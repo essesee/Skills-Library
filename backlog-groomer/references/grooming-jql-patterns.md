@@ -277,6 +277,30 @@ AND status NOT IN (Closed, Done, Resolved)
 ORDER BY priority DESC, created ASC
 ```
 
+## Field Extraction
+
+Extract these fields per ticket during ingestion (Step 2). Drop raw Jira response after extraction.
+
+| Field | Used By |
+|-------|---------|
+| key | All steps |
+| summary | Consolidation (4B), scope validation (7) |
+| issuetype | Staleness (3), consolidation (4), estimation (8) |
+| status | Staleness (3), sprint readiness (6) |
+| priority | Priority rebalancing (5) |
+| assignee | Staleness (3), estimation (8) |
+| created | Priority rebalancing (5), staleness (3) |
+| updated | Staleness (3) |
+| storyPoints | Estimation (8), sprint readiness (6) |
+| description | Scope validation (7), consolidation (4B) |
+| labels | Priority rebalancing (5), epic health (9) |
+| components | Priority rebalancing (5), epic health (9) |
+| epic link | Epic health (9), consolidation (4B) |
+| sprint | Sprint readiness (6), estimation (8) |
+| issue links | Dependencies (10), staleness (3) |
+| comment count + last comment date | Staleness (3) |
+| fix versions | Report metadata |
+
 ## Batch Processing
 
 All queries should use `startAt` and `maxResults` parameters for pagination:

@@ -60,8 +60,4 @@ These rules determine how items are categorized in generated release notes. Appl
 <!-- Populated automatically from interactive review sessions. Format below. -->
 <!-- These take precedence over the default rules above. -->
 
-<!-- Example:
-- label:internal-tooling → Improvements (override from New Features) — 2026-02-20
-- epic:Platform Migration → Breaking Changes (always) — 2026-02-20
-- keyword:"audit log" → New Features (user preference) — 2026-02-20
--->
+<!-- Format: {label/epic/keyword}:{value} → {Category} (override from {original}) — {date} -->

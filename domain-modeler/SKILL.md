@@ -1,6 +1,6 @@
 ---
 name: domain-modeler
-description: "Walk through Domain-Driven Design modeling — event storming, bounded context identification, aggregate design, and context mapping. Searches GitHub repos, Confluence, and Jira to ground modeling in real system context. Use this skill when the user needs to model a domain, identify service boundaries, design aggregates, or run an event storming session. Trigger on phrases like 'model this domain,' 'identify bounded contexts,' 'event storm this,' 'what are the aggregates,' 'context map,' 'domain events,' 'service boundaries,' or any architectural discussion about how domain concepts relate."
+description: "Use when the user needs to model a domain, identify service boundaries, design aggregates, or run an event storming session. Trigger on: 'model this domain,' 'identify bounded contexts,' 'event storm this,' 'what are the aggregates,' 'context map,' 'domain events,' 'service boundaries,' or any architectural discussion about how domain concepts relate."
 ---
 
 # Domain Modeler
@@ -9,33 +9,18 @@ description: "Walk through Domain-Driven Design modeling — event storming, bou
 Apply Domain-Driven Design to model complex domains, identify clean service boundaries, and design aggregates that enforce business invariants. Grounded in real system context — always searches existing code, docs, and tickets before modeling.
 
 ## Dependencies
-- **ubiquitous-language-builder** — call when terminology needs alignment before or during modeling
-- **GitHub** — search repos for existing code, schemas, service boundaries
-- **Confluence** — search for domain specs, architecture docs, decision records
-- **Jira** — search for feature context, requirements, domain discussions
 
-## Context Gathering (Always Do First)
+**Tools/APIs:** GitHub, Confluence, Jira
+**Other Skills:** ubiquitous-language-builder (call when terminology needs alignment)
+**Reference Files:** `references/ddd-patterns.md` (loaded on skill trigger)
 
-Before any modeling, gather real context. Run these searches in parallel:
+## Context Gathering (Parallel)
 
-1. **GitHub**: Search your organization's repos for:
-   - Existing service/repo names that map to domain concepts (`gh search repos`, `gh search code`)
-   - Schema definitions, data models, entity classes
-   - API contracts and integration points between services
-   - Event definitions, message types, queue/topic names
+Before modeling, gather real context. Run all three searches in parallel; summarize findings before proceeding. Flag surprises or contradictions. Drop raw results after summarizing.
 
-2. **Confluence**: Search for:
-   - Architecture decision records, system design docs
-   - Domain glossaries or terminology docs
-   - Feature specs that describe domain rules and workflows
-   - Integration documentation between systems
-
-3. **Jira**: Search for:
-   - Epics and stories that reveal domain boundaries
-   - Bug patterns that hint at aggregate boundary problems
-   - Feature requests that reveal unstated domain concepts
-
-Present a summary of what was found before proceeding with modeling. Flag anything surprising or contradictory.
+a. **GitHub** (max 5 queries): service/repo names matching domain concepts, schema definitions, API contracts and integration points, event/message/topic definitions
+b. **Confluence** (max 3 queries): architecture decision records, domain glossaries, feature specs describing domain rules
+c. **Jira** (max 3 queries): epics/stories revealing domain boundaries, bug patterns hinting at aggregate boundary problems, feature requests revealing unstated concepts
 
 ## Inputs
 - Domain description, feature requirement, or existing system to analyze
@@ -50,41 +35,31 @@ Present a summary of what was found before proceeding with modeling. Flag anythi
 ## Modes
 
 ### Event Storming
-Walk through a lightweight event storming session:
+Lightweight event storming. Pause and validate with the user after each step.
 
-1. **Domain Events** — What happened? Past tense, business language. Search code for existing event classes/types. ("BookingConfirmed," "AgentAssignedToClub," "TravelDataUpdated")
-2. **Commands** — What triggered each event? Cross-reference with existing API endpoints and Jira workflows.
-3. **Aggregates** — What entity owns each command and enforces the rules? Check existing code for entity/model definitions.
-4. **Bounded Contexts** — Group related aggregates. Validate against actual repo/service boundaries.
-5. **Context Relationships** — How do contexts communicate? Search for existing integration points, API calls between services, shared databases.
-
-At each step, pause and validate with the user before moving on.
+1. **Domain Events** — past tense, business language. Search code for existing event classes/types.
+2. **Commands** — what triggered each event? Cross-reference with API endpoints and Jira.
+3. **Aggregates** — which entity owns each command? Check existing entity/model definitions.
+4. **Bounded Contexts** — group related aggregates. Validate against actual repo/service boundaries.
+5. **Context Relationships** — how do contexts communicate? Search for integration points, cross-service calls, shared databases.
 
 ### Context Mapping
 For existing systems or when bounded contexts are already identified:
 
-1. List all bounded contexts — pull from actual repo structure and service inventory
-2. For each pair, identify the relationship type:
-   - **Shared Kernel** — shared model, tight coupling (flag as risk)
-   - **Customer-Supplier** — upstream/downstream with negotiated contract
-   - **Conformist** — downstream conforms to upstream's model
-   - **Anticorruption Layer** — downstream translates upstream's model
-   - **Open Host Service** — upstream provides a well-defined protocol
-   - **Published Language** — shared standardized language (e.g., UBL)
-   - **Separate Ways** — no integration needed
-3. Flag problematic relationships found in the real system (shared databases, circular dependencies, missing ACLs)
+1. List all bounded contexts from actual repo structure and service inventory.
+2. For each pair, identify the relationship type (see `ddd-patterns.md` > Context Relationship Types). Flag Shared Kernel as risk.
+3. Flag problematic relationships: shared databases, circular dependencies, missing ACLs.
 
 ### Aggregate Design
-For a specific bounded context, define aggregates:
+For a specific bounded context, define aggregates (see `ddd-patterns.md` for tactical patterns and design heuristics):
 
-1. **Aggregate Root** — the entry point entity. Search code for existing root entities.
-2. **Entities** — objects with identity inside the aggregate
-3. **Value Objects** — immutable objects defined by attributes
-4. **Invariants** — business rules the aggregate must enforce. Cross-reference with Jira tickets for bug reports that reveal broken invariants.
-5. **Domain Events** — events emitted on state change. Check for existing event infrastructure.
-6. **Consistency Boundary** — what must be transactionally consistent vs. eventually consistent
+1. **Aggregate Root** — search code for existing root entities.
+2. **Entities & Value Objects** — identify each; check existing definitions.
+3. **Invariants** — business rules the aggregate must enforce. Cross-reference Jira for bug reports revealing broken invariants.
+4. **Domain Events** — events emitted on state change. Check existing event infrastructure.
+5. **Consistency Boundary** — transactionally consistent vs. eventually consistent.
 
-Challenge: Is the aggregate too large? Can it be split? Does the existing code match the ideal boundary?
+Challenge: Is the aggregate too large? Does existing code match the ideal boundary?
 
 ### Quick Check
 For a single design question ("should X and Y be in the same bounded context?"):
@@ -92,15 +67,18 @@ For a single design question ("should X and Y be in the same bounded context?"):
 - Apply DDD concepts with real context
 - Give a clear recommendation with reasoning
 
-## Validation Rules
-- Never recommend a boundary change without searching for what currently exists
-- If the recommendation conflicts with the current system, provide a migration path
-- Flag where the code structure diverges from the domain model found in docs/tickets
-- Surface terminology mismatches between code, Jira, and Confluence
+## When NOT to Use
+- Pure CRUD with no business logic or invariants.
+- Simple data transformation with no domain complexity.
+- API design without domain modeling (use api-composer instead).
 
 ## Context Rules
-- Load `references/ddd-patterns.md` only when this skill triggers
-- Run context gathering searches in parallel for efficiency
-- Drop search results from context after summarizing — keep only the findings
-- For Event Storming mode, work iteratively — don't dump the full model at once
-- Always use domain language, not technical jargon, for naming events and aggregates
+- Load `references/ddd-patterns.md` only on skill trigger.
+- Run context gathering searches in parallel.
+- Drop raw search results after summarizing; keep only findings.
+- Search for what currently exists before recommending any boundary change.
+- Provide a migration path when recommendations conflict with the current system.
+- Flag divergences between code structure and domain model in docs/tickets.
+- Surface terminology mismatches between code, Jira, and Confluence.
+- Use domain language, not technical jargon, for naming events and aggregates.
+- In Event Storming mode, work iteratively; do not dump the full model at once.

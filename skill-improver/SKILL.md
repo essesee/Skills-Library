@@ -1,21 +1,19 @@
 ---
 name: skill-improver
-description: "Use when a skill needs tuning based on real usage — steps getting skipped, triggers that don't match, preferences that drifted, or reference files that went stale. Use after a skill session to propose edits, or target a specific skill for transcript-based analysis. Trigger on phrases like 'improve that skill', 'tune the daily-planner skill', 'skill-improver daily-planner', 'that skill needs work', 'fix that workflow'."
+description: "Use when a skill needs tuning based on real usage. Trigger on phrases like 'improve that skill,' 'tune the daily-planner skill,' 'skill-improver daily-planner,' 'that skill needs work,' 'fix that workflow,' 'skill needs adjustment,' or any request to refine a skill based on how it actually performed."
 ---
 
 # Skill Improver
 
 ## Purpose
-
-Observe how skills are actually used and propose concrete edits to SKILL.md, reference files, preferences, and rules. Every change requires user approval before writing. Closes the feedback loop between skill design and real-world usage.
+Observe how skills are actually used and propose concrete edits to SKILL.md, reference files, preferences, and rules. Every change requires user approval before writing.
 
 ## Dependencies
 
-- **Reference files**:
-  - `references/improvement-log.md` — session history (proposals made/applied/rejected)
-  - `references/analysis-heuristics.md` — thresholds, signal keywords, confidence rules
-  - `references/skill-conventions.md` — structural patterns for well-formed skills
-- **Other skills**: None (no runtime dependencies)
+**Reference Files:**
+- `references/improvement-log.md` — session history (proposals made/applied/rejected)
+- `references/analysis-heuristics.md` — thresholds, signal keywords, confidence rules
+- `references/skill-conventions.md` — structural patterns for well-formed skills (also the audit standard for convention compliance)
 
 ## Modes
 
@@ -58,11 +56,10 @@ Run all evidence gathering simultaneously. Each source is independent.
 
 #### 2B: Learning File Analysis
 
-Read all files in `{skill}/references/`. Flag:
+Read all files in `{skill}/references/` (typically 2-5 files). Flag:
 - Empty sections that remain empty after 3+ sessions
-- Zero-weight or stale entries (30+ days unmodified)
-- Contradictions between reference files and SKILL.md
-- Missing learning categories vs. workflow steps (e.g., a gathering phase with no corresponding preference tracking)
+- Stale entries (30+ days unmodified) or contradictions with SKILL.md
+- Missing learning categories vs. workflow steps
 - Batch size mismatches between inline limits and Context Rules
 
 If the skill has no `references/` directory, skip this sub-step.
@@ -80,76 +77,31 @@ Load reference files:
 - `improvement-log.md` to filter out previously rejected proposals (see re-proposal rules)
 - `skill-conventions.md` for structural validation
 
-Apply six analysis lenses:
+Apply six analysis lenses (thresholds and scoring in `analysis-heuristics.md`):
 
-**1. Convention Compliance**
-Compare the target skill's structure against `skill-conventions.md`. Flag missing patterns:
-- No batch limits on a gathering phase
-- No consolidation rule on a learning/log file
-- Missing Context Rules reinforcement for parallel steps
-- Section order deviations
-- Frontmatter issues (description summarizes workflow = CSO anti-pattern)
-
-**2. Description / Triggers**
-Compare actual trigger phrases from transcripts vs. listed triggers. Check:
-- Trigger phrases users say that aren't in the description
-- Listed triggers nobody uses
-- Description summarizing workflow instead of triggering conditions (CSO anti-pattern)
-
-**3. Workflow Steps**
-- Skipped >60% of sessions → propose remove or make optional
-- Heavily edited by user >50% → propose change default
-- Causes errors >30% → propose add error handling
-- User does unlisted steps → propose add to workflow
-- Execution order mismatches → propose reorder
-
-**4. Reference Files**
-- Empty learning sections → investigate cause
-- Stale overridden rules → propose update defaults
-- Batch size complaints → propose adjustment
-- Rules user manually adds each session → propose as defaults
-
-**5. Edge Cases**
-- Unhandled situations from transcripts → propose new entries
-- Never-triggered edge cases → flag as potential dead weight
-
-**6. Context Rules**
-- Premature data drops causing re-fetches
-- Batch size problems (too large = context overflow, too small = excessive calls)
-- File update timing issues (mid-workflow vs. session end)
+| Lens | Key Checks |
+|------|------------|
+| **Convention Compliance** | Structure vs. `skill-conventions.md`: batch limits, consolidation rules, Context Rules, section order, frontmatter |
+| **Description / Triggers** | Actual trigger phrases vs. listed triggers; CSO anti-pattern (description summarizes workflow) |
+| **Workflow Steps** | Skipped >60% → remove/optional; edited >50% → change default; errors >30% → add handling; unlisted steps → add |
+| **Reference Files** | Empty sections, stale overrides, batch size complaints, rules user manually adds each session |
+| **Edge Cases** | Unhandled situations → add; never-triggered cases → flag as dead weight |
+| **Context Rules** | Premature data drops, batch size issues, file update timing |
 
 ### Phase 4: Interactive Review
 
 Present proposals grouped by target file, sorted by confidence (HIGH first):
 
 ```
-[1] SKILL.md > Workflow Step 3: Make optional (skipped 4/5 sessions)
-    Confidence: HIGH | Evidence: transcripts 2026-02-28, 2026-03-01
-
-[2] SKILL.md > Description: Add trigger phrase "tune my planner"
-    Confidence: MEDIUM | Evidence: transcript 2026-03-01
-
-[3] references/preferences.md > Batch size: Increase Jira batch from 10 to 20
-    Confidence: LOW | Evidence: 1 session
+[n] {file} > {section}: {proposed change}
+    Confidence: {level} | Evidence: {source}
 ```
 
-**Actions:**
-- **"Apply {n}"** — Apply this proposal. Reads target file fresh, applies edit, shows confirmation.
-- **"Edit {n}"** — Modify the proposal before applying. User provides adjusted wording.
-- **"Skip {n}"** — Defer without logging rejection. Not counted against re-proposal.
-- **"Reject {n}"** — Log as rejected in `improvement-log.md`. Affects re-proposal rules.
-- **"Show diff {n}"** — Preview exact changes before deciding.
-- **"Apply all"** — Apply all remaining proposals in order.
-- **"Done"** — End review. Unapplied proposals treated as skipped.
+**Actions:** **Apply {n}** / **Edit {n}** / **Skip {n}** (defer, no log) / **Reject {n}** (log to `improvement-log.md`) / **Show diff {n}** / **Apply all** / **Done** (unapplied = skipped)
 
-**Navigation Commands** (available at any point):
-- **"Next"** — Move to next proposal
-- **"Back"** — Return to previous proposal
-- **"Jump to {n}"** — Skip to specific proposal
-- **"Show overview"** — Re-display all proposals with status
-- **"Remaining"** — Show count of unreviewed proposals
+**Commands:** **Next** / **Back** / **Jump to {n}** / **Show overview** / **Remaining**
 
-**Warning**: If a proposal modifies the skill's `description` field, warn: "This changes skill discovery. Other sessions may find/miss this skill differently."
+If a proposal modifies the skill's `description` field, warn: "This changes skill discovery. Other sessions may find/miss this skill differently."
 
 ### Phase 5: Apply Changes
 

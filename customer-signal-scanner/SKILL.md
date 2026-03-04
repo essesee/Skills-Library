@@ -1,18 +1,21 @@
 ---
 name: customer-signal-scanner
-description: "Scan Gmail and Slack for customer, partner, and customer organization escalations and complaints. Surfaces external-facing pain signals with structured evidence. Works standalone for ad-hoc customer signal checks or in orchestrated mode when called by problem-discoverer. Trigger on phrases like 'scan for customer issues,' 'any customer escalations,' 'what are customers complaining about,' 'check for partner issues,' 'customer complaints,' 'customer signal scan,' 'external escalations,' 'customer feedback,' or any request to surface what external stakeholders are reporting."
+description: "Scan Gmail and Slack for customer and partner escalations, complaints, and pain signals. Trigger on phrases like 'scan for customer issues,' 'any customer escalations,' 'what are customers complaining about,' 'customer complaints,' 'customer signal scan,' 'external escalations,' 'customer feedback,' or any request to surface what external stakeholders are reporting."
 ---
 
 # Customer Signal Scanner
 
 ## Purpose
-Customer and partner pain doesn't always arrive as a formal bug report or Jira ticket. It shows up in email threads, Slack escalations, and support channel chatter. This skill systematically scans Gmail and Slack for external-facing signals — complaints, escalations, repeated issues, and severity indicators — and surfaces them as structured evidence for decision-making.
+Systematically scans Gmail and Slack for external-facing signals — complaints, escalations, repeated issues, severity indicators — and surfaces them as structured evidence for decision-making.
 
 ## Dependencies
-- **Gmail** — customer/partner emails, escalation threads, complaint patterns
-- **Slack** — support channels, customer-facing channels, escalation threads
-- **Reference files:**
-  - `references/customer-signal-patterns.md` — learning file tracking which patterns lead to action vs. dismissal
+
+**Tools/APIs:**
+- Gmail — customer/partner emails, escalation threads, complaint patterns
+- Slack — support channels, customer-facing channels, escalation threads
+
+**Reference Files:**
+- `references/customer-signal-patterns.md` — learned patterns (action vs. dismissal)
 
 ## Inputs
 - **Time window** (optional): how far back to scan (default: 30 days)
@@ -21,44 +24,27 @@ Customer and partner pain doesn't always arrive as a formal bug report or Jira t
 - **Orchestrated mode flag** (optional): `called_by_problem_discoverer = true` — returns structured signal list, no interactive review. Default: `false`
 
 ## Outputs
+Ranked signal list with structured detail, cluster groupings, and summary statistics.
 
-### Standalone Mode (default)
-- Ranked list of customer signals with structured detail
-- Interactive review: each signal presented for Acknowledge / Investigate / Dismiss / Link to Existing
-- Summary of signal patterns and affected customers
-
-### Orchestrated Mode (called by problem-discoverer)
-Returns structured signal list — no interactive review:
-- All detected signals in common output format
-- Cluster groupings for related signals
-- Summary statistics (total signals, severity distribution, top reporters)
+**Standalone mode** (default): Interactive review per signal (Acknowledge / Investigate / Dismiss / Link to Existing).
+**Orchestrated mode** (`called_by_problem_discoverer = true`): Returns structured signal list. No interactive review.
 
 ## Signal Types
 
-### Direct Escalations
-Explicit complaints or demands for resolution.
-- Patterns: "this is broken," "we need this fixed," "escalating," "unacceptable," "when will this be resolved"
-- Severity: escalation
+### Direct Escalations (severity: escalation)
+Patterns: "this is broken," "we need this fixed," "escalating," "unacceptable," "when will this be resolved"
 
-### Repeated Issues
-Same customer reporting the same problem, or multiple customers reporting similar issues.
-- Patterns: same reporter + same topic within time window, multiple reporters + similar keywords
-- Severity: complaint (recurring)
+### Repeated Issues (severity: complaint, recurring)
+Patterns: same reporter + same topic within window, multiple reporters + similar keywords
 
-### Severity Indicators
-Language that signals business impact or urgency.
-- Patterns: "urgent," "critical," "losing business," "switching to," "can't use," "deadline," "blocking," "SLA"
-- Severity: escalation or complaint (context-dependent)
+### Severity Indicators (severity: escalation or complaint)
+Patterns: "urgent," "critical," "losing business," "switching to," "can't use," "deadline," "blocking," "SLA"
 
-### Unresolved Threads
-Customer raised an issue and received no resolution in the thread.
-- Patterns: customer message with question/complaint, no follow-up resolution, thread age > 3 days
-- Severity: complaint
+### Unresolved Threads (severity: complaint)
+Patterns: customer question/complaint with no follow-up resolution, thread age > 3 days
 
-### Customer-Specific Patterns
-Problems affecting specific customer organizations vs. platform-wide issues.
-- Patterns: customer name + issue keywords, multiple issues from same customer
-- Note: platform-wide patterns score higher than single-customer issues
+### Customer-Specific Patterns (severity: varies)
+Patterns: customer name + issue keywords, multiple issues from same customer. Platform-wide patterns score higher than single-customer issues.
 
 ## Output Format (per signal)
 
@@ -83,10 +69,9 @@ Problems affecting specific customer organizations vs. platform-wide issues.
 - Load `references/customer-signal-patterns.md` for learned patterns
 
 ### Step 2: Scan
-- Pull messages from relevant Slack channels and Gmail threads within time window
-- Process in batches. Extract signal-relevant content; drop raw message content after classification.
-- For Gmail: search for threads with customer/partner/organization senders, escalation keywords
-- For Slack: search channels for complaint patterns, escalation language, unresolved questions
+Pull messages from relevant Slack channels and Gmail threads within time window. Process in batches of 20 messages. Extract signal-relevant content; drop raw message content after classification.
+- Gmail: threads with customer/partner/organization senders, escalation keywords
+- Slack: complaint patterns, escalation language, unresolved questions
 
 ### Step 3: Classify
 Apply signal type detection to each message/thread:
@@ -105,20 +90,18 @@ Apply signal type detection to each message/thread:
 - Within frequency: sort by recency (newer first)
 
 ### Step 6: Present or Return
-**Standalone mode**: Present each signal for interactive review:
-- **Acknowledge**: Note signal, no immediate action needed
-- **Investigate**: Flag for deeper investigation
-- **Dismiss**: Not actionable (log reasoning to learning file)
-- **Link to Existing**: Connect to an existing Jira ticket or known issue
+**Standalone mode**: Present each signal for interactive review: **Acknowledge** / **Investigate** / **Dismiss** (log reasoning) / **Link to Existing**
+
+Commands: **Next** / **Back** / **Jump to #** / **Show overview** / **Remaining** / **Done**
 
 **Orchestrated mode**: Return full structured signal list to problem-discoverer. Skip interactive review.
 
 ## Context Rules
-- Process messages in batches. Drop raw message content after extracting signal summaries.
-- In orchestrated mode: skip interactive review, return structured signal list.
-- Learning file (`references/customer-signal-patterns.md`) updated at session end only.
-- Do not store or surface personally identifiable information beyond what's needed for signal context (reporter name/org is relevant; personal details are not).
-- Respect channel access — only scan channels the user has access to.
+- Process messages in batches of 20. Drop raw message content after extracting signal summaries.
+- In orchestrated mode, skip interactive review and return structured signal list.
+- Update learning file (`references/customer-signal-patterns.md`) at session end only.
+- Do not surface PII beyond reporter name/org needed for signal context.
+- Only scan channels the user has access to.
 
 ## Edge Cases
 - **No customer-facing channels configured**: Ask user to identify relevant Slack channels and Gmail labels.

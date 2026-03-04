@@ -1,6 +1,6 @@
 ---
 name: ubiquitous-language-builder
-description: "Build and maintain shared domain vocabulary by scanning GitHub repos, Confluence docs, and Jira tickets for terminology — flagging mismatches between code, documentation, and business language. Use this skill to audit terminology alignment, build domain glossaries, or resolve naming conflicts. Trigger on phrases like 'define the language for,' 'align terminology,' 'what do we call,' 'glossary,' 'naming is inconsistent,' 'terminology audit,' 'domain language,' or when other skills (domain-modeler, api-composer) surface terminology confusion."
+description: "Use when terminology is inconsistent between code, docs, and business language, or when building a domain glossary. Trigger on: 'define the language for,' 'align terminology,' 'what do we call,' 'glossary,' 'naming is inconsistent,' 'terminology audit,' 'domain language,' or when other skills surface terminology confusion."
 ---
 
 # Ubiquitous Language Builder
@@ -9,35 +9,17 @@ description: "Build and maintain shared domain vocabulary by scanning GitHub rep
 Build and enforce a shared vocabulary between business stakeholders, documentation, and code. When the code says "TravelProduct" but Jira says "Offering" and Confluence says "Package" — that's a bug in the language, and it causes real bugs in the system.
 
 ## Dependencies
-- **GitHub** — scan code for class names, variable names, API field names, enum values
-- **Confluence** — scan docs for business terminology, spec language, glossaries
-- **Jira** — scan tickets for how the team describes domain concepts
-- **domain-modeler** — call when terminology confusion reveals a bounded context problem
 
-## Context Gathering (Always Do First)
+**Tools/APIs:** GitHub, Confluence, Jira
+**Other Skills:** domain-modeler (call when terminology confusion reveals a bounded context problem)
 
-For the domain area being audited, search all three sources in parallel:
+## Context Gathering (Parallel)
 
-1. **GitHub**: Search for:
-   - Class/interface/type names related to the domain concept
-   - Variable and field names in data models
-   - API endpoint names and request/response field names
-   - Enum values and constants
-   - Comments and documentation strings
+Search all three sources for the domain area being audited. Run in parallel; present findings as a terminology comparison before making recommendations. Drop raw results after building the comparison table.
 
-2. **Confluence**: Search for:
-   - How the concept is described in specs and design docs
-   - Existing glossaries or terminology guides
-   - Meeting notes where the concept was discussed
-   - External-facing documentation (what do customers/partners call it?)
-
-3. **Jira**: Search for:
-   - How tickets describe the concept (ticket titles, descriptions, comments)
-   - How different team members refer to the same thing
-   - Acceptance criteria language
-   - Bug reports that might stem from naming confusion
-
-Present findings as a terminology comparison before making recommendations.
+a. **GitHub** (max 5 queries): class/type names, variable/field names, API endpoint and field names, enum values, doc comments
+b. **Confluence** (max 3 queries): spec/design doc terminology, existing glossaries, external-facing docs (what customers/partners call it)
+c. **Jira** (max 3 queries): ticket titles and descriptions, acceptance criteria language, bug reports stemming from naming confusion
 
 ## Inputs
 - A domain concept or area to audit (e.g., "what do we call the thing an agent books?")
@@ -99,14 +81,17 @@ For a single naming question ("should we call this X or Y?"):
 - Search for existing usage of both terms
 - Give a direct recommendation with evidence
 
-## Validation Rules
-- Never recommend a term change without showing current usage across all sources
-- If the recommended term requires code changes, estimate the blast radius (how many files/repos)
-- Cross-reference with bounded contexts — the same real-world thing can legitimately have different names in different contexts
-- Flag when customer/partner-facing terms differ from internal terms (this matters for APIs)
-
 ## Context Rules
-- No reference files needed — this skill is procedural
-- Run searches in parallel for efficiency
-- Drop raw search results after building the comparison table
-- Keep glossary outputs compact — link to sources rather than embedding full context
+- Run all source searches in parallel. Drop raw results after building comparison table.
+- Always show current usage across all sources before recommending a term change.
+- Estimate blast radius (files/repos) when a term change requires code changes.
+- Cross-reference with bounded contexts — the same concept can legitimately have different names in different contexts.
+- Flag when customer/partner-facing terms differ from internal terms (matters for APIs).
+- Keep glossary outputs compact — link to sources rather than embedding full context.
+
+## Edge Cases
+- Same concept legitimately has different names in different bounded contexts (DDD anti-corruption layer) — this is correct, not a mismatch.
+
+## When NOT to Use
+- Bounded context boundary problems, not just naming — use `domain-modeler`.
+- Naming conflict is purely in code with no business terminology involved — standard refactoring.

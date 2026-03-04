@@ -2,7 +2,7 @@
 
 _This file is populated over time by the problem-discoverer skill. It tracks acted-on patterns, dismissed patterns, deferred items, and source effectiveness to improve future discovery sessions._
 
-_Consolidate every 5 sessions. Keep under 2,000 words._
+_Consolidate every 5 sessions. Keep under 2,000 words. On consolidation: merge entries into patterns, remove individual entries older than 3 months, keep deferred items until resolved or explicitly dismissed._
 
 ---
 

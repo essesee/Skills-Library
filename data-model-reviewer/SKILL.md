@@ -1,6 +1,6 @@
 ---
 name: data-model-reviewer
-description: "Review data models and schemas against Universal Business Language (UBL) patterns and industry standards for travel data exchange. Searches GitHub repos, Confluence, and Jira to understand existing models before recommending changes. Use this skill when reviewing schemas, designing data exchange formats, evaluating API contracts, or checking standards compliance. Trigger on phrases like 'review this schema,' 'does this follow UBL,' 'data model review,' 'standardize this format,' 'travel data structure,' 'exchange format,' 'document schema,' or any data modeling question involving business documents or travel data."
+description: "Use when reviewing schemas, designing data exchange formats, evaluating API contracts, or checking standards compliance. Trigger on: 'review this schema,' 'does this follow UBL,' 'data model review,' 'standardize this format,' 'travel data structure,' 'exchange format,' 'document schema,' or any data modeling question involving business documents or travel data."
 ---
 
 # Data Model Reviewer
@@ -9,36 +9,18 @@ description: "Review data models and schemas against Universal Business Language
 Review and design data models against UBL patterns and industry standards. Ensures your data exchange formats are well-structured, standards-aligned, and maintainable. Grounded in what actually exists in the codebase.
 
 ## Dependencies
-- **GitHub** — search for existing schemas, data models, API contracts
-- **Confluence** — search for data specs, integration docs, partner requirements
-- **Jira** — search for data-related bugs, schema change requests, integration issues
-- **api-composer** — call when the review reveals composition problems between services
-- **ubiquitous-language-builder** — call when field naming is inconsistent
 
-## Context Gathering (Always Do First)
+**Tools/APIs:** GitHub, Confluence, Jira
+**Other Skills:** api-composer (call when review reveals composition problems), ubiquitous-language-builder (call when field naming is inconsistent)
+**Reference Files:** `references/ubl-travel-patterns.md` (loaded on skill trigger)
 
-Before reviewing or designing, search for real context in parallel:
+## Context Gathering (Parallel)
 
-1. **GitHub**: Search for:
-   - Schema definitions (JSON Schema, OpenAPI, Protobuf, DB migrations)
-   - Data model classes/types (entities, DTOs, value objects)
-   - Serialization/deserialization code
-   - External provider integrations (what formats do they send/receive?)
-   - Shared types across services
+Search for real context before reviewing or designing. Run all three in parallel; summarize findings before proceeding. Drop raw results after summarizing.
 
-2. **Confluence**: Search for:
-   - Data dictionaries, field definitions
-   - Partner/provider data specs
-   - Integration documentation
-   - Data flow diagrams
-
-3. **Jira**: Search for:
-   - Data mapping bugs (wrong types, missing fields, encoding issues)
-   - Schema migration tickets
-   - Partner integration issues
-   - Feature requests that require new data fields
-
-Summarize findings before proceeding. Drop raw results from context.
+a. **GitHub** (max 5 queries): schema definitions (JSON Schema, OpenAPI, Protobuf, DB migrations), data model classes/types, serialization code, external provider integrations, shared types across services
+b. **Confluence** (max 3 queries): data dictionaries, partner/provider data specs, integration docs, data flow diagrams
+c. **Jira** (max 3 queries): data mapping bugs, schema migration tickets, partner integration issues, feature requests requiring new fields
 
 ## Inputs
 - A schema, data model, or API contract to review
@@ -56,28 +38,10 @@ Summarize findings before proceeding. Drop raw results from context.
 ### Schema Review
 Review an existing schema against best practices and UBL patterns:
 
-1. **Structure Check**:
-   - Are entities properly separated from value objects?
-   - Are IDs consistent (format, naming convention)?
-   - Are dates/times in ISO 8601?
-   - Are monetary values structured correctly (amount + currency)?
-   - Are addresses following a standard structure?
-
-2. **UBL Alignment** (where applicable):
-   - Does the schema use UBL-standard document types where they fit? (Invoice, Order, Despatch Advice, etc.)
-   - Are common components following UBL patterns? (Party, Address, Period, Amount, Quantity)
-   - Are code lists using standard values where they exist? (country codes, currency codes, unit codes)
-
-3. **Travel Industry Specifics**:
-   - Are travel product types well-categorized?
-   - Do booking/reservation models capture the right lifecycle states?
-   - Are provider-specific formats properly abstracted?
-   - Is traveler information structured for standard exchange?
-
-4. **Practical Issues**:
-   - Nullable vs. required fields — are the choices intentional?
-   - Versioning strategy — how will the schema evolve?
-   - Backward compatibility — will existing consumers break?
+1. **Structure Check** — entity/value object separation, ID consistency, ISO 8601 dates, monetary values (amount + currency), address structure.
+2. **UBL Alignment** — UBL document types where they fit, common components (Party, Address, Period, Amount, Quantity), standard code lists. See `ubl-travel-patterns.md`.
+3. **Travel Industry Specifics** — product type categorization, booking/reservation lifecycle states, provider format abstraction, traveler info structure.
+4. **Practical Issues** — nullable vs. required intentionality, versioning strategy, backward compatibility.
 
 ### Design Guidance
 Design new data models for a given domain:
@@ -103,25 +67,16 @@ When a schema change is proposed:
 3. Propose a migration strategy (versioning, deprecation period, adapter layer)
 4. Cross-reference with Jira for related tickets
 
-## UBL Quick Reference
-
-Load `references/ubl-travel-patterns.md` for the full reference. Key patterns:
-
-- **Party**: Any actor (person, organization). Has name, address, contact, identifiers.
-- **Address**: Structured postal address. Use country codes (ISO 3166), not free text.
-- **Period**: Start date/time + end date/time. ISO 8601.
-- **Amount**: Numeric value + currency code (ISO 4217).
-- **Quantity**: Numeric value + unit code.
-- **Document Reference**: Link to another document by ID and type.
-
-## Validation Rules
-- Never recommend a schema change without searching for current consumers
-- If recommending UBL alignment, show the practical benefit — don't standardize for standardization's sake
-- Flag where existing schemas diverge from each other across repos
-- If a provider sends non-standard data, recommend an anticorruption layer rather than polluting internal models
-
 ## Context Rules
-- Load `references/ubl-travel-patterns.md` only when this skill triggers
-- Run context gathering searches in parallel
-- Drop raw search results after summarizing
-- For large schema reviews, work section by section — don't dump everything at once
+- Load `references/ubl-travel-patterns.md` only when this skill triggers.
+- Run context gathering searches in parallel. Drop raw results after summarizing.
+- Always search for current consumers before recommending schema changes.
+- Show practical benefit when recommending UBL alignment — don't standardize for standardization's sake.
+- Flag where existing schemas diverge from each other across repos.
+- Recommend an anticorruption layer for non-standard provider data rather than polluting internal models.
+- For large schema reviews, work section by section.
+
+## When NOT to Use
+- API design without data modeling — use `api-composer`.
+- Field naming alignment — use `ubiquitous-language-builder`.
+- Pure code refactoring with no schema impact.

@@ -1,15 +1,16 @@
 ---
 name: output-consistency-reviewer
-description: "Review complex deliverables for internal contradictions, logic gaps, unstated assumptions, and constraint violations. Use this skill after producing any complex output — reports, strategy docs, proposals, analyses — to catch inconsistencies before sharing. Trigger on phrases like 'review this for consistency,' 'does this make sense,' 'check my logic,' 'anything contradictory here,' 'validate this document,' 'sanity check this,' or proactively after completing any multi-section deliverable with interdependent claims."
+description: "Use after producing any complex output to catch inconsistencies before sharing. Trigger on: 'review this for consistency,' 'does this make sense,' 'check my logic,' 'anything contradictory,' 'validate this document,' 'sanity check this,' or proactively after completing any multi-section deliverable."
 ---
 
 # Output Consistency Reviewer
 
 ## Purpose
-Complex work can contradict itself. Conclusions don't always follow from premises. Recommendations sometimes conflict with stated constraints. This skill catches those problems before the user ships the deliverable.
+Catch contradictions, logic gaps, unstated assumptions, and constraint violations in complex deliverables before they ship.
 
 ## Dependencies
-- **Mental Models (Skill 6):** Model definitions loaded as a compact reference during review. When a model surfaces a concern, it's named in the flag.
+
+**Other Skills:** mental-models (model definitions loaded during review)
 
 ## Inputs
 - Completed output to review (document, report, proposal, analysis)
@@ -24,50 +25,29 @@ Complex work can contradict itself. Conclusions don't always follow from premise
 ## Review Passes
 
 ### Pass 1: Contradiction Scan
-Identify statements that conflict with each other, even sections apart. Look for:
-- Direct contradictions ("revenue is growing" in section 2 vs. "revenue is declining" in section 5)
-- Implicit contradictions (recommending cost cuts while also proposing expensive new initiatives)
-- Tone contradictions (optimistic framing in the summary, pessimistic data in the body)
+Identify conflicting statements — direct contradictions, implicit contradictions, and tone contradictions across sections.
 
 ### Pass 2: Logic Chain Validation
-Trace arguments from premises to conclusions:
-- Does each conclusion follow from its premises?
-- Flag non-sequiturs (leaps in logic)
-- Flag assumed causation (correlation treated as cause)
-- Flag correlation-causation errors
-- Check that evidence actually supports the claim it's attached to
+Trace arguments from premises to conclusions. Flag non-sequiturs, assumed causation, and evidence that doesn't support its claim.
 
 ### Pass 3: Constraint Check
-Cross-reference recommendations against stated constraints, goals, and requirements:
-- Does recommendation X violate constraint Y?
-- Are there goals stated in the introduction that aren't addressed in the body?
-- Do the conclusions actually serve the stated purpose?
+Cross-reference recommendations against stated constraints, goals, and requirements. Flag violations and unaddressed goals.
 
 ### Pass 4: Assumption Surfacing
-Identify unstated assumptions baked into the reasoning:
-- What's being taken for granted that might not be true?
-- What environmental conditions are assumed stable?
-- What stakeholder behaviors are assumed predictable?
-Make each assumption explicit for user validation.
+Identify unstated assumptions — what's taken for granted, what environmental conditions are assumed stable, what behaviors are assumed predictable. Make each explicit.
 
 ### Pass 5: Mental Model Integration
-Load the Skill 6 model definitions. If any model surfaces a concern:
-- Name the model in the flag
-- Explain what it reveals
-- Recommend action
-
-Common triggers:
-- Second-Order Thinking: "This recommendation achieves the goal but creates a new problem..."
-- Chesterton's Fence: "This proposes removing X without explaining why X exists..."
-- Inversion: "If the opposite happened, this plan has no fallback..."
+Load mental model definitions. If any model surfaces a concern, name the model, explain the insight, recommend action.
 
 ## Severity Triage
-- **Low-stakes issues:** Fix and note the change. Don't interrupt the user.
-- **High-stakes issues:** Stop and surface for user decision. Don't auto-fix.
-
-The threshold: if being wrong about this fix could embarrass the user, change a decision, or mislead a stakeholder — it's high-stakes. Ask.
+- **Low-stakes**: Fix and note the change.
+- **High-stakes**: Stop and surface for user decision. If being wrong could embarrass, change a decision, or mislead — ask.
 
 ## Context Rules
-- **Load only the output being reviewed** and stated constraints. Don't pull in background context.
-- **Skill 6 model definitions** loaded as compact reference file during review.
-- **Findings summarized concisely.** Don't repeat the full output back — just reference sections and flag issues.
+- Load only the output being reviewed and stated constraints. Do not pull in background context.
+- Load mental model definitions once at review start. Do not reload mid-workflow.
+- Summarize findings concisely — reference sections, don't repeat the full output.
+
+## When NOT to Use
+- Reviewing code — use `code-writer` Evaluator Mode.
+- Format/tone calibration — use `priority-format-calibrator`.

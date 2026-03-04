@@ -1,5 +1,7 @@
 # Signal Scoring Rubric
 
+Scoring rubric for problem-discoverer Step 4. Each cluster of related signals is scored against 6 weighted factors, adjusted for clustering effects, then ranked.
+
 ## Composite Formula
 
 ```
@@ -45,7 +47,7 @@ Which personas are affected, how many, and how severely?
 | 2 | Minor inconvenience for one persona; easy workaround |
 | 1 | Cosmetic or negligible impact |
 
-**Persona weights** (for tie-breaking):
+**Persona weights** (for tie-breaking; override via org context skill if available):
 - End Users: 1.0 — primary end user
 - Support Team: 0.9 — direct customer contact
 - Back Office: 0.7 — internal operations
@@ -99,12 +101,12 @@ This prevents a single noisy source from inflating scores.
 
 ## Cluster Adjustments
 
-When multiple signals cluster around the same underlying problem:
+When multiple signals cluster around the same underlying problem. Cap total adjustments at +/- 0.5.
 
-- **Cross-category cluster bonus**: +0.3 to composite score when 3+ categories converge
-- **Recurrence bonus**: +0.2 if this problem appeared in a previous discovery session (check discovery-log.md)
+- **Cross-category cluster bonus**: +0.3 when 3+ categories converge
+- **Recurrence bonus**: +0.2 if appeared in a previous discovery session (check discovery-log.md)
 - **Incident echo bonus**: +0.2 if related to an incident with incomplete remediation
-- **Single-source penalty**: -0.2 if all evidence comes from a single source category
+- **Single-source penalty**: -0.2 if all evidence from a single source category
 - **Stale signal penalty**: -0.1 per signal older than 60 days (capped at -0.3)
 
 ---

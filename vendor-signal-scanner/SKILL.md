@@ -1,18 +1,21 @@
 ---
 name: vendor-signal-scanner
-description: "Scan Gmail and Slack for vendor/provider communication that signals integration problems, service degradation, contract issues, or upcoming changes that affect the platform. Surfaces vendor-related risks with structured evidence. Works standalone for ad-hoc vendor health checks or in orchestrated mode when called by problem-discoverer. Trigger on phrases like 'vendor issues,' 'provider problems,' 'any integration issues,' 'vendor communication scan,' 'supplier signals,' 'vendor health check,' 'API changes,' 'deprecation notices,' 'vendor risk,' or any request to surface vendor-related risks and issues."
+description: "Scan Gmail and Slack for vendor/provider signals — integration problems, service degradation, contract issues, or upcoming changes. Trigger on phrases like 'vendor issues,' 'provider problems,' 'any integration issues,' 'vendor communication scan,' 'supplier signals,' 'vendor health check,' 'API changes,' 'deprecation notices,' 'vendor risk,' or any request to surface vendor-related risks and issues."
 ---
 
 # Vendor Signal Scanner
 
 ## Purpose
-Vendor and provider problems often arrive as quiet notifications — a deprecation email, a degraded-performance alert buried in a support channel, a contract renewal with new terms. By the time these surface as platform incidents, the window for proactive response has closed. This skill systematically scans vendor communication for signals that indicate current or upcoming integration problems, service changes, and contractual shifts.
+Systematically scans vendor communication (Gmail + Slack) for signals that indicate current or upcoming integration problems, service changes, and contractual shifts — catching them before they surface as platform incidents.
 
 ## Dependencies
-- **Gmail** — vendor correspondence, integration support threads, API change notifications, contract communications
-- **Slack** — vendor-specific channels, integration channels, alerting channels
-- **Reference files:**
-  - `references/vendor-signal-patterns.md` — learning file tracking which patterns lead to action vs. dismissal
+
+**Tools/APIs:**
+- Gmail — vendor correspondence, integration support threads, API change notifications, contracts
+- Slack — vendor-specific channels, integration channels, alerting channels
+
+**Reference Files:**
+- `references/vendor-signal-patterns.md` — learned patterns (action vs. dismissal)
 
 ## Inputs
 - **Time window** (optional): how far back to scan (default: 30 days)
@@ -21,44 +24,27 @@ Vendor and provider problems often arrive as quiet notifications — a deprecati
 - **Orchestrated mode flag** (optional): `called_by_problem_discoverer = true` — returns structured signal list, no interactive review. Default: `false`
 
 ## Outputs
+Ranked signal list with structured detail, cluster groupings, and summary statistics.
 
-### Standalone Mode (default)
-- Ranked list of vendor signals with structured detail
-- Interactive review: each signal presented for Acknowledge / Investigate / Dismiss / Link to Existing
-- Summary of vendor risk landscape
-
-### Orchestrated Mode (called by problem-discoverer)
-Returns structured signal list — no interactive review:
-- All detected signals in common output format
-- Cluster groupings for related signals
-- Summary statistics (total signals, severity distribution, affected vendors)
+**Standalone mode** (default): Interactive review per signal (Acknowledge / Investigate / Dismiss / Link to Existing).
+**Orchestrated mode** (`called_by_problem_discoverer = true`): Returns structured signal list. No interactive review.
 
 ## Signal Types
 
-### Service Degradation
-Vendor reports of current or recent service issues.
-- Patterns: "downtime," "degraded performance," "known issue," "investigating," "service disruption," "partial outage," "elevated error rates," "maintenance window"
-- Severity: escalation
+### Service Degradation (severity: escalation)
+Patterns: "downtime," "degraded performance," "known issue," "investigating," "service disruption," "partial outage," "elevated error rates," "maintenance window"
 
-### Breaking Changes
-Upcoming changes that require platform adaptation.
-- Patterns: "deprecation," "end of life," "EOL," "migration required," "API v2," "sunset," "breaking change," "mandatory upgrade," "new version required"
-- Severity: escalation
+### Breaking Changes (severity: escalation)
+Patterns: "deprecation," "end of life," "EOL," "migration required," "API v2," "sunset," "breaking change," "mandatory upgrade," "new version required"
 
-### Integration Failures
-Error notifications, timeout reports, data sync problems.
-- Patterns: "timeout," "connection refused," "rate limit," "authentication failed," "sync failure," "data mismatch," "payload rejected," "webhook failed"
-- Severity: complaint
+### Integration Failures (severity: complaint)
+Patterns: "timeout," "connection refused," "rate limit," "authentication failed," "sync failure," "data mismatch," "payload rejected," "webhook failed"
 
-### Contract and Pricing Signals
-Commercial changes that affect the platform.
-- Patterns: "renewal," "price increase," "new terms," "SLA breach," "contract update," "pricing change," "tier change," "usage limits," "overage"
-- Severity: complaint or informational (context-dependent)
+### Contract and Pricing Signals (severity: complaint or informational)
+Patterns: "renewal," "price increase," "new terms," "SLA breach," "contract update," "pricing change," "tier change," "usage limits," "overage"
 
-### Vendor Responsiveness
-Patterns of slow or absent vendor support.
-- Patterns: unanswered support threads (> 3 business days), repeated follow-ups without resolution, "still waiting," "no response," "any update on"
-- Severity: mention
+### Vendor Responsiveness (severity: mention)
+Patterns: unanswered support threads (> 3 business days), repeated follow-ups without resolution, "still waiting," "no response," "any update on"
 
 ## Output Format (per signal)
 
@@ -83,10 +69,9 @@ Patterns of slow or absent vendor support.
 - Load `references/vendor-signal-patterns.md` for learned patterns
 
 ### Step 2: Scan
-- Pull messages from relevant Slack channels and Gmail threads within time window
-- Process in batches. Extract signal-relevant content; drop raw message content after classification.
-- For Gmail: search for vendor sender domains, API change notifications, contract correspondence
-- For Slack: search vendor/integration channels for degradation reports, change announcements, support threads
+Pull messages from relevant Slack channels and Gmail threads within time window. Process in batches of 20 messages. Extract signal-relevant content; drop raw message content after classification.
+- Gmail: vendor sender domains, API change notifications, contract correspondence
+- Slack: vendor/integration channels for degradation reports, change announcements, support threads
 
 ### Step 3: Classify
 Apply signal type detection to each message/thread:
@@ -105,20 +90,18 @@ Apply signal type detection to each message/thread:
 - Within urgency: sort by platform impact (widely-used integrations first)
 
 ### Step 6: Present or Return
-**Standalone mode**: Present each signal for interactive review:
-- **Acknowledge**: Note signal, no immediate action needed
-- **Investigate**: Flag for deeper investigation or vendor follow-up
-- **Dismiss**: Not relevant to platform (log reasoning to learning file)
-- **Link to Existing**: Connect to an existing Jira ticket or known issue
+**Standalone mode**: Present each signal for interactive review: **Acknowledge** / **Investigate** / **Dismiss** (log reasoning) / **Link to Existing**
+
+Commands: **Next** / **Back** / **Jump to #** / **Show overview** / **Remaining** / **Done**
 
 **Orchestrated mode**: Return full structured signal list to problem-discoverer. Skip interactive review.
 
 ## Context Rules
-- Process messages in batches. Drop raw message content after extracting signal summaries.
-- In orchestrated mode: skip interactive review, return structured signal list.
-- Learning file (`references/vendor-signal-patterns.md`) updated at session end only.
-- Pay special attention to time-sensitive signals (deprecation deadlines, mandatory migration dates). Flag these prominently regardless of other ranking factors.
-- Respect channel access — only scan channels the user has access to.
+- Process messages in batches of 20. Drop raw message content after extracting signal summaries.
+- In orchestrated mode, skip interactive review and return structured signal list.
+- Update learning file (`references/vendor-signal-patterns.md`) at session end only.
+- Flag time-sensitive signals (deprecation deadlines, mandatory migration dates) prominently regardless of other ranking.
+- Only scan channels the user has access to.
 
 ## Edge Cases
 - **Marketing emails vs. real vendor communication**: Filter out vendor marketing/newsletter content. Focus on support threads, official notifications, and technical channels.

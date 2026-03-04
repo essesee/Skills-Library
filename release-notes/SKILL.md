@@ -1,21 +1,26 @@
 ---
 name: release-notes
-description: "Scans Jira, GitHub, and Slack for delivered work over a configurable window (default 2 weeks) and generates a general-audience release notes markdown file. Cross-references tickets with PRs, categorizes by impact type, highlights the most significant items, and writes a publish-ready document. Learns formatting, tone, and categorization preferences over time. Trigger on phrases like 'generate release notes,' 'write release notes,' 'what shipped this sprint,' 'create a changelog,' or any request to summarize delivered work for publishing."
+description: "Use when the user wants to summarize delivered work as a polished release notes document. Trigger on phrases like 'generate release notes,' 'write release notes,' 'what shipped this sprint,' 'create a changelog,' or any request to summarize delivered work for publishing."
 ---
 
 # Release Notes
 
 ## Purpose
 
-Generate a polished, general-audience release notes document from the last two weeks of delivered work across Jira, GitHub, and Slack. The output should describe user impact in plain language — not engineering jargon — with inline links to source tickets and PRs. Over time, the skill learns the user's categorization preferences, tone, and what to include or exclude.
+Produce a publish-ready release notes document describing user impact in plain language, with inline links to source tickets and PRs. Learns categorization, tone, and inclusion preferences over time.
 
 ## Dependencies
 
-- **Jira (Atlassian MCP):** Resolved tickets via JQL — stories, bugs, tasks, epics.
-- **GitHub CLI (`gh`):** Merged PRs across configured org/repos.
-- **Slack (Slack MCP):** Deployment and release messages from configured channels.
-- **Preferences file (`references/release-notes-preferences.md`):** Org config, learned formatting and tone preferences.
-- **Category rules (`references/category-rules.md`):** Classification heuristics and learned overrides.
+**Tools/APIs:**
+- Jira — resolved tickets via JQL
+- GitHub CLI (`gh`) — merged PRs
+- Slack — deployment and release messages
+
+**Reference Files:**
+- `references/release-notes-preferences.md` — config template (first-run schema)
+- `references/tst-release-notes-preferences.md` — active org config and session log
+- `references/category-rules.md` — classification heuristics and learned overrides
+- `references/release-notes-template.md` — output markdown template
 
 ## Inputs
 
@@ -31,28 +36,12 @@ A single markdown file written to the configured output path containing:
 - Categorized item lists with inline Jira/PR links
 - Footer with generation metadata (date, range, source counts)
 
----
-
-## First-Run Setup
-
-On the first invocation — or whenever `references/release-notes-preferences.md` has empty config sections — prompt the user for:
-
-1. **Jira project keys** — Which projects to query (e.g., `PLAT, CORE`).
-2. **GitHub org and/or repos** — Org name for broad search, or specific `org/repo` list.
-3. **Slack channels** — Channels where deployments/releases are announced.
-4. **Output path** — Where to write the generated markdown file.
-5. **Audience label** (optional) — Who reads these notes (e.g., "internal stakeholders," "AAA club admins"). Shapes tone.
-
-Write answers to the Configuration section of `references/release-notes-preferences.md`. Do not proceed to data gathering until config is confirmed.
-
----
-
 ## Workflow
 
 ### Phase 1: Load Configuration
 
-1. Read `references/release-notes-preferences.md` and `references/category-rules.md`.
-2. If config is incomplete, run First-Run Setup (above).
+1. Read `references/tst-release-notes-preferences.md` and `references/category-rules.md`.
+2. If no org-specific preferences file exists, use `references/release-notes-preferences.md` as template. Prompt user for: Jira project keys, GitHub org/repos, Slack channels, output path, audience label. Write to a new org-specific file.
 3. Resolve the date range: use explicit input, or default to `today - 14 days` through `today`.
 4. Confirm the date range and config with the user before proceeding.
 
@@ -62,53 +51,28 @@ Run all data pulls simultaneously. Each source is independent.
 
 #### 2A: Jira — Resolved Work
 
-Query Jira using JQL for each configured project:
-
 ```
 project IN ({projects}) AND resolved >= "{start_date}" AND resolved <= "{end_date}" AND statusCategory = Done ORDER BY priority ASC, resolved DESC
 ```
 
-For each ticket, extract:
-- Key, summary, issue type, priority, resolution
-- Epic link and epic name (if any)
-- Labels and fix versions
-- Whether any label or field indicates "breaking change"
-
-Process in batches of 20.
+Extract per ticket: key, summary, issue type, priority, resolution, epic link/name, labels, fix versions, breaking change indicators. Batch: 20.
 
 #### 2B: GitHub — Merged PRs
 
-For each configured org or repo, run:
-
 ```bash
+# Org-wide:
 gh search prs --merged --merged-after={start_date} --merged-before={end_date} --owner={org} --limit=100 --json number,title,body,url,repository,mergedAt,labels
-```
-
-Or for specific repos:
-
-```bash
+# Or per-repo:
 gh pr list --repo {org/repo} --state merged --search "merged:>={start_date}" --json number,title,body,url,mergedAt,labels --limit=100
 ```
 
-For each PR, extract:
-- Number, title, body (first 500 chars), URL, repo name
-- Any Jira ticket keys found in title or body (regex: `[A-Z]{2,10}-\d+`)
-- Labels (look for `breaking-change`, `feature`, `bugfix`, `hotfix`)
-
-Process in batches of 20.
+Extract per PR: number, title, body (first 500 chars), URL, repo name, Jira keys from title/body (regex: `[A-Z]{2,10}-\d+`), labels. Batch: 20.
 
 #### 2C: Slack — Deployment & Release Messages
 
-Search configured Slack channels for messages in the date range containing deployment keywords.
+Search configured channels for deployment keywords: `deployed`, `shipped`, `released`, `hotfix`, `rollback` (and similar).
 
-Keywords to scan for: `deployed`, `shipped`, `released`, `hotfix`, `rollback`, `went live`, `pushed to prod`, `production release`, `cut a release`.
-
-For each matching message, extract:
-- Channel, timestamp, author, text
-- Any Jira ticket keys or PR numbers mentioned
-- Whether it indicates a rollback or incident
-
-Process in batches of 10.
+Extract per message: channel, timestamp, author, text, Jira keys/PR numbers, rollback indicators. Batch: 10.
 
 ### Phase 3: Cross-Reference
 
@@ -122,15 +86,7 @@ After all three sources return:
 
 ### Phase 4: Categorize
 
-Apply rules from `references/category-rules.md` to classify each item:
-
-1. **Breaking Changes** — Any item flagged as breaking (Jira label, PR label, or explicit mention in summary/body).
-2. **New Features** — Issue type = Story, or PR label = `feature`, or summary indicates new capability.
-3. **Bug Fixes** — Issue type = Bug, or PR label = `bugfix`/`hotfix`.
-4. **Improvements** — Everything else that doesn't fit above categories.
-5. **Known Issues** — Items with rollbacks, partial fixes, or open follow-up tickets.
-
-When a rule from `category-rules.md` has a learned override for a specific keyword, epic, or label — apply the override. When ambiguous, default to **Improvements**.
+Classify each item using `references/category-rules.md`. Apply learned overrides first, then default rules. When ambiguous, default to **Improvements**.
 
 ### Phase 5: Select Highlights
 
@@ -143,42 +99,12 @@ Choose 2–3 items as highlights based on:
 
 ### Phase 6: Generate Draft
 
-Compose the release notes markdown using this template:
-
-```markdown
-# Release Notes — {date range or version label}
-
-> {1-sentence theme summarizing the body of work}
-
-## Highlights
-
-{2–3 paragraphs, one per highlight item. Describe user impact in plain language. Include inline links.}
-
-## New Features
-- **{Name}** — {User-impact description.} ([{JIRA-KEY}]({url}) | [PR #{n}]({url}))
-
-## Improvements
-- **{Name}** — {What changed and why it matters.} ([{JIRA-KEY}]({url}))
-
-## Bug Fixes
-- **{Name}** — {What was broken, now fixed.} ([{JIRA-KEY}]({url}))
-
-## Breaking Changes
-{Include only if items exist. Otherwise omit this section entirely.}
-
-## Known Issues
-{Include only if items exist. Otherwise omit this section entirely.}
-
----
-_Generated {date}. Covers {start_date} to {end_date}. Sources: {N} Jira tickets, {M} merged PRs, Slack._
-```
-
-**Tone rules:**
-- Write for the audience defined in preferences. Default: informed but non-technical.
-- Lead with what the user can now do, not what the engineer changed.
-- Group related items (e.g., multiple PRs for one feature = one line item).
-- Omit empty sections entirely — do not render "## New Features" if there are none.
-- Apply any learned tone preferences from `references/release-notes-preferences.md`.
+Compose using the template in `references/release-notes-template.md`. Key rules:
+- Write for the audience defined in preferences (default: informed but non-technical)
+- Lead with user impact, not engineering changes
+- Group related items (multiple PRs for one feature = one line item)
+- Omit empty sections entirely
+- Apply learned tone preferences from org-specific preferences file
 
 ### Phase 7: Interactive Review
 
@@ -192,10 +118,7 @@ Present the full draft to the user. Offer these actions:
 - **"Rewrite"** — Regenerate a specific section with different framing or tone. (Logged as tone signal.)
 - **"Change highlights"** — Swap highlight items. (Logged as highlight preference.)
 
-#### Navigation Commands (Available at Any Point)
-
-- **Show overview** — Re-display the full draft.
-- **Done** — Equivalent to Approve.
+Navigation commands: Show overview / Done / Next section / Back
 
 Continue the review loop until the user approves or says Done.
 
@@ -206,25 +129,20 @@ Continue the review loop until the user approves or says Done.
 
 ### Phase 9: Learn
 
-After the file is written, update `references/release-notes-preferences.md`:
+After the file is written, update the org-specific preferences file following the format comments in each section (category overrides, removal patterns, tone adjustments, highlight preferences). Log a session entry.
 
-1. **Category overrides** — Log any re-categorizations: `{keyword/label/epic}: moved from {X} to {Y} — {date}`.
-2. **Removal patterns** — Log removed items: `{pattern/type}: removed — {reason if given} — {date}`.
-3. **Tone adjustments** — Log rewrite requests: `{section}: {adjustment description} — {date}`.
-4. **Highlight preferences** — Log highlight swaps: `{what was chosen over what} — {date}`.
-5. **Consolidation** — Every 5 sessions, review the Session Log. Remove zero-signal entries, merge duplicates, strengthen confirmed patterns. Trim to under 2,000 words.
+**Consolidation:** Every 5 sessions, review the Session Log. Remove zero-signal entries, merge duplicates, strengthen confirmed patterns. Trim to under 2,000 words.
 
 ---
 
 ## Context Rules
 
-- Phase 2 data pulls run in parallel — each source is independent.
-- After Phase 3 cross-referencing, drop raw source data. Keep only the unified item list.
-- Load reference files once at workflow start. Do not reload mid-workflow.
-- Update `references/release-notes-preferences.md` only after Phase 8 (file written), never mid-workflow.
-- Batch Jira and GitHub results in groups of 20. Batch Slack messages in groups of 10.
-- If a source returns zero results, note it but continue — do not fail the entire workflow.
-- If Jira or GitHub is unreachable, warn the user and offer to proceed with available sources only.
+- Load config and category-rules at Phase 1. Load template at Phase 6.
+- Run Phase 2 data pulls in parallel — each source is independent.
+- After Phase 3, drop raw source data. Keep only the unified item list.
+- Update preferences file only after Phase 8 (file written), never mid-workflow.
+- Batch: Jira 20, GitHub 20, Slack 10.
+- If a source returns zero results or is unreachable, note the gap and continue with available sources.
 
 ## Edge Cases
 

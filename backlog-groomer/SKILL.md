@@ -1,43 +1,45 @@
 ---
 name: backlog-groomer
-description: "Orchestrate comprehensive backlog grooming for your team — stale ticket detection, priority rebalancing, sprint readiness assessment, epic health checks, dependency mapping, estimation gaps, scope validation, and cross-type consolidation. Delegates bug-specific work to the bug-consolidator skill. Use this skill whenever the backlog needs a health check, sprint planning prep, or systematic cleanup. Trigger on phrases like 'groom the backlog,' 'prep for sprint planning,' 'clean up the board,' 'what's sprint ready,' 'are our priorities right,' 'stale tickets,' 'backlog health check,' 'audit the backlog,' 'board health,' 'what needs grooming,' or any request for a comprehensive review of team tickets."
+description: "Use when the backlog needs a systematic health check, sprint planning prep, or cleanup. Trigger on phrases like 'groom the backlog,' 'prep for sprint planning,' 'clean up the board,' 'what's sprint ready,' 'are our priorities right,' 'stale tickets,' 'backlog health check,' 'audit the backlog,' 'board health,' 'what needs grooming,' or any request for comprehensive review of team tickets."
 ---
 
 # Backlog Groomer
 
 ## Purpose
-Backlogs decay. Tickets go stale, priorities drift, epics bloat, dependencies hide, and sprint planning becomes guesswork. This skill runs a systematic health check across your team's board — all ticket types, not just bugs — and produces actionable recommendations with a one-at-a-time review workflow.
-
-## Team Scope
-**All queries are scoped to `Team = "YourTeam"`.** Only team-owned tickets are ingested, analyzed, and acted upon. This constraint is hardcoded into every JQL pattern in the reference files and is not overridable.
+Systematic health check across your team's board — all ticket types, not just bugs — producing actionable recommendations with a one-at-a-time review workflow. All queries scoped to your team's Jira filter (set by org context skill; see `grooming-jql-patterns.md`).
 
 ## Dependencies
-- **Bug Consolidator:** Delegated for bug-specific clustering, stale detection, duplicate detection, and priority scoring. Called in orchestrated mode.
-- **Jira Template Builder:** Templates and epic/roadmap mapping rules.
-- **Jira API:** Read/write tickets, epics, sprints.
-- **Reference Files** (loaded once at Step 1):
-  - `references/grooming-jql-patterns.md` — JQL queries for all analysis dimensions
-  - `references/sprint-readiness-checklist.md` — Readiness criteria by ticket type
-  - `references/staleness-thresholds.md` — Configurable stale thresholds by type/status
-  - `references/grooming-report-template.md` — Output report structure
+
+**Tools/APIs:**
+- Jira — read/write tickets, epics, sprints
+
+**Other Skills:**
+- `bug-consolidator` — bug-specific clustering, stale detection, duplicates (orchestrated mode)
+- `jira-template-builder` — templates and epic/roadmap mapping rules
+
+**Reference Files:**
+- `references/grooming-jql-patterns.md` — JQL queries and field extraction list
+- `references/sprint-readiness-checklist.md` — readiness criteria by ticket type
+- `references/staleness-thresholds.md` — configurable stale thresholds by type/status
+- `references/priority-scoring-rubric.md` — priority rebalancing weights
+- `references/grooming-report-template.md` — output report structure
 
 ## Inputs
-- **Team filter**: Always `Team = "YourTeam"` — hardcoded, not overridable.
-- **Scope** (required): One of:
-  - Whole board
-  - Specific epic(s) (by key or name)
-  - Current sprint / next sprint
-  - Custom JQL (combined with Team filter automatically)
-- **Focus** (optional): Run all analyses, or limit to specific dimensions:
-  - `stale` — stale ticket detection only
-  - `sprint-readiness` — sprint readiness assessment only
-  - `priorities` — priority rebalancing only
-  - `consolidation` — cross-type consolidation only
-  - `estimation` — estimation gaps only
-  - `epic-health` — epic health check only
-  - `dependencies` — dependency mapping only
-  - `scope-validation` — scope validation only
-  - (Default: all dimensions)
+- **Scope** (required): Whole board / specific epic(s) / current or next sprint / custom JQL
+- **Focus** (optional, default: all):
+
+| Focus | Runs Step(s) |
+|-------|-------------|
+| `stale` | 3 |
+| `sprint-readiness` | 6 |
+| `priorities` | 5 |
+| `consolidation` | 4 |
+| `estimation` | 8 |
+| `epic-health` | 9 |
+| `dependencies` | 10 |
+| `scope-validation` | 7 |
+
+- **Staleness overrides** (optional): Custom thresholds per `staleness-thresholds.md` format
 
 ## Outputs
 - Comprehensive grooming report (per `grooming-report-template.md`)
@@ -48,34 +50,18 @@ Backlogs decay. Tickets go stale, priorities drift, epics bloat, dependencies hi
 
 ### Step 1: Configure Scope
 - Ask user for scope and focus (or accept defaults: whole board, all dimensions)
-- Load all four reference files
 - Confirm configuration before proceeding
 - If user specifies a focus, skip non-relevant steps
 
 ### Step 2: Ingest Tickets (Batched)
-Pull tickets matching scope via JQL (from `grooming-jql-patterns.md`) in batches of 20. For each ticket, extract:
-- Key, type, summary, status, priority
-- Created date, updated date, resolved date
-- Story points / estimate
-- Assignee, reporter
-- Epic link, sprint
-- Labels, components
-- Issue links (blocks, is blocked by, duplicates, relates to)
-- Comment count and last comment date
-
-Drop raw ticket data after extraction. Build working dataset of extracted attributes only.
+Pull tickets matching scope via JQL (from `grooming-jql-patterns.md`) in batches of 20. Extract fields per `grooming-jql-patterns.md > Field Extraction`. Drop raw data after extraction.
 
 During ingestion, incrementally build:
 - Epic membership map (epic -> ticket keys)
 - Dependency graph (ticket -> blocks/blocked-by)
 
 ### Step 3: Stale Ticket Detection
-Compare each ticket against thresholds from `staleness-thresholds.md`. Classify as:
-- **Close candidate**: Exceeds staleness threshold, no assignee, no links, no recent activity
-- **Needs update**: Has assignee but no activity beyond threshold
-- **Reprioritize**: Stale but still relevant — suggest priority change or sprint removal
-
-Group stale tickets by type and status for the report.
+Compare each ticket against thresholds and classification logic from `staleness-thresholds.md`. Group stale tickets by classification (close candidate / needs update / reprioritize), then by type and status.
 
 ### Step 4: Cross-Type Consolidation
 
@@ -88,7 +74,7 @@ Invoke **bug-consolidator** in orchestrated mode (`called_by_backlog_groomer = t
 
 #### Step 4B: Story/Task Overlap Detection
 For non-bug tickets, detect:
-- **Duplicates**: Stories/tasks with >70% summary similarity within the same epic
+- **Duplicates**: Stories/tasks with highly similar summaries within the same epic
 - **Subsets**: One ticket's scope is entirely contained within another's
 - **Conflicting**: Tickets with contradictory acceptance criteria or goals
 - **Fragmented**: Multiple small tickets that should be a single story
@@ -96,20 +82,7 @@ For non-bug tickets, detect:
 Compare summaries within and across epics. Flag overlaps with confidence level.
 
 ### Step 5: Priority Rebalancing
-Score each non-bug ticket on 6 dimensions (each weighted):
-
-| Dimension | Weight | Source |
-|-----------|--------|--------|
-| Current priority | 20% | Jira priority field |
-| Business alignment | 25% | Epic/roadmap alignment, labels |
-| Age | 15% | Days since created |
-| Blocking impact | 20% | Number of downstream blocked tickets |
-| Sprint proximity | 10% | In current sprint vs. backlog |
-| User impact | 10% | Labels, components, description keywords |
-
-Flag tickets where computed priority significantly diverges from Jira priority:
-- Over-prioritized: Jira says Critical/High but score suggests Medium/Low
-- Under-prioritized: Jira says Low but score suggests High/Critical
+Score each non-bug ticket using the 6-dimension weighted formula in `references/priority-scoring-rubric.md`. Flag tickets where computed priority significantly diverges from Jira priority (over-prioritized or under-prioritized).
 
 ### Step 6: Sprint Readiness Assessment
 Evaluate tickets in current/next sprint against criteria from `sprint-readiness-checklist.md`. Score each ticket:
@@ -162,40 +135,20 @@ Present the report overview to the user before entering review mode.
 Walk through recommended actions sorted by estimated impact (highest first). For each action:
 - Show: what the action is, which ticket(s) it affects, why it's recommended
 - Options: **Approve** / **Deny** / **Edit** (modify before applying)
-- Navigation: **Next** / **Back** / **Jump to #** / **Show report** / **Done** (stop review) / **Remaining** (count of unreviewed items)
-
-Action types include:
-- Close stale ticket
-- Update priority
-- Merge duplicate tickets
-- Move ticket to/from sprint
-- Add missing acceptance criteria (draft provided)
-- Reassign epic
-- Flag for estimation
-- Add dependency link
-- Reclassify ticket type
+- Commands: **Next** / **Back** / **Jump to #** / **Show report** / **Done** (stop review) / **Remaining** (count of unreviewed)
 
 For Jira write actions (close, move, update priority, merge), execute on Approve. For advisory actions (flag for estimation, draft AC), note as recommendations in the summary.
 
 ### Step 13: Impact Summary
-After review is complete, show before/after metrics:
-- Tickets closed (stale)
-- Priorities adjusted
-- Tickets consolidated (bugs merged, stories combined)
-- Sprint changes (added/removed)
-- Descriptions/AC updated
-- Estimation requests sent
-- Epic restructures
-- Dependencies addressed or flagged
-- Net change in open ticket count
+After review, show before/after metrics for all dimensions that had approved actions. Include net change in open ticket count.
 
 ## Context Rules
-- **Reference files** loaded once at Step 1. Do not reload mid-workflow.
-- **Batch ingest** (20 tickets per batch). Drop raw data after attribute extraction.
-- **Bug-consolidator delegation**: Pass bug subset, receive structured results. Do not hold bug-consolidator's internal working context.
-- **One-at-a-time during review** (Step 12): Only the current recommendation in active context. Load next on navigation.
-- **Epic health and dependency graph**: Built incrementally during Step 2 ingestion, not as a separate pass.
-- **Report generation**: Compile from extracted attributes and analysis results, not from re-reading tickets.
+- Load all reference files at Step 1. Do not reload mid-workflow.
+- Batch ingest at 20 tickets per batch. Drop raw data after attribute extraction.
+- Pass bug subset to bug-consolidator; keep only its structured output.
+- During Step 12 review, hold only the current recommendation. Load next on navigation.
+- Build epic membership map and dependency graph incrementally during Step 2 ingestion.
+- Compile the report from extracted attributes and analysis results, not from re-reading tickets.
 
 ## Edge Cases
 - **Empty scope**: No tickets match the query. Report this immediately, suggest broadening scope.

@@ -1,6 +1,6 @@
 ---
 name: discover-design-deliver
-description: "Guide product development through the 4D Process (Discover, Design, Develop, Deliver) — from problem validation through solution design to shipping. Uses Problem Statement and PRD templates. Searches GitHub, Confluence, Jira, and PostHog to ground each phase in real context. Trigger on phrases like 'new feature,' 'scope this,' 'should we build,' 'product discovery,' 'problem statement,' 'write a PRD,' 'design this feature,' 'plan the build,' 'where are we on,' 'phase check,' '4D process,' or any product development lifecycle question."
+description: "Use when guiding product development through discovery, design, and delivery. Trigger on phrases like 'new feature,' 'scope this,' 'should we build,' 'product discovery,' 'problem statement,' 'write a PRD,' 'design this feature,' 'plan the build,' 'where are we on,' 'phase check,' '4D process,' or any product development lifecycle question."
 ---
 
 # Discover, Design, Develop, Deliver (4D Process)
@@ -21,24 +21,32 @@ The four phases:
 - Business Value → completes the cycle
 
 ## Dependencies
-- **GitHub** — existing code, related features, technical feasibility
-- **Confluence** — specs, research docs, prior art
-- **Jira** — existing tickets, related epics, customer feedback
-- **PostHog** — usage data, feature adoption metrics, funnel analysis, drop-off patterns
-- **domain-modeler** — call when the feature touches domain boundaries
-- **api-composer** — call when new service integrations are needed
-- **ubiquitous-language-builder** — call when new domain concepts are introduced
-- **data-model-reviewer** — call when data exchange formats are involved
-- **problem-discoverer** — may hand off pre-compiled evidence packages for Problem Statement writing
 
-## Context Gathering (Always Do First)
+**Tools/APIs:**
+- Jira — existing tickets, related epics, customer feedback
+- Confluence — specs, research docs, prior art
+- GitHub — existing code, related features, technical feasibility
+- PostHog — usage data, feature adoption metrics, funnel analysis
 
-Before starting any phase, search for existing context in parallel:
+**Other Skills:**
+- `domain-modeler` — when the feature touches domain boundaries
+- `api-composer` — when new service integrations are needed
+- `ubiquitous-language-builder` — when new domain concepts are introduced
+- `data-model-reviewer` — when data exchange formats are involved
+- `problem-discoverer` — may hand off pre-compiled evidence packages
 
-1. **Jira**: Existing tickets/epics, customer-reported issues, past attempts, related bugs
-2. **Confluence**: Prior research, specs, design docs, meeting notes, competitive analysis
-3. **GitHub**: Existing code in this area, related PRs, technical constraints
-4. **PostHog**: Current usage patterns, drop-off/friction points, feature adoption data
+**Reference Files:**
+- `references/problem-statement-template.md` — Problem Statement structure and checkpoints
+- `references/prd-template.md` — PRD structure and sections
+
+## Context Gathering (Parallel — Always Do First)
+
+Search all four sources simultaneously before starting any phase. Batch: Jira 20, Confluence 10, GitHub 20, PostHog 5 queries.
+
+- **2A: Jira** — Existing tickets/epics, customer-reported issues, past attempts, related bugs
+- **2B: Confluence** — Prior research, specs, design docs, meeting notes
+- **2C: GitHub** — Existing code in this area, related PRs, technical constraints
+- **2D: PostHog** — Current usage patterns, drop-off/friction points, feature adoption
 
 Present a summary of prior art before starting. Don't repeat work already done.
 
@@ -46,80 +54,29 @@ Present a summary of prior art before starting. Don't repeat work already done.
 
 **Goal**: Validate the problem is real, worth solving, and clearly articulated.
 
-**Methodologies**:
-- **User Interviews**: On-site visits, 1:1 stakeholder meetings with screen sharing, direct observation
-- **Data Analytics**: BI and site analytics — bounce rates, booking trends, usage patterns (PostHog)
-- **Vendor Meetings**: Understanding external provider systems for integration
+**Methodologies**: User interviews, data analytics (PostHog), vendor meetings for integration understanding.
 
-**Artifact: Problem Statement** (required to exit Discover)
+**Artifact: Problem Statement** (required to exit Discover). Use `references/problem-statement-template.md`. Must include: problem articulation, personas, examples, 5 Whys (down to root cause AND up to business case), and conclusion.
 
-Use the template from `references/problem-statement-template.md`. The Problem Statement must include:
-- **Problem Statement**: Clear articulation of the customer problem
-- **Personas**: Who is affected and how (use your team's defined persona names: End Users, Support Team, Back Office, Engineering Teams)
-- **Examples**: Concrete scenarios showing the problem in action
-- **Why is this a problem**: 5 Whys drilling down to root cause
-- **Root Cause**: Single clear statement of the fundamental cause
-- **Why should we solve this**: 5 Whys building the business case upward
-- **Conclusion**: Summary connecting problem, impact, and strategic value
-
-**Approval gate**: Problem Statement must be approved by the Product Team and relevant stakeholders.
-
-**On approval**: Product Manager moves the Idea from Research to Discovery in Jira.
+**Approval gate**: Problem Statement approved by Product Team and relevant stakeholders. On approval, move Idea from Research to Discovery in Jira.
 
 ## Phase 2: Design
 
 **Goal**: Develop a validated solution to the approved problem.
 
-**Methodologies**:
-- **Design Workshops**: Collaborative sessions — sketching, brainstorming, affinity diagramming. Half-day to full-day sessions.
-- **User Testing**: Observe users interacting with prototypes. Facilitator asks tasks, observes behavior, gathers feedback.
-- **Prompt Framing**: Document content goals and requirements for generative-AI prompts based on wireframes.
+**Methodologies**: Design workshops, user testing with prototypes, prompt framing for AI-assisted content.
 
-**Artifact: Product Requirements Document (PRD)** (required to exit Design)
+**Artifact: PRD** (required to exit Design). Use `references/prd-template.md`. Must include: executive summary, problem statement, goals, persona impact (before/after), background research, recommendations (MVP + success metrics + rollout), appendix.
 
-Use the template from `references/prd-template.md`. The PRD must include:
-- **Summary/Executive Summary**: What we're building and why
-- **Problem Statement**: From Discover phase, with Root Cause, Value, and Conclusion
-- **Goals**: Measurable objectives
-- **Persona Impact**: Before/after for each affected persona
-- **Background Research**: Existing personas, engineering systems, business processes, data models
-- **Recommendations**: MVP with functional, technical, analytics, back office requirements + success metrics + rollout plan
-- **Appendix**: Open questions, related documents
-
-**Key stakeholders**: End Users, Advisory Group, Product Team
-
-**Tools**: Gemini (drafting), Slab (documentation), Mermaid (diagrams), Miro (workshops), Figma (designs), v0 (prompt framing)
-
-**Approval gate**: PRD must be approved by the Advisory Group and Product Team.
+**Approval gate**: PRD approved by Advisory Group and Product Team.
 
 ## Phase 3: Develop
 
-**Goal**: Build the solution described in the PRD.
-
-**Methodologies**:
-- **Sprints**: 2-week cadence
-- **Grooming**: Every 2 weeks, 1 hour. Clarify acceptance criteria, point stories.
-- **Daily Scrums**: Regular standup cadence
-- **Retrospective**: Mondays, 1 hour, every 2 weeks
-- **Planning**: Ad hoc before sprint end
-
-**Work intake sources**:
-- Roadmap Initiatives (completed Design process, have PRD)
-- Production Bugs (via Help Desk / support channels)
-- Technical Requirements (debt, dependencies, standardization)
-- Security and Compliance
-
-**Artifacts**: Jira work items (Stories, Bugs, Epics) delivered biweekly.
+Build the PRD solution via 2-week sprints. Work intake: roadmap initiatives, production bugs, tech requirements, security/compliance. Artifacts: Jira work items delivered biweekly.
 
 ## Phase 4: Deliver
 
-**Goal**: Release and validate the solution provides business value.
-
-**Review process by work type**:
-- Roadmap Initiatives → reviewed with stakeholders post-GA
-- Production Bugs → reviewed with reporting parties
-- Technical Requirements → reviewed by Tech Leads
-- Security/Compliance → reviewed by DevOps/Security
+Release and validate business value. Review with stakeholders by work type (roadmap → stakeholders, bugs → reporters, tech → leads, security → DevOps).
 
 ## Modes
 
@@ -159,8 +116,13 @@ For small features: compressed discovery, lightweight design, ticket creation wi
 - Version documents (v1, v2 [WIP], etc.) — preserve history
 
 ## Context Rules
-- Load reference templates only when this skill triggers
-- Run context gathering searches in parallel
-- Drop raw search results after summarizing
-- At each gate, present a clear go/no-go recommendation with evidence
-- When calling other skills, let them run their full workflow
+- Load reference templates only when entering the phase that uses them (problem-statement at Phase 1, prd at Phase 2). Do not preload both.
+- Run context gathering searches in parallel. Drop raw search results after summarizing.
+- At each gate, present a clear go/no-go recommendation with evidence.
+- When calling other skills, let them run their full workflow — do not abbreviate.
+
+## When NOT to Use
+- **Ill-defined problem** — use `ambiguity-handler` first to clarify
+- **Bug triage or backlog cleanup** — use `backlog-groomer` or `bug-consolidator`
+- **Status reporting on existing work** — use `atlassian:generate-status-report`
+- **Domain modeling without a product development context** — use `domain-modeler` directly
