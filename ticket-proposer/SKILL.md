@@ -10,11 +10,11 @@ Extract actionable items from meetings and Slack and propose fully structured Ji
 
 ## Dependencies
 
-**Tools/APIs:** Jira API (create tickets, read board), Slack API (read threads)
+**Tools/APIs:** Jira API (create tickets, read board), Slack API (read threads), Circleback API (SearchMeetings, ReadMeetings for action items and decisions)
 **Other Skills:** voice-analyzer (ticket descriptions in user's voice), jira-template-builder (templates and epic mapping rules)
 
 ## Inputs
-- Meeting notes (text, transcript, or document), Slack threads, existing board context (for deduplication)
+- Meeting notes (text, transcript, or document), Slack threads, Circleback meetings (by date range or search), existing board context (for deduplication)
 
 ## Outputs
 - Proposed tickets with full structure, approve/deny/edit workflow, auto-assigned epics, deduplication warnings, source attribution
@@ -22,10 +22,13 @@ Extract actionable items from meetings and Slack and propose fully structured Ji
 ## Workflow
 
 ### Step 1: Extract Action Items
-From meeting notes: identify actionable items, decisions, and follow-ups. Note who was responsible and the source line.
+From meeting notes (text): identify actionable items, decisions, and follow-ups. Note who was responsible and the source line.
 From Slack: extract decisions, requests, problems, commitments. Note author, timestamp, and message link.
+From Circleback: if user says "create tickets from my meetings" or provides a date range, use `SearchMeetings` (last 3 days default) then `ReadMeetings` to pull structured action items. Circleback already provides action item text, assignee, and meeting context — map directly to ticket proposals. Note meeting name and date as source attribution.
 
 ### Step 2: Generate Ticket Proposals
+Check `memory/developer-profiles.md` for the assignee's preferences. If a profile exists, tailor ticket format, verbosity, and section structure to match their preferences. If no profile, use default jira-template-builder templates.
+
 For each action item: load the appropriate jira-template-builder template, generate full ticket (summary, description, AC, labels), auto-assign epic via mapping rules, propose assignee, add source attribution.
 
 ### Step 3: Deduplication Check

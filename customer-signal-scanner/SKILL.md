@@ -13,6 +13,7 @@ Systematically scans Gmail and Slack for external-facing signals — complaints,
 **Tools/APIs:**
 - Gmail — customer/partner emails, escalation threads, complaint patterns
 - Slack — support channels, customer-facing channels, escalation threads
+- Circleback — SearchTranscripts (keyword search in meeting recordings), SearchMeetings + ReadMeetings (meeting notes from customer/partner meetings), FindDomains (identify customer domain filters)
 
 **Reference Files:**
 - `references/customer-signal-patterns.md` — learned patterns (action vs. dismissal)
@@ -69,9 +70,10 @@ Patterns: customer name + issue keywords, multiple issues from same customer. Pl
 - Load `references/customer-signal-patterns.md` for learned patterns
 
 ### Step 2: Scan
-Pull messages from relevant Slack channels and Gmail threads within time window. Process in batches of 20 messages. Extract signal-relevant content; drop raw message content after classification.
+Pull messages from relevant Slack channels, Gmail threads, and Circleback meeting transcripts within time window. Process in batches of 20 messages. Extract signal-relevant content; drop raw message content after classification.
 - Gmail: threads with customer/partner/organization senders, escalation keywords
 - Slack: complaint patterns, escalation language, unresolved questions
+- Circleback: Use `FindDomains` to identify customer/partner domains, then `SearchMeetings` filtered by those domains within time window. `ReadMeetings` to extract complaints, escalations, and pain points discussed in meetings. Also `SearchTranscripts` for signal keywords ("broken," "escalating," "can't use," "switching to," "blocking") filtered to customer-domain meetings. Verbal escalations in meetings are often more candid than written communication. Batch limit: 20 transcript hits max.
 
 ### Step 3: Classify
 Apply signal type detection to each message/thread:

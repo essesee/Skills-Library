@@ -13,6 +13,7 @@ Systematically scans internal Slack and Gmail for informal team pain — workaro
 **Tools/APIs:**
 - Slack — engineering channels, support channels, general/product channels
 - Gmail — internal threads about recurring problems, cross-team coordination
+- Circleback — SearchTranscripts (keyword search across meeting recordings), SearchMeetings + ReadMeetings (meeting notes, action items, decisions)
 
 **Reference Files:**
 - `references/team-signal-patterns.md` — learned patterns (action vs. dismissal)
@@ -72,9 +73,10 @@ Patterns: references to past incidents, "happened again," "same thing as last ti
 - Load `references/team-signal-patterns.md` for learned patterns
 
 ### Step 2: Scan
-Pull messages from relevant Slack channels and Gmail threads within time window. Process in batches of 20 messages. Extract signal-relevant content; drop raw message content after classification.
+Pull messages from relevant Slack channels, Gmail threads, and Circleback meeting transcripts within time window. Process in batches of 20 messages. Extract signal-relevant content; drop raw message content after classification.
 - Slack: workaround language, frustration patterns, knowledge gaps, friction indicators
 - Gmail: internal threads with recurring problem discussion, coordination breakdowns
+- Circleback: `SearchTranscripts` for signal keywords (e.g., "workaround," "hack," "keeps happening," "blocked by," "manual process"). Filter to internal meetings only (exclude customer/vendor domains via `FindDomains`). Also `SearchMeetings` + `ReadMeetings` for recent meetings — scan notes and action items for pain signals that surface verbally but never get written down in Slack/email. Batch limit: 20 transcript hits max.
 
 ### Step 3: Classify
 Apply signal type detection to each message/thread:

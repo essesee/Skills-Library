@@ -1,12 +1,12 @@
 ---
 name: daily-planner
-description: "Use when the user needs to prioritize work across Jira, Gmail, Slack, and Calendar for the day. Trigger on phrases like 'plan my day,' 'what should I work on today,' 'daily briefing,' 'morning standup prep,' 'what's on my plate,' 'build my to-do list,' 'what needs my attention,' or any request to aggregate today's work across tools."
+description: "Use when the user needs to prioritize work across Jira, Gmail, Slack, Calendar, and Circleback for the day. Trigger on phrases like 'plan my day,' 'what should I work on today,' 'daily briefing,' 'morning standup prep,' 'what's on my plate,' 'build my to-do list,' 'what needs my attention,' or any request to aggregate today's work across tools."
 ---
 
 # Daily Planner
 
 ## Purpose
-Work is scattered across Jira, Gmail, Slack, and Google Calendar. Starting the day means checking four different tools to figure out what matters. This skill pulls from all four, prioritizes using the Google Drive platform roadmap as the source of truth, surfaces relevant Slack messages even without direct tags, learns preferences over time, and then walks through every item interactively so the user can take action on each one.
+Work is scattered across Jira, Gmail, Slack, Google Calendar, and Circleback. Starting the day means checking five different tools to figure out what matters. This skill pulls from all five, prioritizes using the Google Drive platform roadmap as the source of truth, surfaces relevant Slack messages even without direct tags, pulls meeting action items and decisions from Circleback, learns preferences over time, and then walks through every item interactively so the user can take action on each one.
 
 ## Dependencies
 
@@ -15,6 +15,7 @@ Work is scattered across Jira, Gmail, Slack, and Google Calendar. Starting the d
 - Gmail API — search unread/important, read threads, create drafts
 - Slack API — search messages, read channels/DMs, send messages
 - Google Calendar API — list events, find free time
+- Circleback API — SearchMeetings, ReadMeetings (action items, notes, insights), SearchTranscripts, SearchCalendarEvents, FindProfiles
 - WebFetch — access Google Drive roadmap (shared/published link)
 
 **Other Skills:**
@@ -50,6 +51,7 @@ This skill improves over time by tracking how the user interacts with the daily 
 - **Slack:** channel engagement, sender importance, actioned keywords, dismissed noise → tune relevance model
 - **Communication:** reply-first senders, thread engagement, reply effort level → refine urgency signals
 - **Jira:** active epics, gap types actioned vs. skipped → focus attention
+- **Circleback:** meeting types that produce actionable items, action items actioned vs. skipped, which attendee groups generate follow-ups → tune meeting intelligence relevance
 
 ### How Learning Works
 1. During the interactive walkthrough, every user action is a signal (action taken, skipped, re-prioritized, dismissed)
@@ -80,6 +82,14 @@ This skill improves over time by tracking how the user interacts with the daily 
 ## Jira Focus
 - {epic/area}: {importance level}
 - {gap types they care about}: {ranked list}
+
+## Circleback Meeting Intelligence
+### Meeting Types That Produce Action Items
+- {meeting name/pattern}: {frequency} — {typical action types}
+### Attendee Groups With Follow-ups
+- {group/person}: {weight} — {reason}
+### Action Item Patterns
+- {pattern}: {actioned or skipped} — {notes}
 
 ## Session Log
 - {date}: {key adjustments made}
@@ -177,10 +187,22 @@ Run all data pulls simultaneously.
 2. Contextual: scan high-priority channels and people, score against relevance model
 3. Tag each surfaced message with why: "mentioned you", "your project discussed", "key person", "decision being made"
 
-#### 1E: Google Calendar — Today's Schedule (batch: all today's events, typically <15)
+#### 1E: Google Calendar + Circleback Meeting Prep (batch: all today's events, typically <15)
 1. `gcal_list_events` for today
 2. Extract: title, time, duration, attendees, agenda
 3. `gcal_find_my_free_time` for focus blocks
+4. For each meeting with 2+ attendees, search Circleback (`SearchMeetings`) for the most recent past meeting with the same attendees/topic
+5. If found, `ReadMeetings` to pull: previous action items, open decisions, key notes
+6. Attach as "Last meeting context" to the calendar item for prep during walkthrough
+
+#### 1F: Circleback — Meeting Action Items & Decisions (batch: 20 meetings max)
+1. `SearchMeetings` for last 3 days (no search term, just date range)
+2. `ReadMeetings` for all returned meetings — extract action items, decisions, insights
+3. Filter action items: keep those assigned to user or unassigned (likely user's responsibility as PO)
+4. Tag each with source meeting name, date, and attendees
+5. Deduplicate against Jira — if an action item already has a linked Jira ticket, mark as "tracked" and deprioritize
+6. For items touching active roadmap topics (from cache), cross-reference and note alignment
+7. Optionally: `SearchTranscripts` for keywords matching active Jira stories/roadmap items to surface meeting discussions the user may have missed or forgotten
 
 ### Phase 2: Prioritize
 
@@ -190,10 +212,10 @@ Default tiers (when no preference signal exists):
 
 | Tier | Label | Items |
 |------|-------|-------|
-| P0 | Do First | Blockers, deadlines, at-risk roadmap items, urgent messages, imminent meetings |
-| P1 | Do Today | Sprint stories needing requirements, roadmap gaps, direct questions 24h+, Slack >=70 |
-| P2 | Do If Time | Unestimated/unassigned stories, non-urgent replies, Slack 40-69, stale stories |
-| P3 | Delegate/Defer | Items user typically dismisses, low-priority backlog, FYI-only messages |
+| P0 | Do First | Blockers, deadlines, at-risk roadmap items, urgent messages, imminent meetings, stale meeting action items (>3 days old) |
+| P1 | Do Today | Sprint stories needing requirements, roadmap gaps, direct questions 24h+, Slack >=70, meeting action items from last 3 days |
+| P2 | Do If Time | Unestimated/unassigned stories, non-urgent replies, Slack 40-69, stale stories, meeting decisions needing follow-up |
+| P3 | Delegate/Defer | Items user typically dismisses, low-priority backlog, FYI-only messages, tracked action items (already in Jira) |
 
 ### Phase 3: Present Overview
 Show the full daily plan as a scannable summary:
@@ -243,7 +265,8 @@ Work through **every item** one at a time, priority order (P0 → P3). Present w
 | **Jira Story** | "Write requirements" (draft desc + AC, update Jira), "Add AC only", "Assign to {person}", "Move to sprint", "Comment" |
 | **Gmail** | "Draft reply" (via voice-analyzer + message-drafting → Gmail draft), "Quick ack", "Forward to {person}", "Star for later" |
 | **Slack** | "Reply", "React", "Reply in thread", "Read full thread" |
-| **Calendar** | "Prep notes" (pull Jira/Slack/email context), "Add agenda", "Decline" |
+| **Calendar** | "Prep notes" (pull Jira/Slack/email context + Circleback last meeting notes), "Add agenda", "Decline", "Show last meeting notes" |
+| **Meeting Action Item** | "Create Jira ticket" (draft story from action item), "Draft follow-up" (Slack/email to relevant attendees), "Mark done" (note in session log), "Already tracked" (link to existing Jira ticket), "Search transcript" (pull transcript context via SearchTranscripts) |
 | **Roadmap Gap** | "Create epic", "Create stories", "Write requirements", "Flag in standup" |
 | **All types** | "Skip" (logged as preference signal), "Not my problem" / "Not important" / "Not relevant" (logged as strong negative signal) |
 
@@ -270,8 +293,9 @@ Triggered when user says "done" or all items are exhausted.
 ---
 
 ## Edge Cases
-- **Empty source** (no unread Gmail, no Slack messages, etc.) — skip that source, note it in overview. Do not error.
+- **Empty source** (no unread Gmail, no Slack messages, no recent meetings, etc.) — skip that source, note it in overview. Do not error.
 - **API failure** — log which source failed, proceed with remaining sources. Note gap in overview.
+- **Circleback not connected** — skip Phase 1F and Circleback meeting prep in 1E. Note in overview. Do not error.
 - **No active Jira epics** — skip Jira story readiness checks. Still check roadmap alignment.
 - **No roadmap URL cached** — trigger first-run setup flow before proceeding.
 - **All items are P3** — present overview, ask if user wants to walkthrough or skip to "Done."
@@ -292,5 +316,7 @@ Triggered when user says "done" or all items are exhausted.
 - When writing Jira requirements: load only the story + epic + roadmap item. Drop all other context.
 - Keep calendar data loaded through entire session (lightweight footprint).
 - Summarize email/Slack threads exceeding 1,000 words before loading into walkthrough context.
-- Batch limits: Jira epics 5, Gmail messages 10, Slack messages 10, Calendar events all.
+- Batch limits: Jira epics 5, Gmail messages 10, Slack messages 10, Calendar events all, Circleback meetings 20.
 - Score Slack relevance during Phase 1D ingestion only — do not re-score later.
+- Circleback meeting prep context (Phase 1E step 4-6): load per-meeting during walkthrough, not all at once. Keep lightweight.
+- SearchTranscripts (Phase 1F step 7): only run if user has opted in or if matching a high-priority roadmap/Jira keyword. Do not speculatively search all transcripts.

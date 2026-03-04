@@ -15,6 +15,7 @@ Quarterly self-reviews are tedious because the hard part isn't writing -- it's r
 - Jira API -- JQL search via `searchJiraIssuesUsingJql`
 - Slack API -- message search via `slack_search_public_and_private`, channel reading
 - Gmail API -- sent mail search via `gmail_search_messages`, thread reading
+- Circleback API -- SearchMeetings (by date range), ReadMeetings (action items, decisions, insights), SearchTranscripts (keyword search across meeting recordings)
 
 **Other Skills:**
 - `voice-analyzer` -- load voice profile for drafting (optional; falls back to CLAUDE.md style)
@@ -104,6 +105,21 @@ Search strategy:
 3. Batch limit: 15 threads max.
 
 **Output**: Structured list of email signals with signal type tags.
+
+#### Source D: Circleback Meetings
+
+Search all meetings during the review period using `SearchMeetings` with date range. Then `ReadMeetings` for full detail.
+
+Extract signals mapped to review sections:
+- **Decisions made/driven**: action items assigned to user, decisions the user drove or facilitated
+- **Leadership**: meetings where user was organizer or key contributor, cross-functional meetings
+- **Wins/shipped work**: meeting notes referencing launches, completions, milestones
+- **Cross-functional coordination**: meetings with attendees from multiple teams (use attendee list to detect)
+- **Challenges discussed**: blockers raised, escalations, delays mentioned in meeting notes
+
+Optionally `SearchTranscripts` for high-value keywords: "shipped," "launched," "decided," "unblocked," "escalated" within the date range. Limit to 10 transcript hits max.
+
+**Output**: Structured list of meeting-sourced evidence with signal type tags and meeting name/date attribution.
 
 #### Evidence Quality Check
 

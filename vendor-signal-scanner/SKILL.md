@@ -13,6 +13,7 @@ Systematically scans vendor communication (Gmail + Slack) for signals that indic
 **Tools/APIs:**
 - Gmail — vendor correspondence, integration support threads, API change notifications, contracts
 - Slack — vendor-specific channels, integration channels, alerting channels
+- Circleback — SearchTranscripts (keyword search in meeting recordings), SearchMeetings + ReadMeetings (meeting notes from vendor meetings), FindDomains (identify vendor domain filters)
 
 **Reference Files:**
 - `references/vendor-signal-patterns.md` — learned patterns (action vs. dismissal)
@@ -69,9 +70,10 @@ Patterns: unanswered support threads (> 3 business days), repeated follow-ups wi
 - Load `references/vendor-signal-patterns.md` for learned patterns
 
 ### Step 2: Scan
-Pull messages from relevant Slack channels and Gmail threads within time window. Process in batches of 20 messages. Extract signal-relevant content; drop raw message content after classification.
+Pull messages from relevant Slack channels, Gmail threads, and Circleback meeting transcripts within time window. Process in batches of 20 messages. Extract signal-relevant content; drop raw message content after classification.
 - Gmail: vendor sender domains, API change notifications, contract correspondence
 - Slack: vendor/integration channels for degradation reports, change announcements, support threads
+- Circleback: Use `FindDomains` to identify vendor domains, then `SearchMeetings` filtered by those domains within time window. `ReadMeetings` to extract integration issues, service changes, deprecation discussions, and contract topics discussed in vendor meetings. Also `SearchTranscripts` for signal keywords ("deprecation," "migration," "breaking change," "downtime," "rate limit," "price increase") filtered to vendor-domain meetings. Batch limit: 20 transcript hits max.
 
 ### Step 3: Classify
 Apply signal type detection to each message/thread:
