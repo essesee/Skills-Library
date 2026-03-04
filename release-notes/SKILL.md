@@ -18,7 +18,7 @@ Produce a publish-ready release notes document describing user impact in plain l
 
 **Reference Files:**
 - `references/release-notes-preferences.md` — config template (first-run schema)
-- `references/tst-release-notes-preferences.md` — active org config and session log
+- `references/<org>-release-notes-preferences.md` — active org config and session log (created on first run; gitignored)
 - `references/category-rules.md` — classification heuristics and learned overrides
 - `references/release-notes-template.md` — output markdown template
 
@@ -40,8 +40,8 @@ A single markdown file written to the configured output path containing:
 
 ### Phase 1: Load Configuration
 
-1. Read `references/tst-release-notes-preferences.md` and `references/category-rules.md`.
-2. If no org-specific preferences file exists, use `references/release-notes-preferences.md` as template. Prompt user for: Jira project keys, GitHub org/repos, Slack channels, output path, audience label. Write to a new org-specific file.
+1. Read the org-specific preferences file (e.g., `references/<org>-release-notes-preferences.md`) and `references/category-rules.md`.
+2. If no org-specific preferences file exists, use `references/release-notes-preferences.md` as template. Prompt user for: Jira project keys, GitHub org/repos, Slack channels, output path, audience label. Write to a new org-specific file (naming convention: `<org>-release-notes-preferences.md`).
 3. Resolve the date range: use explicit input, or default to `today - 14 days` through `today`.
 4. Confirm the date range and config with the user before proceeding.
 
@@ -129,7 +129,7 @@ Continue the review loop until the user approves or says Done.
 
 ### Phase 9: Learn
 
-After the file is written, update the org-specific preferences file following the format comments in each section (category overrides, removal patterns, tone adjustments, highlight preferences). Log a session entry.
+After the file is written, update the org-specific preferences file (e.g., `references/<org>-release-notes-preferences.md`) following the format comments in each section (category overrides, removal patterns, tone adjustments, highlight preferences). Log a session entry.
 
 **Consolidation:** Every 5 sessions, review the Session Log. Remove zero-signal entries, merge duplicates, strengthen confirmed patterns. Trim to under 2,000 words.
 

@@ -1,11 +1,13 @@
 # Grooming JQL Patterns
 
-Reference file for the backlog-groomer skill. JQL queries for all analysis dimensions. Every query includes `Team = "Platform"` as a base constraint.
+Reference file for the backlog-groomer skill. JQL queries for all analysis dimensions. Every query includes a team filter as a base constraint.
+
+> **Org context:** Replace `{your_team}` with your team name. If an org context skill is loaded, it provides the concrete value (e.g., `Team = "{your_team}"`).
 
 ## Base Filter
 
 ```
-Team = "Platform"
+Team = "{your_team}"
 ```
 
 This is prepended to every query. Never run grooming queries without the team filter.
@@ -15,7 +17,7 @@ This is prepended to every query. Never run grooming queries without the team fi
 ### Whole Board (All Open Tickets)
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND status NOT IN (Closed, Done, Resolved)
 ORDER BY priority DESC, created ASC
 ```
@@ -23,7 +25,7 @@ ORDER BY priority DESC, created ASC
 ### Specific Epic
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND "Epic Link" = "{epic_key}"
 AND status NOT IN (Closed, Done, Resolved)
 ORDER BY priority DESC, created ASC
@@ -32,7 +34,7 @@ ORDER BY priority DESC, created ASC
 ### Current Sprint
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND sprint IN openSprints()
 ORDER BY priority DESC, rank ASC
 ```
@@ -40,16 +42,16 @@ ORDER BY priority DESC, rank ASC
 ### Next Sprint
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND sprint IN futureSprints()
 ORDER BY priority DESC, rank ASC
 ```
 
 ### Custom JQL (User-Provided)
 
-Prepend `Team = "Platform" AND` to the user's custom JQL. Example:
+Prepend `Team = "{your_team}" AND` to the user's custom JQL. Example:
 ```jql
-Team = "Platform" AND {user_jql}
+Team = "{your_team}" AND {user_jql}
 ```
 
 ## Stale Ticket Detection
@@ -57,7 +59,7 @@ Team = "Platform" AND {user_jql}
 ### Stale Stories (30+ days, no update)
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND issuetype = Story
 AND status NOT IN (Closed, Done, Resolved)
 AND updated <= "-30d"
@@ -67,7 +69,7 @@ ORDER BY updated ASC
 ### Stale Tasks (21+ days, no update)
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND issuetype = Task
 AND status NOT IN (Closed, Done, Resolved)
 AND updated <= "-21d"
@@ -77,7 +79,7 @@ ORDER BY updated ASC
 ### Stale Bugs (delegated to bug-consolidator, included for reference)
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND issuetype = Bug
 AND status NOT IN (Closed, Done, Resolved)
 AND updated <= "-21d"
@@ -87,7 +89,7 @@ ORDER BY updated ASC
 ### Stale Sub-tasks (14+ days, no update)
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND issuetype = Sub-task
 AND status NOT IN (Closed, Done, Resolved)
 AND updated <= "-14d"
@@ -97,7 +99,7 @@ ORDER BY updated ASC
 ### Close Candidates (any type, 60+ days, unassigned, no links)
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND status NOT IN (Closed, Done, Resolved)
 AND assignee is EMPTY
 AND updated <= "-60d"
@@ -109,7 +111,7 @@ ORDER BY created ASC
 ### High/Critical Priority Tickets Not In Sprint
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND priority IN (Critical, Highest, High)
 AND sprint is EMPTY
 AND status NOT IN (Closed, Done, Resolved)
@@ -119,7 +121,7 @@ ORDER BY priority DESC, created ASC
 ### Low Priority Tickets In Current Sprint
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND priority IN (Low, Lowest)
 AND sprint IN openSprints()
 AND status NOT IN (Closed, Done, Resolved)
@@ -129,7 +131,7 @@ ORDER BY priority ASC
 ### Unset Priority
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND priority is EMPTY
 AND status NOT IN (Closed, Done, Resolved)
 ORDER BY created DESC
@@ -140,7 +142,7 @@ ORDER BY created DESC
 ### Current Sprint — Missing Estimates
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND sprint IN openSprints()
 AND (storyPoints is EMPTY OR storyPoints = 0)
 AND status NOT IN (Closed, Done, Resolved)
@@ -150,7 +152,7 @@ ORDER BY priority DESC
 ### Current Sprint — Unassigned
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND sprint IN openSprints()
 AND assignee is EMPTY
 AND status NOT IN (Closed, Done, Resolved)
@@ -160,7 +162,7 @@ ORDER BY priority DESC
 ### Next Sprint — All Tickets (for readiness check)
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND sprint IN futureSprints()
 AND status NOT IN (Closed, Done, Resolved)
 ORDER BY priority DESC, rank ASC
@@ -171,7 +173,7 @@ ORDER BY priority DESC, rank ASC
 ### All Unestimated Tickets
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND (storyPoints is EMPTY OR storyPoints = 0)
 AND issuetype IN (Story, Bug, Task)
 AND status NOT IN (Closed, Done, Resolved)
@@ -181,7 +183,7 @@ ORDER BY priority DESC, created ASC
 ### Unestimated by Epic
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND "Epic Link" = "{epic_key}"
 AND (storyPoints is EMPTY OR storyPoints = 0)
 AND issuetype IN (Story, Bug, Task)
@@ -194,7 +196,7 @@ ORDER BY created ASC
 ### Tickets Without Epic
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND "Epic Link" is EMPTY
 AND issuetype IN (Story, Bug, Task)
 AND status NOT IN (Closed, Done, Resolved)
@@ -204,7 +206,7 @@ ORDER BY created DESC
 ### Tickets in a Specific Epic
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND "Epic Link" = "{epic_key}"
 AND status NOT IN (Closed, Done, Resolved)
 ORDER BY status ASC, priority DESC
@@ -213,7 +215,7 @@ ORDER BY status ASC, priority DESC
 ### All Active Epics
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND issuetype = Epic
 AND status NOT IN (Closed, Done, Resolved)
 ORDER BY priority DESC, created ASC
@@ -224,7 +226,7 @@ ORDER BY priority DESC, created ASC
 ### Blocked Tickets
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND status NOT IN (Closed, Done, Resolved)
 AND issueFunction in hasLinks("is blocked by")
 ORDER BY priority DESC
@@ -235,7 +237,7 @@ Note: If `issueFunction` is not available, fetch all tickets and filter by links
 ### Blocking Other Tickets
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND status NOT IN (Closed, Done, Resolved)
 AND issueFunction in hasLinks("blocks")
 ORDER BY priority DESC
@@ -246,7 +248,7 @@ ORDER BY priority DESC
 ### Vaguely Scoped Tickets (heuristic: recent, no description)
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND issuetype IN (Story, Task)
 AND status NOT IN (Closed, Done, Resolved)
 AND description is EMPTY
@@ -262,7 +264,7 @@ Use the description-empty query above, then also check for stories where descrip
 ### All Non-Bug Open Tickets (for overlap detection)
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND issuetype IN (Story, Task)
 AND status NOT IN (Closed, Done, Resolved)
 ORDER BY created DESC
@@ -271,7 +273,7 @@ ORDER BY created DESC
 ### All Open Bugs (passed to bug-consolidator)
 
 ```jql
-Team = "Platform"
+Team = "{your_team}"
 AND issuetype = Bug
 AND status NOT IN (Closed, Done, Resolved)
 ORDER BY priority DESC, created ASC
