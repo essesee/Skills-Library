@@ -16,7 +16,7 @@
 <!-- Absolute or relative path where the release notes markdown file is written -->
 
 ### Audience
-<!-- Who reads these notes — shapes tone. e.g., "internal stakeholders," "AAA club admins" -->
+<!-- Who reads these notes — shapes tone. e.g., "internal stakeholders," "external partners" -->
 
 ---
 

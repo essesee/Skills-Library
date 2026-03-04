@@ -8,7 +8,7 @@ description: "Use when you need to send tailored project status updates to one o
 ## Purpose
 Stakeholders need regular project updates but each one cares about different things. This skill pulls project data from Jira and the roadmap, drafts a tailored update per stakeholder in the user's voice, walks through each draft for review, and sends via the stakeholder's preferred channel.
 
-**Prerequisite:** At least one stakeholder profile must exist at `references/stakeholders/{name}.md`. If none exist, the skill guides setup interactively (see First-Run Setup).
+**Prerequisite:** At least one stakeholder profile must exist at `tst-context/references/people/{name}.md`. If none exist, the skill guides setup interactively (see First-Run Setup).
 
 ## Dependencies
 
@@ -16,6 +16,7 @@ Stakeholders need regular project updates but each one cares about different thi
 - Jira API — JQL search for sprint data, epics, stories, blockers
 - Gmail API — search stakeholder threads, create email drafts
 - Slack API — search DMs/channels, send messages
+- Circleback API — SearchMeetings (by attendee/date), ReadMeetings (notes, decisions, action items from meetings with stakeholder)
 - WebFetch — access Google Drive roadmap (shared with `daily-planner`)
 
 **Other Skills:**
@@ -23,7 +24,7 @@ Stakeholders need regular project updates but each one cares about different thi
 - `daily-planner` — shares roadmap cache and Jira gap analysis when available
 
 **Reference Files:**
-- `references/stakeholders/{name}.md` — one per stakeholder (profile, voice, delivery log)
+- `tst-context/references/people/{name}.md` — one per stakeholder (profile, voice, delivery log)
 - `references/profile-template.md` — template for creating new profiles
 - `references/update-templates.md` — Brief/Standard/Detailed format examples
 - `references/voice-guidelines.md` — shared voice blending rules and "Never Do This" universals
@@ -53,7 +54,7 @@ Stakeholders need regular project updates but each one cares about different thi
 
 ## Stakeholder Profiles
 
-Each stakeholder gets their own file at `references/stakeholders/{name}.md`. See `references/profile-template.md` for full structure. Key sections:
+Each stakeholder gets their own file at `tst-context/references/people/{name}.md`. See `references/profile-template.md` for full structure. Key sections:
 
 - **Contact info** — email, Slack ID, preferred channel, cadence
 - **What They Care About** — topics with HIGH/MEDIUM/LOW importance
@@ -100,6 +101,15 @@ For each stakeholder being updated:
 2. Search Gmail for recent threads. Extract: unresolved questions, commitments needing status updates.
 3. Summary format: `[topic] — stakeholder asked about X on [date].`
 4. Drop raw messages after extraction.
+
+#### 1D: Circleback — Recent Meeting Context (per stakeholder)
+For each stakeholder being updated:
+1. Use `FindProfiles` to resolve stakeholder name to Circleback profile ID.
+2. `SearchMeetings` filtered by profile + last 7-14 days (match update window).
+3. `ReadMeetings` for matched meetings — extract: decisions made, action items (especially those assigned to user), open questions, topics discussed.
+4. Summary format: `[meeting name, date] — decided X, action item Y still open, discussed Z.`
+5. Flag any open action items from meetings with this stakeholder — these should appear prominently in the update.
+6. Drop raw meeting data after extraction. Keep summaries for Phase 2 drafting.
 
 ---
 
