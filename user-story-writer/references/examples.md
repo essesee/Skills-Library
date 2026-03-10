@@ -1,41 +1,41 @@
 # Story Examples
 
-Real examples from the Platform team's best completed stories. One per type variant. Use for calibration — these represent the quality bar.
+Real examples following the skill's proven format. One per type variant. Use for calibration — these represent the quality bar.
 
 ---
 
-## Feature Example (derived from TST-539)
+## Feature Example
 
 ### User story
 
-* As a travel agent, when manually booking a cruise, I want a unified "Cruise Booking Details" and "Cruise Itinerary" form so I can complete the entire booking in one pass with minimal errors.
+* As a customer service agent, when processing a return request, I want a unified "Return Details" and "Refund Summary" form so I can complete the entire return in one pass with minimal errors.
 
 ### Context
 
-Tricia, an experienced travel agent, enters cruise details and needs booking-level fields plus a day-by-day itinerary in one session with no backend delays.
+Maria, an experienced agent, enters return details and needs order-level fields plus a line-by-line refund breakdown in one session with no backend delays.
 
 ### Design
 
-* **Figma:** [Agent-Admin — Cruise Details](link)
-* **Prototype:** [Cruise Prototype](link)
+* **Figma:** [Agent Console — Return Details](link)
+* **Prototype:** [Return Flow Prototype](link)
 
 ### Acceptance criteria
 
-- [ ] Cruise Booking Details section contains all required fields: Cruise Line, Ship, Confirmation Number, Tour Number, Destination, Departure/Return dates, Category, Cabin Number, Dining Preference
+- [ ] Return Details section contains all required fields: Order Number, Reason Code, Return Method, Item Selection, Condition Assessment
 - [ ] All required fields show validation errors when empty on submit
-- [ ] Date pickers enforce Departure <= Return constraint
-- [ ] Cruise Itinerary section allows adding day-by-day port entries
-- [ ] Form saves complete booking in a single submit action
+- [ ] Item selection enforces at least one item selected constraint
+- [ ] Refund Summary section calculates refund amounts per line item automatically
+- [ ] Form saves complete return in a single submit action
 
 ### Other information
 
-* **Environment**: Preview + CDEV only. Do NOT release to Prod.
+* **Environment**: Staging only. Do NOT release to Prod.
 
 **What makes this good:** Specific persona with name, clear situation trigger, concrete ACs with validation rules, design references included, scope constraint clearly stated.
 
 ---
 
-## Tech Debt Example (derived from TST-4022)
+## Tech Debt Example
 
 ### User story
 
@@ -50,38 +50,38 @@ This issue focuses on improving server code quality and addressing technical deb
 ### Acceptance criteria
 
 - [ ] `readFileSync` in `src/server/routes/checkout.tsx` is replaced with `fs.promises.readFile()` or startup-time caching
-- [ ] The MSW test page still loads correctly after the change
+- [ ] The test page still loads correctly after the change
 - [ ] `body-parser` import is removed from `src/server/main.ts`
 - [ ] `bodyParser.json()` is replaced with `express.json()`
 - [ ] `body-parser` and `@types/body-parser` are removed from `package.json`
-- [ ] Verbose logs ("Starting licenseeDataMiddleware", "Successfully read cookie value") are at `debug` level instead of `info`
+- [ ] Verbose logs ("Starting dataMiddleware", "Successfully read cookie value") are at `debug` level instead of `info`
 
-**What makes this good:** Multiple user stories for distinct concerns, ACs reference specific files and functions, existing behavior preservation included ("MSW test page still loads"), checkbox format for engineering tracking.
+**What makes this good:** Multiple user stories for distinct concerns, ACs reference specific files and functions, existing behavior preservation included ("test page still loads"), checkbox format for engineering tracking.
 
 ---
 
-## Spike Example (derived from TST-4332 + TST-3969)
+## Spike Example
 
 ### User story
 
-* As a developer, when planning multi-room hotel checkout, I want to investigate how the receipt panel should display 2+ hotels so that we can design the correct UI before building.
+* As a developer, when planning multi-item checkout, I want to investigate how the receipt panel should display 2+ items so that we can design the correct UI before building.
 
 ### Context
 
-The current checkout receipt panel only supports a single hotel. We need to determine the UX for multiple hotel bookings before committing to implementation.
+The current checkout receipt panel only supports a single item. We need to determine the UX for multiple items before committing to implementation.
 
 ### Questions
 
-1. How will multiple hotel line items appear in the receipt panel — stacked blocks with subtotals or combined view?
-2. How are taxes and fees broken down — per hotel or aggregated?
-3. How does "Due at Property" vs "Due Today" display when hotels have different payment terms?
-4. Does trip protection show as one line or per hotel?
-5. Does "Remove Hotel" need to appear for each hotel listed?
+1. How will multiple line items appear in the receipt panel — stacked blocks with subtotals or combined view?
+2. How are taxes and fees broken down — per item or aggregated?
+3. How does "Due Later" vs "Due Today" display when items have different payment terms?
+4. Does trip/order protection show as one line or per item?
+5. Does "Remove Item" need to appear for each item listed?
 
 ### Output
 
 * Design recommendation from UX
-* API sketch from backend for multi-hotel receipt data structure
+* API sketch from backend for multi-item receipt data structure
 
 ### Timebox
 
@@ -89,7 +89,7 @@ The current checkout receipt panel only supports a single hotel. We need to dete
 
 ### Answered Questions
 
-* Traveler forms do NOT need to repeat for each hotel — same travelers assumed.
+* Input forms do NOT need to repeat for each item — same details assumed.
 
 **What makes this good:** Specific, answerable questions (not vague). Clear output deliverables with owners. Timebox present. Pre-answered questions included to avoid re-investigation.
 
@@ -99,18 +99,18 @@ The current checkout receipt panel only supports a single hotel. We need to dete
 
 ### User story
 
-* As a travel agent, when using SSO to access the platform, I want authentication to work reliably across all entry points so that I don't lose work or get locked out during active sessions.
+* As a user, when using SSO to access the platform, I want authentication to work reliably across all entry points so that I don't lose work or get locked out during active sessions.
 
 ### Context
 
-Multiple bugs report authentication failures across different SSO flows — initial login, session refresh, and cross-app navigation. The root cause appears to be inconsistent token handling between the identity provider and platform session management. 8 agents reported issues in the last 30 days.
+Multiple bugs report authentication failures across different SSO flows — initial login, session refresh, and cross-app navigation. The root cause appears to be inconsistent token handling between the identity provider and platform session management. 8 users reported issues in the last 30 days.
 
 **Consolidated bugs:**
 | Ticket | Summary | Severity |
 |--------|---------|----------|
-| TST-3001 | SSO login fails intermittently on Chrome | High |
-| TST-3045 | Session expires during active booking flow | Critical |
-| TST-3067 | Cross-app navigation loses auth state | Medium |
+| PROJ-3001 | SSO login fails intermittently on Chrome | High |
+| PROJ-3045 | Session expires during active workflow | Critical |
+| PROJ-3067 | Cross-app navigation loses auth state | Medium |
 
 ### Acceptance criteria
 
@@ -123,7 +123,7 @@ Multiple bugs report authentication failures across different SSO flows — init
 ### Other information
 
 * **Priority score**: 8.2 (composite from bug-consolidator)
-* **Related tickets**: TST-3001, TST-3045, TST-3067 (become sub-defects)
+* **Related tickets**: PROJ-3001, PROJ-3045, PROJ-3067 (become sub-defects)
 * **Root cause hypothesis**: Token refresh timer doesn't account for cross-app iframe context
 
 **What makes this good:** User story describes the root problem, not individual symptoms. Consolidated bugs table for quick reference. ACs cover each child bug's scenario plus regression check. Root cause hypothesis included for developer context.

@@ -14,7 +14,7 @@ The domain is parameterized — you specify what industry expert to be (travel, 
 ## Dependencies
 
 **Tools/APIs:** Confluence (project context search), Jira (related tickets/requirements), GitHub (existing implementations)
-**Other Skills:** `tst-context` (optional overlay for company-specific context), `mental-models` (referenced for systems thinking)
+**Other Skills:** `company-context` (optional overlay for company-specific context), `mental-models` (referenced for systems thinking)
 **Reference Files:** `references/evaluation-framework.md`, `references/domains/{domain}.md`
 
 ## Inputs

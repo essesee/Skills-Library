@@ -1,22 +1,45 @@
-# SkillsLibrary
+# EsseseOS
 
-Personal Claude Code skills for Jesse Shedd. This repo is the canonical source — `~/.claude/skills/` points directly here.
+A library of 34 Claude Code skills for product management, engineering, architecture, project management, and communication workflows.
+
+## What Are Skills?
+
+[Claude Code skills](https://docs.anthropic.com/en/docs/claude-code/skills) are structured prompts that teach Claude how to perform specific workflows. Each skill is a `SKILL.md` file with optional reference materials. When Claude Code detects a matching trigger phrase, it loads the skill and follows its instructions.
+
+Skills are different from one-off prompts — they encode repeatable processes, quality standards, and domain knowledge so Claude performs complex workflows consistently.
+
+## Installation
+
+**Full library:**
+
+```bash
+git clone https://github.com/essesee/EsseseOS.git ~/.claude/skills
+```
+
+**Cherry-pick individual skills:**
+
+Copy any skill directory (e.g., `user-story-writer/`) into your `~/.claude/skills/` folder.
 
 ## Structure
 
-Each skill is a directory with a `SKILL.md` and optional `references/` folder:
+Each skill follows this layout:
 
 ```
 skill-name/
-  SKILL.md                    # Main skill definition
+  SKILL.md                    # Main skill definition (trigger, workflow, inputs/outputs)
   references/                 # Supporting materials (optional)
-    patterns.md
     templates.md
+    patterns.md
+    examples.md
 ```
 
-Company-specific content (tst-context, developer profiles, preferences, stakeholder lists) is gitignored and stays local-only.
+Skills reference each other by name — for example, `user-story-writer` can call `company-context` for persona definitions.
 
----
+## CLAUDE.md
+
+The included `CLAUDE.md` is a cognitive model — it tells Claude how you think, decide, communicate, and where to push back. It's fully generic and project-agnostic.
+
+To adapt it: edit the values, blind spots, and communication style sections to match your own patterns. The structure works as-is; the content should reflect you.
 
 ## Skill Catalog (34 skills)
 
@@ -89,3 +112,24 @@ Quality checks, reasoning, and skill management.
 | ambiguity-handler | Resolve scope, terms, or context at the start of complex or vague tasks |
 | mental-models | Evaluate proposals, stress-test reasoning, or assess risk using thinking frameworks |
 | skill-improver | Tune skills based on real usage feedback |
+
+## Customization
+
+### Company-specific context
+
+Many skills reference a `company-context` directory for team-specific information (personas, terminology, approval gates, etc.). To use this:
+
+1. Create a `company-context/` directory in the repo root
+2. Add your company-specific files (SKILL.md, references, profiles)
+3. Add `company-context/` to `.gitignore` to keep it local-only
+
+The same pattern applies to other gitignored paths like stakeholder profiles and developer preferences — see `.gitignore` for the full list.
+
+### Adapting skills
+
+Skills are designed to be forked and modified. Common customizations:
+
+- **Personas** in `user-story-writer` — update the persona lookup table for your team's roles
+- **Domain profiles** in `domain-sme-evaluator` — create profiles for your industry in `references/domains/`
+- **Templates** — modify any `references/templates.md` to match your team's standards
+- **Tool integrations** — skills reference Jira, Slack, Gmail, PostHog, etc. Swap for your stack.

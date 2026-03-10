@@ -4,7 +4,7 @@
 
 The travel industry connects travelers with suppliers (airlines, hotels, car rental companies, cruise lines, tour operators) through a layered distribution network. Key intermediaries include Global Distribution Systems (GDSs), Online Travel Agencies (OTAs), Travel Management Companies (TMCs), and traditional travel agencies. Revenue flows through commissions, booking fees, markup, and negotiated rates.
 
-The industry runs on decades-old infrastructure (GDS systems date to the 1960s) layered with modern APIs. Products are perishable (unsold seats/rooms expire), pricing is dynamic and opaque, and inventory is shared across channels — meaning availability and price can change between search and booking. AAA clubs operate as a hybrid: leisure travel agencies with membership-driven value propositions and negotiated supplier relationships.
+The industry runs on decades-old infrastructure (GDS systems date to the 1960s) layered with modern APIs. Products are perishable (unsold seats/rooms expire), pricing is dynamic and opaque, and inventory is shared across channels — meaning availability and price can change between search and booking. Membership-based travel agencies operate as a hybrid: leisure travel agencies with membership-driven value propositions and negotiated supplier relationships.
 
 ## Core Domain Concepts
 
@@ -13,7 +13,7 @@ The industry runs on decades-old infrastructure (GDS systems date to the 1960s) 
 - **OTA (Online Travel Agency)** — Consumer-facing booking platforms (Expedia, Booking.com) that compete with traditional agency channels.
 - **Segment** — One leg of a journey (e.g., SFO-LAX). A trip can have multiple segments across multiple suppliers.
 - **Fare Rules** — Complex, supplier-specific conditions governing price, changes, cancellations, refunds, and penalties. Never assume fare rules are simple or uniform.
-- **Rate Code / Negotiated Rate** — Special pricing tiers from suppliers, often tied to corporate accounts, membership programs (like AAA), or volume agreements.
+- **Rate Code / Negotiated Rate** — Special pricing tiers from suppliers, often tied to corporate accounts, membership programs, or volume agreements.
 - **Booking Flow** — Search > Quote > Book > Ticket/Confirm > Manage > Cancel/Refund. Each step can fail independently.
 - **Ticketing** — Separate from booking. A reservation can exist without a ticket. Ticketing deadlines (TTLs) are enforced and missing them cancels the booking.
 - **Void vs. Refund** — Voids happen same-day (free). Refunds happen after ticketing and may incur penalties. Conflating these is a common and costly mistake.
@@ -72,7 +72,7 @@ The industry runs on decades-old infrastructure (GDS systems date to the 1960s) 
 
 ## Industry Systems & Integrations
 
-- **Sabre** — Major GDS. SOAP/REST APIs. Sabre Red Workspace is the agent desktop. SynXis for hotel CRS. Primary GDS for many US agencies including AAA clubs.
+- **Sabre** — Major GDS. SOAP/REST APIs. Sabre Red Workspace is the agent desktop. SynXis for hotel CRS. Primary GDS for many US agencies including large membership-based agencies.
 - **Amadeus** — Largest GDS globally. Altea for airline PSS. REST APIs via Amadeus for Developers. Strong in European market.
 - **Travelport** — GDS encompassing Apollo, Galileo, Worldspan legacy systems. Travelport+ is the modern platform.
 - **NDC Aggregators** — Platforms that aggregate NDC connections across airlines (Travelfusion, Kyte, etc.). Simplify airline-direct integration.

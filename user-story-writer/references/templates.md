@@ -7,7 +7,7 @@
 | travel agent | Agent-facing features, booking flows, itinerary management |
 | developer | Tech debt, code quality, infra, DX improvements |
 | maintainer | Refactoring, reliability, observability, monitoring |
-| user | End-user facing features (rare — most TST features are agent-facing) |
+| user | End-user facing features (varies by product — some products are operator/agent-facing) |
 | admin | Admin panel, configuration, permissions, club management |
 
 ---

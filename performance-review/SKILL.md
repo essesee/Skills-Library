@@ -19,7 +19,7 @@ Quarterly self-reviews are tedious because the hard part isn't writing -- it's r
 
 **Other Skills:**
 - `voice-analyzer` -- load voice profile for drafting (optional; falls back to CLAUDE.md style)
-- `tst-context` -- company context if `company-context.md` is missing
+- `company-context` -- company context if `company-context.md` is missing
 
 **Reference Files:**
 - `references/company-context.md` -- company-specific values (team, projects, role, review form)

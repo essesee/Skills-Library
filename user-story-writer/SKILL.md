@@ -7,7 +7,7 @@ description: "Use when writing or improving story descriptions for any tracker �
 
 ## Purpose
 
-Produces structured, high-quality story descriptions in markdown. Tool-agnostic — output works in any tracker. Follows the Platform team's proven format.
+Produces structured, high-quality story descriptions in markdown. Tool-agnostic — output works in any tracker. Follows a proven, opinionated format.
 
 ## Dependencies
 
@@ -17,7 +17,7 @@ Produces structured, high-quality story descriptions in markdown. Tool-agnostic 
 - `references/quality-checklist.md` — Load at Step 4 (validation).
 
 **Other Skills:**
-- `tst-context` — Load if you need persona definitions or team conventions.
+- `company-context` — Load if you need persona definitions or team conventions.
 
 **Data Files:**
 - `memory/developer-profiles.md` — Check at Step 3 if assignee is known. Overrides default format.

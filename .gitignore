@@ -1,8 +1,8 @@
 .DS_Store
 peon-ping-*/
-tst-context/
+company-context/
 stakeholder-update/references/stakeholders/
-release-notes/references/tst-*
+release-notes/references/company-*
 daily-planner/references/preferences.md
 daily-planner/references/roadmap-cache.md
 performance-review/references/company-context.md

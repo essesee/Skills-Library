@@ -8,7 +8,7 @@ description: "Use when you need to send tailored project status updates to one o
 ## Purpose
 Stakeholders need regular project updates but each one cares about different things. This skill pulls project data from Jira and the roadmap, drafts a tailored update per stakeholder in the user's voice, walks through each draft for review, and sends via the stakeholder's preferred channel.
 
-**Prerequisite:** At least one stakeholder profile must exist at `tst-context/references/people/{name}.md`. If none exist, the skill guides setup interactively (see First-Run Setup).
+**Prerequisite:** At least one stakeholder profile must exist at `company-context/references/people/{name}.md`. If none exist, the skill guides setup interactively (see First-Run Setup).
 
 ## Dependencies
 
@@ -24,7 +24,7 @@ Stakeholders need regular project updates but each one cares about different thi
 - `daily-planner` — shares roadmap cache and Jira gap analysis when available
 
 **Reference Files:**
-- `tst-context/references/people/{name}.md` — one per stakeholder (profile, voice, delivery log)
+- `company-context/references/people/{name}.md` — one per stakeholder (profile, voice, delivery log)
 - `references/profile-template.md` — template for creating new profiles
 - `references/update-templates.md` — Brief/Standard/Detailed format examples
 - `references/voice-guidelines.md` — shared voice blending rules and "Never Do This" universals
@@ -54,7 +54,7 @@ Stakeholders need regular project updates but each one cares about different thi
 
 ## Stakeholder Profiles
 
-Each stakeholder gets their own file at `tst-context/references/people/{name}.md`. See `references/profile-template.md` for full structure. Key sections:
+Each stakeholder gets their own file at `company-context/references/people/{name}.md`. See `references/profile-template.md` for full structure. Key sections:
 
 - **Contact info** — email, Slack ID, preferred channel, cadence
 - **What They Care About** — topics with HIGH/MEDIUM/LOW importance
