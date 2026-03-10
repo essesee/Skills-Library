@@ -1,4 +1,4 @@
-# EsseseOS
+# Skills Library
 
 A library of 34 Claude Code skills for product management, engineering, architecture, project management, and communication workflows.
 
@@ -13,7 +13,7 @@ Skills are different from one-off prompts — they encode repeatable processes, 
 **Full library:**
 
 ```bash
-git clone https://github.com/essesee/EsseseOS.git ~/.claude/skills
+git clone https://github.com/essesee/Skills-Library.git ~/.claude/skills
 ```
 
 **Cherry-pick individual skills:**
