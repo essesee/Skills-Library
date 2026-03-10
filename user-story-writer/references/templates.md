@@ -4,11 +4,11 @@
 
 | Persona | When to Use |
 |---------|-------------|
-| travel agent | Agent-facing features, booking flows, itinerary management |
+| operator | Operator-facing features, workflow management, case handling |
 | developer | Tech debt, code quality, infra, DX improvements |
 | maintainer | Refactoring, reliability, observability, monitoring |
 | user | End-user facing features (varies by product — some products are operator/agent-facing) |
-| admin | Admin panel, configuration, permissions, club management |
+| admin | Admin panel, configuration, permissions, account management |
 
 ---
 

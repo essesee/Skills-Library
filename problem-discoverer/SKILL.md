@@ -1,6 +1,6 @@
 ---
 name: problem-discoverer
-description: "Use when you need to proactively discover platform problems — monthly health checks (Full Scan), targeted area scans (Focused Scan), or validation of a specific signal (Signal Triage). Orchestrates quantitative data, bug patterns, organizational signals, structural analysis, and communication channels. Trigger on phrases like 'full scan,' 'quarterly health check,' 'what's broken,' 'platform health,' 'scan the booking flow,' 'focused scan on search,' 'validate this signal,' 'is this a problem.'"
+description: "Use when you need to proactively discover platform problems — monthly health checks (Full Scan), targeted area scans (Focused Scan), or validation of a specific signal (Signal Triage). Orchestrates quantitative data, bug patterns, organizational signals, structural analysis, and communication channels. Trigger on phrases like 'full scan,' 'quarterly health check,' 'what's broken,' 'platform health,' 'scan the checkout flow,' 'focused scan on search,' 'validate this signal,' 'is this a problem.'"
 ---
 
 # Problem Discoverer
@@ -54,7 +54,7 @@ Platform problems emerge as scattered, disconnected signals. This skill orchestr
 | Mode | Trigger | Behavior | Default Window |
 |------|---------|----------|----------------|
 | **Full Scan** | "full scan," "quarterly health check," "what problems should we work on" | All signal sources, comprehensive ranked list | 90 days |
-| **Focused Scan** | "scan the booking flow," "problems in the audit system" | Same workflow scoped to a feature area/domain | 30 days |
+| **Focused Scan** | "scan the checkout flow," "problems in the audit system" | Same workflow scoped to a feature area/domain | 30 days |
 | **Signal Triage** | "validate this signal," "is this a problem," "I heard X is broken" | Validate a specific user-provided signal | 30 days |
 
 ## Workflow
@@ -92,7 +92,7 @@ All 5 categories are independent — run concurrently. For each, extract signal 
 Merge and analyze all signals from Step 3:
 
 1. **Deduplicate against baseline**: Remove signals that match known work from Step 2
-2. **Cluster related signals**: Group signals that point to the same underlying problem (e.g., customer complaints + error spike + bug cluster all pointing to booking flow reliability)
+2. **Cluster related signals**: Group signals that point to the same underlying problem (e.g., customer complaints + error spike + bug cluster all pointing to checkout flow reliability)
 3. **Score each cluster**: Apply composite formula from `references/signal-scoring.md` (6 weighted factors: breadth, depth, persona impact, strategic alignment, trend, actionability)
 4. **Sharpen framing**: For top 3-5 candidates (or any scoring 3.5+), use `mental-models` to stress-test framing (First Principles, Inversion, Second-Order Thinking)
 5. **Resolve ambiguity**: For candidates with contradictory signals across categories, use `ambiguity-handler` to surface assumptions and clarify

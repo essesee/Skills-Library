@@ -52,7 +52,7 @@
 ## Transcript Search Strategy
 
 ### Search Location
-`.jsonl` files in `~/.claude/projects/-Users-jesseshedd-Documents-work/`
+`.jsonl` files in the Claude Code project directory (`~/.claude/projects/{project-dir}/`)
 
 ### Search Pattern
 Grep for `Skill` tool_use blocks where the skill argument matches the target skill name.

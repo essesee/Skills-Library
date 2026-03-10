@@ -20,7 +20,7 @@ Observe how skills are actually used and propose concrete edits to SKILL.md, ref
 ### Explicit Mode
 Invocation: `/skill-improver {skill-name}`
 
-Targets a named skill. Scans transcripts in `~/.claude/projects/-Users-jesseshedd-Documents-work/` for past sessions where the skill was used, plus the skill's own reference files.
+Targets a named skill. Scans transcripts in your Claude Code project directory (`~/.claude/projects/{project-dir}/`) for past sessions where the skill was used, plus the skill's own reference files.
 
 ### Post-Session Mode
 Invocation: "improve that skill" (or similar) after using a skill in the current conversation
@@ -44,7 +44,7 @@ Run all evidence gathering simultaneously. Each source is independent.
 **Post-session mode**: Skip this sub-step. The current conversation is the evidence — extract signals directly from it.
 
 **Explicit mode**:
-- Grep `.jsonl` files in `~/.claude/projects/-Users-jesseshedd-Documents-work/` for `Skill` tool_use matching the target skill name.
+- Grep `.jsonl` files in the Claude Code project directory (`~/.claude/projects/{project-dir}/`) for `Skill` tool_use matching the target skill name.
 - Scan max 20 files, analyze max 5 matching transcripts (most recent first).
 - Extract per transcript:
   - Which workflow steps were executed vs. skipped

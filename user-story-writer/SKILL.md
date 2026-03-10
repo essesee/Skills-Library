@@ -65,7 +65,7 @@ Structured markdown with these sections (type determines which are included):
 **User story format**: `As a [persona], when [situation], I want [need] so that [value]`
 - Multiple user stories are OK if genuinely distinct perspectives exist
 - Use bullet points for multiple user stories, not numbered lists
-- Personas: `travel agent`, `developer`, `maintainer`, `user`, `admin`
+- Personas: `operator`, `developer`, `maintainer`, `user`, `admin`
 
 **Context section**: 2-5 sentences. Cover: what's the problem, why it matters now, what depends on this. No filler.
 
@@ -109,5 +109,5 @@ When called by other skills:
 | Write ACs the developer can't test | Every AC maps to a verifiable action |
 | Use passive voice in user stories | "I want to X" not "X should be done" |
 | Over-engineer edge cases | Only include edge cases relevant to the change |
-| Generic personas ("as a user") when specific exists | Use the real persona (travel agent, developer, etc.) |
+| Generic personas ("as a user") when specific exists | Use the real persona (operator, developer, etc.) |
 | Include implementation details in user story | Keep user story focused on need and value. Implementation goes in ACs or dev notes. |
