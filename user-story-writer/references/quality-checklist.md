@@ -32,6 +32,14 @@ Run every item before presenting the story. Fix failures before output.
 | 14 | Existing behavior preservation noted when changing code | |
 | 15 | For bug consolidation: every child bug's symptom is covered by at least one AC | |
 
+## Feature Flag (when flag confirmed at Step 1.5)
+
+| # | Check | Pass/Fail |
+|---|-------|-----------|
+| 15a | Flag name follows convention: kebab-case, product prefix, 2-4 word description | |
+| 15b | ACs cover both states: flag enabled (new behavior) AND flag disabled (existing behavior unchanged) | |
+| 15c | Cleanup/removal AC is present | |
+
 ## Structural Checks
 
 | # | Check | Pass/Fail |

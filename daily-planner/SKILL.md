@@ -19,9 +19,8 @@ Work is scattered across Jira, Gmail, Slack, Google Calendar, and Circleback. St
 - WebFetch — access Google Drive roadmap (shared/published link)
 
 **Other Skills:**
-- `jira-template-builder` — epic/roadmap mapping rules (if available)
-- `voice-analyzer` — drafting replies in user's voice
-- `message-drafting` — email and Slack reply workflows
+- `message-drafting` — all email and Slack reply workflows (delegates voice matching and drafting)
+- `user-story-writer` — story descriptions when writing Jira requirements
 
 **Reference Files:**
 - `references/preferences.md` — learned priority signals, Slack relevance, communication patterns
@@ -263,7 +262,7 @@ Work through **every item** one at a time, priority order (P0 → P3). Present w
 | Type | Actions |
 |------|---------|
 | **Jira Story** | "Write requirements" (draft desc + AC, update Jira), "Add AC only", "Assign to {person}", "Move to sprint", "Comment" |
-| **Gmail** | "Draft reply" (via voice-analyzer + message-drafting → Gmail draft), "Quick ack", "Forward to {person}", "Star for later" |
+| **Gmail** | "Draft reply" (delegates to `message-drafting`), "Quick ack", "Forward to {person}", "Star for later" |
 | **Slack** | "Reply", "React", "Reply in thread", "Read full thread" |
 | **Calendar** | "Prep notes" (pull Jira/Slack/email context + Circleback last meeting notes), "Add agenda", "Decline", "Show last meeting notes" |
 | **Meeting Action Item** | "Create Jira ticket" (draft story from action item), "Draft follow-up" (Slack/email to relevant attendees), "Mark done" (note in session log), "Already tracked" (link to existing Jira ticket), "Search transcript" (pull transcript context via SearchTranscripts) |

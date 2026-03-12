@@ -15,6 +15,7 @@ Produces structured, high-quality story descriptions in markdown. Tool-agnostic 
 - `references/templates.md` — Load at Step 2. Literal skeletons per story type.
 - `references/examples.md` — Load only if calibration needed (first time using a type, or quality unclear).
 - `references/quality-checklist.md` — Load at Step 4 (validation).
+- `references/feature-flag-convention.md` — Load at Step 1.5 if feature flag is needed.
 
 **Other Skills:**
 - `company-context` — Load if you need persona definitions or team conventions.
@@ -31,6 +32,7 @@ Produces structured, high-quality story descriptions in markdown. Tool-agnostic 
 | Assignee | No | If known, check developer profiles for format overrides |
 | Related tickets | No | For bug consolidation: list of child bugs |
 | Design reference | No | Figma link, mockup, or screenshot |
+| Feature flag needed | No | Ask user at Step 1.5 (Feature stories only) |
 
 ## Output
 
@@ -56,6 +58,18 @@ Structured markdown with these sections (type determines which are included):
 
 **Default**: Feature (if ambiguous, ask user).
 
+## Step 1.5: Feature Flag Check
+
+Skip this step for non-Feature story types.
+
+1. Ask the user: "Does this feature need a PostHog feature flag for rollout?"
+2. If **no** → proceed to Step 2 normally
+3. If **yes**:
+   a. Load `references/feature-flag-convention.md`
+   b. Propose a flag name following the convention: `{product}-{feature-description}` in kebab-case
+   c. Confirm the flag name with the user before proceeding
+   d. Carry the confirmed flag name into Step 2 for inclusion in acceptance criteria
+
 ## Step 2: Load Template and Write
 
 1. Load `references/templates.md`
@@ -74,13 +88,15 @@ Structured markdown with these sections (type determines which are included):
 - Product/feature: Bullet points or checkboxes — either works
 - Each criterion must be independently testable
 - Include negative cases and edge cases when relevant
+- If a feature flag was confirmed at Step 1.5, include flag ACs from the template (gating, both states, cleanup). Assignee profile overrides the exact format.
 
 ## Step 3: Apply Assignee Preferences
 
 1. Check `memory/developer-profiles.md` for a default assignee and any named assignee
 2. IF assignee is specified → look up their profile. IF profile exists → apply their format overrides
-3. IF no assignee is specified → use the default assignee's profile (currently: Claude Code)
-4. IF no profile found for the assignee → use default template as-is
+3. IF no assignee is specified → use the default assignee's profile (currently: Kevin Truong)
+4. IF user says "for AI", "for Claude", or similar → use the Claude Code profile instead
+5. IF no profile found for the assignee → use default template as-is
 
 ## Step 4: Validate
 
@@ -89,6 +105,8 @@ Load `references/quality-checklist.md`. Run every item. Fix failures before pres
 ## Step 5: Present
 
 Show the complete story description in a markdown code block. If creating in Jira or another tool, confirm with user before writing.
+
+**Follow-up**: After the story is accepted, suggest using `superpowers:test-driven-development` to write tests before implementation — especially for Feature and Bug Consolidation types.
 
 ## Orchestration
 

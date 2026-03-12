@@ -16,18 +16,13 @@ Platform problems emerge as scattered, disconnected signals. This skill orchestr
 - PostHog — usage data, error rates, funnel metrics
 
 **Other Skills (always called):**
-- `customer-signal-scanner` — external escalations (orchestrated mode)
-- `team-signal-scanner` — internal pain signals (orchestrated mode)
-- `vendor-signal-scanner` — vendor issues (orchestrated mode)
 - `sql-data-analysis` — quantitative metrics
 - `bug-consolidator` — bug pattern analysis (orchestrated mode)
 
-**Other Skills (called conditionally):**
-- `domain-modeler` — structural analysis (quick-check mode: lightweight assessment, signal summary output only)
-- `ubiquitous-language-builder` — terminology drift (quick-check mode)
-- `data-model-reviewer` — schema review (quick-check mode)
-- `mental-models` — stress-test framing for top 3-5 candidates
-- `ambiguity-handler` — resolve contradictory signals
+**Other Skills (optional — user chooses which to include):**
+- `customer-signal-scanner` — external escalations (orchestrated mode)
+- `team-signal-scanner` — internal pain signals (orchestrated mode)
+- `vendor-signal-scanner` — vendor issues (orchestrated mode)
 
 **Handoff:**
 - `discover-design-deliver` — receives evidence packages for Problem Statements
@@ -85,8 +80,7 @@ All 5 categories are independent — run concurrently. For each, extract signal 
 | **3a. Quantitative** | `sql-data-analysis` + PostHog | Error rates, latency trends, funnel drop-offs, usage anomalies, spikes vs. baseline |
 | **3b. Bug patterns** | `bug-consolidator` (orchestrated mode) | Clusters by root cause, recurring patterns, severity distribution, systemic indicators |
 | **3c. Organizational** | Jira (workarounds, reopened 3x+, stale 6mo+, high-comment), Confluence (recurring retro items, incomplete postmortems) | Unformalized pain patterns |
-| **3d. Structural** | `domain-modeler`, `ubiquitous-language-builder`, `data-model-reviewer` (all quick-check mode) | Bounded context violations, terminology drift, schema gaps |
-| **3e. Communication** | `customer-signal-scanner`, `team-signal-scanner`, `vendor-signal-scanner` (all orchestrated mode) | Voice signals corroborating or adding to data-visible problems |
+| **3d. Communication** (optional) | `customer-signal-scanner`, `team-signal-scanner`, `vendor-signal-scanner` (all orchestrated mode) | Voice signals corroborating or adding to data-visible problems |
 
 ### Step 4: Synthesize
 Merge and analyze all signals from Step 3:
@@ -94,8 +88,8 @@ Merge and analyze all signals from Step 3:
 1. **Deduplicate against baseline**: Remove signals that match known work from Step 2
 2. **Cluster related signals**: Group signals that point to the same underlying problem (e.g., customer complaints + error spike + bug cluster all pointing to checkout flow reliability)
 3. **Score each cluster**: Apply composite formula from `references/signal-scoring.md` (6 weighted factors: breadth, depth, persona impact, strategic alignment, trend, actionability)
-4. **Sharpen framing**: For top 3-5 candidates (or any scoring 3.5+), use `mental-models` to stress-test framing (First Principles, Inversion, Second-Order Thinking)
-5. **Resolve ambiguity**: For candidates with contradictory signals across categories, use `ambiguity-handler` to surface assumptions and clarify
+4. **Sharpen framing**: For top 3-5 candidates (or any scoring 3.5+), stress-test using first principles, inversion, and second-order thinking
+5. **Resolve ambiguity**: For candidates with contradictory signals across categories, surface assumptions explicitly and present both perspectives
 
 ### Step 5: Present Ranked Candidates
 Present each problem candidate, ranked by composite score:
@@ -142,18 +136,16 @@ Update `references/discovery-log.md`:
 - Run Step 3 source categories in parallel. Drop raw data after extracting signal summaries.
 - Scanner skills in orchestrated mode return structured data — no interactive review within scanners.
 - Call `bug-consolidator` with `called_by_problem_discoverer = true` — structured cluster data, no interactive review.
-- Structural skills (domain-modeler, ubiquitous-language-builder, data-model-reviewer) in quick-check mode — lightweight assessment only.
 - During Step 6 review, keep only the current candidate and its evidence in context.
 - Update discovery log at session end only, not during workflow.
 - Do NOT invoke `backlog-groomer` — too heavy. Ingest recent output passively if available.
 - Dedup is critical — the biggest risk is surfacing already-known problems. Step 2 baseline must be thorough.
-- Activate `mental-models` only for top 3-5 candidates or those scoring 3.5+.
-- Activate `ambiguity-handler` only when a candidate has contradictory signals across source categories.
+- Communication scanners (3d) are optional — ask user which signal sources to include at Step 1.
 
 ## Edge Cases
 - **No significant signals found**: Report a clean bill of health. Note which sources were checked and the time window. This is a valid and useful outcome.
 - **Too many candidates (15+)**: Present top 10 by score. Offer to continue with remaining candidates or defer lower-ranked ones.
-- **Conflicting signals**: When quantitative data says "fine" but voice signals say "broken" (or vice versa), flag the contradiction explicitly. Use `ambiguity-handler` and present both perspectives.
+- **Conflicting signals**: When quantitative data says "fine" but voice signals say "broken" (or vice versa), flag the contradiction explicitly. Surface assumptions and present both perspectives.
 - **Stale discovery log**: If the log references problems from 6+ months ago with no resolution, surface them as "previously identified, still unresolved" candidates.
 - **Scanner skill unavailable**: If a scanner skill fails or returns no results, note the gap in coverage and proceed with available sources. Don't block the scan.
 - **Signal Triage finds nothing**: If the user's signal can't be validated, say so clearly. "We checked X, Y, Z sources and found no corroborating evidence. This may be an isolated incident or the signal may be too early to detect in our data."

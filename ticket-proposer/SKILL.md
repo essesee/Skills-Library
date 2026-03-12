@@ -11,7 +11,7 @@ Extract actionable items from meetings and Slack and propose fully structured Ji
 ## Dependencies
 
 **Tools/APIs:** Jira API (create tickets, read board), Slack API (read threads), Circleback API (SearchMeetings, ReadMeetings for action items and decisions)
-**Other Skills:** voice-analyzer (ticket descriptions in user's voice), jira-template-builder (templates and epic mapping rules), user-story-writer (story description format and quality standards)
+**Other Skills:** voice-analyzer (ticket descriptions in user's voice), user-story-writer (story description format, quality standards, and templates)
 
 ## Inputs
 - Meeting notes (text, transcript, or document), Slack threads, Circleback meetings (by date range or search), existing board context (for deduplication)
@@ -27,9 +27,9 @@ From Slack: extract decisions, requests, problems, commitments. Note author, tim
 From Circleback: if user says "create tickets from my meetings" or provides a date range, use `SearchMeetings` (last 3 days default) then `ReadMeetings` to pull structured action items. Circleback already provides action item text, assignee, and meeting context — map directly to ticket proposals. Note meeting name and date as source attribution.
 
 ### Step 2: Generate Ticket Proposals
-Check `memory/developer-profiles.md` for the assignee's preferences. If a profile exists, tailor ticket format, verbosity, and section structure to match their preferences. If no profile, use default jira-template-builder templates.
+Check `memory/developer-profiles.md` for the assignee's preferences. If a profile exists, tailor ticket format, verbosity, and section structure to match their preferences. If no profile, use default `user-story-writer` templates.
 
-For each action item: write description per `user-story-writer` skill (auto-detect type, default to `feature`), auto-assign epic via jira-template-builder mapping rules, propose assignee, add source attribution.
+For each action item: write description per `user-story-writer` skill (auto-detect type, default to `feature`), propose epic assignment based on roadmap/Jira context, propose assignee, add source attribution.
 
 ### Step 3: Deduplication Check
 Search existing board for duplicates. If match found, suggest updating existing ticket instead.
@@ -40,10 +40,10 @@ Commands: **Next** / **Back** / **Jump to #** / **Show overview** / **Done**
 
 ## Context Rules
 - Load only the specific meeting notes or Slack thread for the current batch.
-- Load jira-template-builder templates and mapping rules as cached reference files.
+- Load user-story-writer templates as cached reference files.
 - One ticket in context at a time during review. Drop previous before loading next.
 - Include source link in every proposed ticket.
 
 ## When NOT to Use
-- Building templates — use `jira-template-builder`.
+- Writing a single story description — use `user-story-writer`.
 - Consolidating duplicate bugs — use `bug-consolidator`.

@@ -9,18 +9,18 @@ description: "Use when evaluating product artifacts (PRDs, API specs, data model
 
 Evaluate product artifacts through the eyes of an industry domain expert. Surfaces domain-specific risks, pattern violations, and missed opportunities that generic evaluation frameworks miss.
 
-The domain is parameterized — you specify what industry expert to be (travel, fintech, healthcare, etc.), and the skill adopts that persona.
+Load the domain profile and run 5 evaluation passes against the artifact.
 
 ## Dependencies
 
 **Tools/APIs:** Confluence (project context search), Jira (related tickets/requirements), GitHub (existing implementations)
-**Other Skills:** `company-context` (optional overlay for company-specific context), `mental-models` (referenced for systems thinking)
+**Other Skills:** `company-context` (optional overlay for company-specific context)
 **Reference Files:** `references/evaluation-framework.md`, `references/domains/{domain}.md`
 
 ## Inputs
 
 - Product artifact to evaluate (PRD, API spec, data model, UI screenshot/mockup, Confluence page URL, or pasted content)
-- Domain identifier (e.g., "travel," "fintech," "healthcare") — must match a profile in `references/domains/`
+- Domain identifier (e.g., "travel") — must match a profile in `references/domains/`
 
 ## Outputs
 
@@ -28,23 +28,13 @@ The domain is parameterized — you specify what industry expert to be (travel, 
 - **Structured findings:** severity-rated list (Critical / High / Medium / Advisory), each with context, domain rationale, and recommended action
 - No numerical scores
 
-## Modes
-
-| Mode | Trigger | Behavior |
-|------|---------|----------|
-| **Full Review** | Default | All evaluation passes, live context gathering, full narrative + findings |
-| **Quick Check** | "quick check" / "quick domain review" | Domain profile only (no live context), abbreviated findings, skip narrative |
-| **Create Profile** | "create domain profile" / no profile exists for requested domain | Guided workflow to create a new profile in `references/domains/` |
-
 ## Workflow
 
 ### Phase 1: Classify & Load
 
 1. Identify artifact type (PRD, API spec, data model, UI, or mixed)
-2. Identify requested domain
-3. Load `references/domains/{domain}.md`
-4. If no profile exists for the requested domain, offer to run Create Profile mode
-5. If artifact type is ambiguous, ask the user before proceeding
+2. Load `references/domains/{domain}.md`
+3. If artifact type is ambiguous, ask the user before proceeding
 
 ### Phase 2: Gather Live Context (Parallel) — Full Review Only
 
@@ -81,20 +71,8 @@ Each pass: load relevant section of domain profile, evaluate artifact against th
 - Drop raw Confluence/Jira/GitHub data after Phase 2 extraction
 - Domain profiles are read-only during evaluation — never modify during a review
 
-## Create Profile Mode
-
-When no domain profile exists or user explicitly requests profile creation:
-
-1. Load `references/domain-profile-template.md`
-2. Ask the user for the target industry/domain
-3. Research the domain using web search and any available internal context
-4. Walk through each template section interactively, confirming key content with the user
-5. Write completed profile to `references/domains/{domain}.md`
-6. Offer to run a Full Review with the new profile
-
 ## When NOT to Use
 
-- Generic quality review without domain lens — use `output-consistency-reviewer`
 - UI-specific heuristic evaluation — use `ui-evaluator`
 - Data model standards compliance — use `data-model-reviewer`
 - API composability analysis — use `api-composer`

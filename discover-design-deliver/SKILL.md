@@ -122,7 +122,7 @@ For small features: compressed discovery, lightweight design, ticket creation wi
 - When calling other skills, let them run their full workflow — do not abbreviate.
 
 ## When NOT to Use
-- **Ill-defined problem** — use `ambiguity-handler` first to clarify
+- **Ill-defined problem** — ask clarifying questions to narrow scope before starting
 - **Bug triage or backlog cleanup** — use `backlog-groomer` or `bug-consolidator`
 - **Status reporting on existing work** — use `atlassian:generate-status-report`
 - **Domain modeling without a product development context** — use `domain-modeler` directly

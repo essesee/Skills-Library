@@ -47,6 +47,18 @@ Run 3-4 test drafts:
 
 Present each to the user for calibration. Log corrections as refinements.
 
+### Step 6: Iterative Refinement
+After the initial profile is built and validated:
+
+1. Ask: "Want to refine any aspect of the profile? You can provide additional samples, flag specific issues, or request adjustments."
+2. If user provides feedback:
+   a. Apply corrections directly to the voice profile
+   b. Re-run the affected test scenario(s) from Step 5 to confirm the fix
+   c. Repeat until user is satisfied
+3. If user says done, save the final profile and style rules
+
+This loop ensures the profile converges on accuracy rather than shipping a first-pass approximation.
+
 ## Context Rules
 - Load voice profile only when drafting or updating.
 - Load style rules at draft time, layered on top of voice profile.
