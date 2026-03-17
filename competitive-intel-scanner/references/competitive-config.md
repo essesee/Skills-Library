@@ -21,9 +21,4 @@
 <!-- Prioritized sources for travel tech news -->
 <!-- e.g., Phocuswire, Skift, TravelWeekly, Tnooz, industry press releases -->
 
-## Findings History
-<!-- Brief log of significant findings for trend tracking -->
-<!-- Format: date, finding, category, action taken -->
-
-## Session Log
-<!-- Date, scope, key findings, user actions -->
+<!-- Findings history and session log moved to references/scan-history.md -->

@@ -1,4 +1,5 @@
 # Context Briefer Preferences
+<!-- Consolidate every 10 sessions. Target: <1,500 words total. On consolidation: remove topics not briefed in 60 days, merge session log entries into patterns. -->
 
 ## Topic Mappings
 <!-- Maps freeform topics to queryable identifiers -->

@@ -1,6 +1,6 @@
 ---
 name: decision-logger
-description: "Use when capturing decisions with context, searching for past decisions, or when other skills surface decision points. Trigger on phrases like 'log this decision,' 'why did we decide,' 'capture this decision,' 'decision record,' 'what was decided about,' 'document this choice,' 'decision log,' or when brainstorming/discover-design-deliver reaches a decision point."
+description: "Use when capturing decisions with context, searching for past decisions, or when other skills surface decision points. Trigger on phrases like 'log this decision,' 'why did we decide,' 'capture this decision,' 'decision record,' 'what was decided about,' 'document this choice,' 'decision log,' 'update decision on,' 'reverse the decision about,' 'supersede decision,' or when brainstorming/discover-design-deliver reaches a decision point."
 ---
 
 # Decision Logger
@@ -19,7 +19,7 @@ Decisions evaporate across Slack, Jira, Confluence, and meetings. This skill cap
 **Other Skills:**
 - `company-context` — Confluence space keys, project names, team context
 - `discover-design-deliver` — feeds decisions into the log when discovery/design phases produce them
-- `voice-analyzer` — when drafting decision summaries for external audiences
+
 
 **Reference Files:**
 - `references/decision-template.md` — structured decision record format
@@ -157,7 +157,7 @@ If no matches found, say so clearly and suggest: "Want me to search Slack thread
 
 When another skill or conversation surfaces a decision point:
 
-1. Detect decision language: "let's go with," "we decided," "the call is," "agreed to," "final answer," "we're going to"
+1. Detect decision language: "let's go with," "we decided," "the call is," "agreed to," "final answer," "we're going to." Suggest Mode fires only when another skill explicitly hands off a decision point, or when the user's message in conversation contains decision language. It does not run as ambient background detection — the calling skill or conversation context triggers it.
 2. Prompt: "This looks like a decision worth capturing: '{extracted statement}'. Want me to log it?"
 3. If yes, enter Log Mode with pre-filled context from the conversation
 4. If no, move on — don't ask again for the same decision
@@ -182,6 +182,9 @@ If `references/decision-log-config.md` doesn't have Confluence config:
 - Suggest Mode detection runs passively — do not load decision log into context for detection.
 - Confluence writes require user confirmation. Never auto-publish.
 - When called from another skill (e.g., brainstorming, discover-design-deliver), accept pre-filled context and skip redundant questions.
+- In Search Mode, limit Confluence results to 10. Present top 5 by relevance.
+- When multiple decisions are queued, process one at a time. Drop previous decision context before starting the next.
+- Decision records should be under 500 words. Trim alternatives to 1-2 sentences each if needed to stay within limit.
 
 ## Edge Cases
 - **Confluence API unavailable:** Draft the decision record locally. Offer to write to Confluence later.

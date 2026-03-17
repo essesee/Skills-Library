@@ -42,6 +42,8 @@ Unlike `daily-planner` (which scans everything to prioritize your day), Context 
 
 ### Step 1: Resolve Topic
 
+**First-run bootstrap:** If `references/briefing-preferences.md` has no topic mappings and `company-context` doesn't resolve the topic, ask: "I don't have project mappings yet. What are your main Jira project keys and which Slack channels should I monitor for this topic?" Save the response to `references/briefing-preferences.md`.
+
 Map the user's topic to queryable identifiers:
 
 | Input Type | Resolution |
@@ -188,6 +190,7 @@ Consolidate every 10 sessions. Keep under 1,500 words.
 - **Cross-team topic:** Include activity from other teams' Jira projects if they're linked to the epic. Flag cross-team items clearly.
 - **Circleback not connected:** Skip meeting context. Note the gap.
 - **User asks for multiple topics:** Process one at a time. Offer to brief on the next after the first is done.
+- **Topic spans multiple epics/projects:** Include activity from all matched epics. Group the briefing by epic rather than by source. Present: "This topic involves {N} epics across {projects}. Here's the status of each."
 
 ## When NOT to Use
 - **Planning the whole day** — use `daily-planner`

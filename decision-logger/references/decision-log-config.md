@@ -30,5 +30,8 @@
 - When a decision supersedes another: update the old decision's status to "Superseded by DEC-XXXX"
 - When posting to Slack: include the decision title, a 1-sentence rationale, and the Confluence link
 
+## ID Cache
+- **Last Used ID:** <!-- Updated automatically after each decision is logged -->
+
 ## Session Log
 <!-- Track usage for learning -->

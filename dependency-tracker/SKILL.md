@@ -1,6 +1,6 @@
 ---
 name: dependency-tracker
-description: "Use when tracking cross-team dependencies, surfacing stale blockers, or generating nudge communications. Trigger on phrases like 'what's blocked,' 'dependency status,' 'check on backend,' 'stale blockers,' 'cross-team blockers,' 'what are we waiting on,' 'dependency check,' 'nudge the backend team,' 'blocked by another team,' or before standup to surface stale dependencies."
+description: "Use when tracking cross-team dependencies, surfacing stale blockers, or generating nudge communications. Trigger on phrases like 'what's blocked,' 'dependency status,' 'check on [team],' 'stale blockers,' 'cross-team blockers,' 'what are we waiting on,' 'dependency check,' 'nudge the backend team,' 'blocked by another team,' or before standup to surface stale dependencies."
 ---
 
 # Dependency Tracker
@@ -65,6 +65,7 @@ Backend team dependencies have zero tracking system. This skill monitors cross-t
    ```
    project IN ({team_projects}) AND status IN ("Blocked", "Waiting", "On Hold")
    ```
+   **Note:** The `issueFunction` JQL requires ScriptRunner or a similar plugin. If unavailable, the fallback JQL only catches issues in explicit Blocked/Waiting/On Hold statuses. For complete coverage without `issueFunction`, supplement with Jira REST API link-type queries to find issues with `blocks`/`is blocked by` relationships regardless of status.
 2. For each blocked issue, follow the link to the blocking issue. Extract:
    - Your ticket: key, summary, status, assignee, sprint, days blocked
    - Blocking ticket: key, summary, status, assignee, project/team, last updated
@@ -170,6 +171,7 @@ Present the draft for review. Actions: **Send** / **Edit** / **Cancel**.
 Update `references/dependency-config.md`:
 - Track which teams are frequently blocking (pattern detection)
 - Track nudge effectiveness (did things move after nudge?)
+- When a dependency is resolved (blocking ticket completed or link removed), log the resolution: date, duration blocked, whether nudges were sent, and outcome. This enables nudge effectiveness tracking over time.
 - Adjust staleness thresholds based on team response patterns
 - Log: date, dependencies tracked, actions taken, outcomes
 
@@ -182,6 +184,7 @@ Update `references/dependency-config.md`:
 - Morning Brief mode: skip Steps 5-7, present report only.
 - Batch limits: Jira issues 30, Slack searches 10 per blocking ticket (cap at 5 tickets per run).
 - Never auto-send messages. Always present draft for user approval.
+- If the full report exceeds 20 dependencies, summarize Healthy items as a count. Present detail only for Stale, At Risk, and Critical.
 
 ## Edge Cases
 - **No blocking relationships found in Jira:** Report clean. Suggest: "No formal blockers in Jira. Are there informal dependencies I should track? You can tell me and I'll monitor them."

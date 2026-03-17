@@ -1,6 +1,6 @@
 ---
 name: system-behavior-documenter
-description: "Use when documenting how a system flow works, capturing the 'why' alongside the 'what,' or building institutional knowledge about system behavior. Trigger on phrases like 'document how this works,' 'explain the booking pipeline,' 'capture system behavior,' 'how does this flow work,' 'trace this flow,' 'system documentation,' 'knowledge capture for,' or any request to document system behavior that lives in no one's head."
+description: "Use when documenting how a system flow works, capturing the 'why' alongside the 'what,' or building institutional knowledge about system behavior. Trigger on phrases like 'document how this works,' 'explain the booking pipeline,' 'capture system behavior,' 'how does this flow work,' 'trace this flow,' 'system documentation,' 'knowledge capture for,' 'on-call guide,' 'how to debug,' 'troubleshooting guide,' 'runbook,' or any request to document system behavior that lives in no one's head."
 ---
 
 # System Behavior Documenter
@@ -23,6 +23,7 @@ System behavior knowledge is a known gap — nobody owns it, and it lives unreli
 
 **Reference Files:**
 - `references/documentation-templates.md` — templates for different documentation types (flow doc, integration doc, troubleshooting guide)
+- `references/documentation-log.md` — tracks what flows have been documented, when, at what commit, and what gaps were identified
 
 ## Inputs
 - **Flow/System** (required): what to document — "the booking pipeline," "authentication flow," "data sync process," specific module or service
@@ -62,6 +63,14 @@ System behavior knowledge is a known gap — nobody owns it, and it lives unreli
    - Confirm with the user: "I found {file/module}. Is this the right starting point?"
 
 ### Step 2: Trace the Flow
+
+#### Mode-Specific Approach
+
+**Knowledge Capture mode:** Skip code tracing. Instead, interview the user with structured questions about the system's behavior, boundaries, data flow, and failure modes. Use the Knowledge Capture template from `references/documentation-templates.md` to guide the session. The user is the primary source — code verification comes after.
+
+**Troubleshooting Guide mode:** Prioritize failure modes, diagnostic commands, and health indicators over the "why" behind design decisions. Focus on what an on-call engineer needs at 2am.
+
+**Flow Documentation and Integration Documentation modes:** Proceed with the code-tracing steps below.
 
 #### For Code-Level Documentation:
 
@@ -200,6 +209,9 @@ Actions:
 - For large codebases, ask the user to confirm the path before tracing deeply into branching paths.
 - Keep the working document in context as it builds. It's the primary output.
 - Max depth: 10 function calls deep before summarizing and asking if the user wants to go deeper.
+- Load only the relevant template from `references/documentation-templates.md` at Step 4 based on the mode. Do not load all templates.
+- Git blame/log output: extract only relevant commit messages and dates. Drop raw git output immediately.
+- During collaborative review (Step 5), keep the full working document in context. When the user provides corrections, update the affected section in place. Do not rebuild from scratch.
 
 ## Edge Cases
 - **Code is poorly commented:** That's expected — the skill's value is documenting what the code doesn't explain. Use git history and external sources for "why."
@@ -208,6 +220,7 @@ Actions:
 - **Flow is too complex for a single document:** Split into sub-flows. Create an overview document that links to detail documents.
 - **No codebase access:** Switch to Knowledge Capture mode — document what the user explains from memory, identify what needs verification.
 - **Code has recently changed:** Note: "This documentation reflects the code as of {date/commit}. Recent changes may not be captured."
+- **Dead code or unreachable paths:** If tracing reveals code paths that appear unreachable (always-false conditions, deprecated methods, commented-out blocks), document them separately under a "Legacy/Dead Code" section. Flag for the user: "This code path appears unreachable as of {commit}. Should it be removed?"
 
 ## When NOT to Use
 - **API design/composition** — use `api-composer`

@@ -19,7 +19,7 @@ As a connector between technical and business worlds, substance translation is a
 - `company-context` — audience personas, team context, business terminology
 - `voice-analyzer` — adapt output tone for the target audience
 - `stakeholder-update` — feeds translated content into status updates
-- `impact-analyzer` — pull quantitative impact data when available
+- `impact-analyzer` — pull quantitative impact data (when available)
 
 **Reference Files:**
 - `references/translation-patterns.md` — common tech→business mappings, framing templates, dimension checklist
@@ -123,6 +123,16 @@ Present the translation. Actions:
 - **"Different angle"** — reframe emphasis (e.g., focus on risk instead of opportunity)
 - **"Another audience"** — generate a variant for a different audience
 
+### Step 6: Learn
+
+After the translation is used:
+1. Log which audience frame was applied and whether the user edited the output
+2. Track which business dimensions the user added, removed, or emphasized
+3. If a translation was particularly effective (approved without edits), note it as a reusable pattern
+4. Update `references/translation-preferences.md`
+
+Consolidate every 10 sessions. Keep under 1,500 words.
+
 ---
 
 ### Business→Tech Mode
@@ -178,6 +188,9 @@ Produce a technical feasibility assessment framed for the requesting audience:
 - In inline mode (called by another skill), return the translation directly without interactive review.
 - When translating for multiple audiences, generate one at a time. Drop previous before generating next.
 - Never fabricate quantitative data. If impact numbers aren't available, say "we'd need data from {source} to quantify this" or invoke `impact-analyzer`.
+- Source material batch limit: summarize epics with >20 stories rather than loading each.
+- In Inline mode (called by another skill), return the translation directly. Do not load preferences or run the Learn step.
+- Translation output should not exceed 300 words for paragraph depth, 100 words for one-liner, or 1,000 words for full brief.
 
 ## Edge Cases
 - **Source material is already business-friendly:** Don't over-translate. Polish and add missing dimensions, but don't strip useful detail.

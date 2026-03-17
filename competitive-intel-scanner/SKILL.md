@@ -1,6 +1,6 @@
 ---
 name: competitive-intel-scanner
-description: "Use when monitoring the travel tech landscape, checking competitor activity, or producing competitive intelligence digests. Trigger on phrases like 'what's happening in travel tech,' 'competitive landscape,' 'industry scan,' 'competitor analysis,' 'market awareness,' 'what are competitors doing,' 'travel tech news,' 'industry trends,' or any request for competitive/market intelligence."
+description: "Use when monitoring the travel tech landscape, checking competitor activity, or producing competitive intelligence digests. Trigger on phrases like 'what's happening in travel tech,' 'competitive landscape,' 'industry scan,' 'competitor analysis,' 'market awareness,' 'what are competitors doing,' 'travel tech news,' 'industry trends,' 'what's [competitor] up to,' 'any news about [company],' 'check on [competitor],' or any request for competitive/market intelligence."
 ---
 
 # Competitive Intel Scanner
@@ -18,9 +18,11 @@ Strategic awareness requires staying current on the travel technology landscape 
 
 **Other Skills:**
 - `company-context` — TST's strategic focus areas, product positioning, competitive context
+- `message-drafting` — for the "Share via Slack" action in Step 5 (optional)
 
 **Reference Files:**
-- `references/competitive-config.md` — competitor list, focus areas, news sources, scan cadence, past digest dates
+- `references/competitive-config.md` — competitor list, focus areas, news sources, scan cadence
+- `references/scan-history.md` — findings history, session log, trend tracking
 
 ## Inputs
 - **Focus** (optional): specific competitor, technology, or market segment (default: broad scan)
@@ -53,7 +55,8 @@ Strategic awareness requires staying current on the travel technology landscape 
 For each tracked competitor:
 1. WebSearch: `"{competitor name}" travel technology {year}` + recent news
 2. WebSearch: `"{competitor name}" announcement OR launch OR partnership OR acquisition`
-3. For top 3-5 results per competitor: WebFetch to read full article, extract key points
+3. Also use search keywords from `references/competitive-config.md` in addition to default queries
+4. For top 3-5 results per competitor: WebFetch to read full article, extract key points
 
 Extract per finding:
 - What happened (factual summary)
@@ -166,6 +169,9 @@ Update `references/competitive-config.md`:
 - Limit: 5 articles per competitor, 10 industry articles total.
 - After Step 2, drop raw search results and article content. Keep only extracted findings.
 - Quick scan: skip Steps 2C (technology) and 2D (internal). Headline-level only.
+- Load config file once at Step 1. Update at Step 6 only. Do not reload mid-workflow.
+- During "go deeper" in Step 5, retain only the digest summary and the specific competitor/topic being deepened. Drop other raw findings.
+- Slack internal signal search (Step 2D): batch limit 20 messages.
 - Confluence publish requires user approval.
 
 ## Edge Cases
@@ -175,6 +181,7 @@ Update `references/competitive-config.md`:
 - **Stale config (no scan in 90+ days):** "It's been {N} days since the last scan. Running a broader search to catch up."
 - **Overwhelming volume:** Prioritize by relevance to TST. Present top 10, offer to expand.
 - **User provides a specific article/link:** Read it, analyze it, add to the digest with context.
+- **WebSearch or WebFetch failures:** Note the gap in coverage. Fall back to internal signals (Slack mentions, config history) and present what's available. Do not block the entire scan for a single source failure.
 
 ## When NOT to Use
 - **Internal platform health** — use `problem-discoverer`
