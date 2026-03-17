@@ -58,6 +58,8 @@ description: "Use when quantifying the business impact of a feature, bug, or cha
 
 2. If ambiguous, ask: "To assess the impact, I need to know: is this about a specific error, a feature's usage, or a proposed change?"
 
+**Quick Count mode:** Skip clarifying questions. Interpret the user's query literally and pull quantitative data only. If truly ambiguous, ask one targeted question maximum.
+
 3. Define assessment dimensions from `references/impact-framework.md`:
    - **Breadth:** How many users/sessions/transactions affected?
    - **Depth:** How severely are they affected? (broken vs. degraded vs. inconvenient)
@@ -91,7 +93,7 @@ If the subject is a proposed change, pull current baseline metrics for compariso
 #### 2C: Qualitative — Slack + Circleback
 
 1. Search Slack for customer complaints, support discussions, or internal frustration about the subject
-2. Search Circleback for meeting discussions where the subject was raised
+2. Search Circleback using `SearchMeetings` by topic keywords and key participants. For matched meetings, use `ReadMeetings` to extract discussions, decisions, and action items related to the subject.
 3. Extract: volume of complaints, sentiment, who's raising it, how recently
 
 ### Step 3: Synthesize
@@ -159,6 +161,16 @@ Present the assessment. Then offer:
 | "Go deeper" | Drill into a specific dimension (e.g., "show me the daily trend") |
 | "Compare to {other thing}" | Run a side-by-side impact comparison |
 | "Different audience" | Reframe for another audience |
+
+### Step 6: Learn
+
+After the assessment:
+1. Track which dimensions the user focused on or asked to expand
+2. Note audience-specific framing that was approved without edits
+3. Log: date, subject, severity assessed, audience, edits made
+4. Update `references/impact-preferences.md`
+
+Consolidate every 10 sessions. Keep under 1,000 words.
 
 ---
 

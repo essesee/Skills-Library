@@ -155,11 +155,11 @@ Actions per draft:
 ### Step 5: Send and Track
 
 For approved messages:
-1. Send via Slack or create Gmail draft (per channel decision)
+1. For Slack: send the message directly (with user confirmation). For email: always create a Gmail draft — never send directly. The user reviews and sends from Gmail.
 2. Log: what was sent, to whom, via which channel, when
 
 If the change type is **Deprecation**, offer to schedule follow-up reminders:
-- "Want me to remind you to send a follow-up in {N} weeks?"
+- "Want me to create a Jira ticket with a due date for the follow-up reminder, or schedule a Slack message for {date}?"
 
 ### Step 6: Generate FAQ (Optional)
 
@@ -167,6 +167,16 @@ If the change is complex or affects multiple audiences:
 1. Anticipate common questions based on the change type and affected audiences
 2. Draft FAQ entries
 3. Offer to post to Confluence or a Slack channel
+
+### Step 7: Learn
+
+After communications are sent:
+1. Track which audiences were included for each change type
+2. Note channel preferences per audience (which channels get approved vs. switched)
+3. Log template variations that were approved without edits
+4. Update `references/change-preferences.md`
+
+Consolidate every 10 sessions. Keep under 1,000 words.
 
 ---
 

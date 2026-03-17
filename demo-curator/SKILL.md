@@ -22,7 +22,7 @@ Unlike `release-notes` (which produces written documentation), this skill produc
 **Other Skills:**
 - `company-context` — audience context, team names, business terminology
 - `technical-to-business-translator` — frame technical work for non-technical audiences
-- `release-notes` — shares shipped work data when both run in the same period
+- `release-notes` — if release-notes was run recently for the same period, reuse its shipped work data (read from the output file) rather than re-querying Jira and GitHub
 - `impact-analyzer` — pull usage/impact metrics for shipped features (inline mode)
 
 **Reference Files:**
@@ -30,7 +30,7 @@ Unlike `release-notes` (which produces written documentation), this skill produc
 
 ## Inputs
 - **Time window** (optional): "last sprint," "last 2 weeks," date range (default: last 14 days)
-- **Audience** (required): "clubs," "leadership," "engineering," "all-hands," or specific group
+- **Audience** (optional, default: "engineering"): "clubs," "leadership," "engineering," "all-hands," or specific group
 - **Scope** (optional): specific epic(s) or "everything shipped"
 - **Format** (optional): "talking points," "slide outline," "narrative script" (default: talking points)
 

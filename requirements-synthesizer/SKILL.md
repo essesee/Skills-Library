@@ -55,7 +55,7 @@ For each input request, extract the structured need:
 | **Constraints** | Any specific requirements or limitations they mentioned |
 | **Context** | Business context — why now? What changed? |
 
-If pulling from Jira/Confluence/Slack/email, read the source material and extract. If inline, ask the user for each request.
+If pulling from Jira/Confluence/Slack/email, read the source material and extract. **Gmail search:** Use `from:{stakeholder_email}` and topic keywords. Search the last 90 days. Extract the specific request, stated priority, and any constraints mentioned. If inline, ask the user for each request.
 
 Present the extracted needs for user validation: "Here's what I understand each stakeholder wants. Correct?"
 
@@ -158,9 +158,9 @@ Prompt to log the synthesis decision via `decision-logger`:
 - Rationale: why this synthesis
 - Who was involved: the stakeholders whose input was synthesized
 
-### Step 8: Create Artifacts
+### Step 8: Create Artifacts (Optional)
 
-Offer to create:
+After Step 7, ask: "Want me to create any artifacts from this?" Then offer:
 - **Jira epic/stories** — using `user-story-writer` for the unified solution
 - **Confluence spec** — requirements document with the synthesis analysis
 - **Stakeholder messages** — sent via Slack or email
@@ -182,6 +182,7 @@ Offer to create:
 - **Technical infeasibility:** If a need is technically impossible or impractical, explain why using `technical-to-business-translator`. Propose alternatives.
 - **10+ stakeholders:** Summarize by group rather than individual. Look for clusters of aligned needs.
 - **Missing context on a request:** Ask: "I don't have enough context on Club B's request. Can you provide more detail, or should I proceed with what I have?"
+- **Single stakeholder with contradictory requirements:** Still useful — the need decomposition helps the user see the internal conflict. Frame as: "These requirements are in tension: {A} vs. {B}. Which is higher priority, or is there a design that satisfies both?"
 
 ## When NOT to Use
 - **Single stakeholder's requirement** — use `user-story-writer` or `discover-design-deliver`

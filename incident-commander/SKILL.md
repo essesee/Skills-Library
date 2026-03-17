@@ -18,7 +18,7 @@ Every step of the incident lifecycle is currently manual — triage, stakeholder
 - GitHub CLI — recent deploys, PR merge history, rollback capability
 
 **Other Skills:**
-- `impact-analyzer` — quantify affected users and business impact
+- `impact-analyzer` — quantify affected users and business impact (invoked in Phase 2 for stakeholder comms and Phase 5 for postmortem impact section)
 - `company-context` — team roster, escalation contacts, stakeholder profiles
 - `voice-analyzer` — audience-appropriate communication tone
 - `technical-to-business-translator` — explain technical issues to non-technical stakeholders
@@ -97,7 +97,7 @@ Based on the error data and system area:
 
 ### Phase 2: Stakeholder Communications
 
-Generate audience-specific messages using `references/incident-templates.md` and stakeholder profiles.
+Generate audience-specific messages using `references/incident-templates.md` and stakeholder profiles. Use `impact-analyzer` (inline mode) to quantify affected users for leadership comms and postmortem impact sections.
 
 #### Clubs / External Stakeholders
 - Lead with: impact on their users/agents
@@ -130,6 +130,13 @@ During an active incident:
 2. **Update comms:** When status changes (investigating → identified → fixing → resolved), generate updated stakeholder messages
 3. **Capture decisions:** When key decisions are made (rollback, hotfix, feature toggle), prompt to log via `decision-logger`
 4. **Track timeline:** Note key events with timestamps as they happen
+
+**Transition to Phase 4:** Move to timeline reconstruction when either:
+- The user says "it's resolved" or "we fixed it"
+- PostHog error rates return to baseline for 15+ minutes
+- The user explicitly requests a postmortem
+
+Do not auto-transition — confirm with the user: "Error rates look normal. Is the incident resolved? Ready to start the postmortem?"
 
 ---
 
@@ -217,6 +224,7 @@ Present the draft. Actions:
 2. Create Jira tickets for each action item, linked to the incident ticket
 3. Link the postmortem Confluence page to the incident Jira ticket
 4. Optionally: post a summary to a Slack channel with link to full postmortem
+5. Log incident to `references/escalation-matrix.md` Session Log: date, severity, duration, root cause category, resolution method, action item count
 
 ---
 
@@ -247,6 +255,7 @@ If `references/escalation-matrix.md` is empty:
 - Never auto-send communications. Always present for review first.
 - Never auto-create Jira tickets without user approval.
 - In Postmortem mode, skip Phases 1-3 and start at Phase 4.
+- During Phase 3 (Resolution Tracking), keep only the incident summary, severity, and a rolling timeline of key events (cap at 30 entries). Drop Slack/PostHog raw data between monitoring checks.
 
 ## Edge Cases
 - **Incident is in another team's system:** Help with comms and coordination but note: "Root cause investigation belongs to {team}. Want me to draft an escalation message?"
