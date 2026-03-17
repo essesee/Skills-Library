@@ -41,10 +41,10 @@ The included `CLAUDE.md` is a cognitive model — it tells Claude how you think,
 
 To adapt it: edit the values, blind spots, and communication style sections to match your own patterns. The structure works as-is; the content should reflect you.
 
-## Skill Catalog (34 skills)
+## Skill Catalog (45 skills)
 
-### Product (9 skills)
-Lifecycle, planning, signals, and data analysis.
+### Product (13 skills)
+Lifecycle, planning, signals, data analysis, and decision capture.
 
 | Skill | Description |
 |-------|-------------|
@@ -57,9 +57,13 @@ Lifecycle, planning, signals, and data analysis.
 | customer-signal-scanner | Scan Gmail and Slack for customer and partner escalations and pain signals |
 | team-signal-scanner | Scan Slack and Gmail for internal team signals — pain points, friction, workaround culture |
 | vendor-signal-scanner | Scan Gmail and Slack for vendor/provider signals — integration problems, service issues, contract changes |
+| decision-logger | Capture decisions with context (why, alternatives, who) to Confluence; search past decisions |
+| context-briefer | Generate "where you left off" briefings when switching between workstreams |
+| impact-analyzer | Quantify business impact by synthesizing PostHog data, Jira, and Slack signals |
+| requirements-synthesizer | Analyze competing stakeholder requests, find common patterns, propose unified solutions |
 
-### Engineering (6 skills)
-Code, deploy, test, and UI.
+### Engineering (7 skills)
+Code, deploy, test, UI, and system documentation.
 
 | Skill | Description |
 |-------|-------------|
@@ -69,6 +73,7 @@ Code, deploy, test, and UI.
 | conventional-commits | Format commit messages as Conventional Commits |
 | ui-evaluator | Review a UI for usability, accessibility, or design consistency before shipping |
 | ui-mockup-generator | Visualize feature concepts, create mockups, prototype UIs, or iterate on existing screens |
+| system-behavior-documenter | Document system flows with the "why" alongside the "what" — trace code, research git history, capture institutional knowledge |
 
 ### Architecture (5 skills)
 DDD, APIs, data models, and domain language.
@@ -81,8 +86,8 @@ DDD, APIs, data models, and domain language.
 | ubiquitous-language-builder | Align terminology between code, docs, and business language, or build a domain glossary |
 | domain-sme-evaluator | Evaluate product artifacts (PRDs, API specs, data models, UIs) through an industry domain lens |
 
-### Project Management (5 skills)
-Backlogs, bugs, tickets, and stories.
+### Project Management (7 skills)
+Backlogs, bugs, tickets, dependencies, and incidents.
 
 | Skill | Description |
 |-------|-------------|
@@ -91,9 +96,11 @@ Backlogs, bugs, tickets, and stories.
 | jira-template-builder | Standardize Jira templates, epic mapping rules, or ticket hygiene analysis |
 | ticket-proposer | Extract action items from meeting notes or Slack discussions and propose Jira tickets |
 | user-story-writer | Write or improve story descriptions for any tracker — Jira, Linear, GitHub Issues |
+| dependency-tracker | Monitor cross-team blocking relationships, surface stale dependencies, generate nudge comms |
+| incident-commander | Full incident lifecycle — triage, stakeholder comms, timeline, postmortem, action item tracking |
 
-### Communication (4 skills)
-Messaging, voice, editing, and release notes.
+### Communication (8 skills)
+Messaging, voice, editing, translation, and change announcements.
 
 | Skill | Description |
 |-------|-------------|
@@ -101,6 +108,10 @@ Messaging, voice, editing, and release notes.
 | voice-analyzer | Draft communications in the user's voice, or build/update a voice profile |
 | style-editor-expanded | Edit or generate formal documents, reports, proposals, or polished external-facing content |
 | release-notes | Summarize delivered work as a polished release notes document |
+| technical-to-business-translator | Translate technical concepts for business audiences (or reverse) with audience-specific framing |
+| change-communicator | Generate audience-specific communications when something ships, changes, or gets deprecated |
+| demo-curator | Pull recently shipped work and generate narrative talking points for demos/showcases |
+| competitive-intel-scanner | Monitor travel tech landscape and produce competitive intelligence digests |
 
 ### Meta (5 skills)
 Quality checks, reasoning, and skill management.
@@ -111,7 +122,7 @@ Quality checks, reasoning, and skill management.
 | priority-format-calibrator | Lightweight check on output quality before delivery |
 | ambiguity-handler | Resolve scope, terms, or context at the start of complex or vague tasks |
 | mental-models | Evaluate proposals, stress-test reasoning, or assess risk using thinking frameworks |
-| skill-improver | Tune skills based on real usage feedback |
+| skill-evolver | Continuously improve skills based on usage — auto-applies safe changes, proposes larger edits |
 
 ## Customization
 

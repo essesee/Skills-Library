@@ -1,0 +1,183 @@
+---
+name: competitive-intel-scanner
+description: "Use when monitoring the travel tech landscape, checking competitor activity, or producing competitive intelligence digests. Trigger on phrases like 'what's happening in travel tech,' 'competitive landscape,' 'industry scan,' 'competitor analysis,' 'market awareness,' 'what are competitors doing,' 'travel tech news,' 'industry trends,' or any request for competitive/market intelligence."
+---
+
+# Competitive Intel Scanner
+
+## Purpose
+Strategic awareness requires staying current on the travel technology landscape — competitor moves, industry trends, emerging technologies, and market shifts. This skill scans web sources, synthesizes findings, and produces digests with "so what" framing for TST's platform business.
+
+## Dependencies
+
+**Tools/APIs:**
+- WebSearch — search for travel technology news, competitor announcements, industry reports
+- WebFetch — read articles and reports found via search
+- Slack API — search internal channels for competitor/industry mentions
+- Confluence API — read/write competitive intelligence pages
+
+**Other Skills:**
+- `company-context` — TST's strategic focus areas, product positioning, competitive context
+
+**Reference Files:**
+- `references/competitive-config.md` — competitor list, focus areas, news sources, scan cadence, past digest dates
+
+## Inputs
+- **Focus** (optional): specific competitor, technology, or market segment (default: broad scan)
+- **Depth** (optional): "quick" (headline scan) or "deep" (full analysis, default)
+- **Time window** (optional): how far back to scan (default: 30 days)
+
+## Outputs
+- Competitive intelligence digest with "so what" framing
+- Categorized findings: competitor moves, industry trends, technology shifts, regulatory changes
+- Strategic implications for TST's platform business
+- Optional: Confluence page with the digest
+
+---
+
+## Workflow
+
+### Step 1: Configure Scan
+
+1. Load `references/competitive-config.md` — competitor list, focus areas, past scan dates
+2. If first run, ask:
+   - "Key competitors to track?"
+   - "Focus areas? (GDS integration, travel syndication, AAA club tech, booking engines, etc.)"
+   - "Any specific companies or technologies you're watching?"
+3. Determine scan scope: broad vs. focused
+
+### Step 2: Gather Intelligence (Parallel)
+
+#### 2A: Competitor Activity
+
+For each tracked competitor:
+1. WebSearch: `"{competitor name}" travel technology {year}` + recent news
+2. WebSearch: `"{competitor name}" announcement OR launch OR partnership OR acquisition`
+3. For top 3-5 results per competitor: WebFetch to read full article, extract key points
+
+Extract per finding:
+- What happened (factual summary)
+- When (date)
+- Source (publication/URL)
+- Relevance to TST (high/medium/low)
+
+#### 2B: Industry Trends
+
+Search for broader travel tech trends:
+1. `travel technology trends {year}`
+2. `travel syndication platform {year}`
+3. `GDS technology evolution {year}`
+4. `AAA club technology digital transformation`
+5. Custom searches based on focus areas from config
+
+#### 2C: Technology Shifts
+
+Search for technology changes relevant to TST's stack:
+1. Emerging technologies in travel booking
+2. API standards and integration patterns
+3. Platform/marketplace models in travel
+4. AI/ML applications in travel tech
+
+#### 2D: Internal Signals (Optional)
+
+Search Slack for internal competitor/industry mentions:
+1. Keywords from competitor names and focus areas
+2. Shared articles or industry discussions
+3. Customer mentions of competitors
+
+### Step 3: Synthesize and Frame
+
+**Filter:** Remove noise. Keep only findings with relevance to TST's business.
+
+**Categorize:**
+
+| Category | What Goes Here |
+|----------|---------------|
+| **Competitor Moves** | Product launches, partnerships, acquisitions, pricing changes, market expansion |
+| **Industry Trends** | Market direction, customer behavior shifts, regulatory changes, adoption patterns |
+| **Technology Shifts** | New standards, platform evolution, integration patterns, emerging capabilities |
+| **Opportunities** | Gaps competitors aren't addressing, market needs TST could fill, partnership possibilities |
+| **Threats** | Competitive encroachment, market shifts away from TST's model, technology obsolescence risks |
+
+**"So What" Framing:** For each finding, answer:
+- What does this mean for TST specifically?
+- Should we respond, watch, or ignore?
+- Does this validate or challenge our current strategy?
+
+### Step 4: Generate Digest
+
+```
+## Competitive Intelligence Digest — {date range}
+
+### Executive Summary
+{3-5 sentences: most important takeaways and strategic implications}
+
+### Competitor Moves
+{Per competitor with activity:}
+#### {Competitor Name}
+- **What:** {finding}
+- **So What:** {implication for TST}
+- **Recommended Response:** {watch / investigate / respond / ignore}
+
+### Industry Trends
+{Trend-level findings with implications}
+
+### Technology Shifts
+{Technology changes relevant to TST's platform}
+
+### Opportunities
+{Market gaps, unaddressed needs, partnership possibilities}
+
+### Threats
+{Competitive or market risks to monitor}
+
+### Recommended Actions
+1. {Specific action with rationale}
+2. {Action}
+3. {Action}
+```
+
+**Quick scan:** Executive summary only. 5-10 bullet points.
+**Deep scan:** Full digest with all sections.
+
+### Step 5: Review and Publish
+
+Present the digest. Actions:
+- **"Approve"** — done, optionally publish to Confluence
+- **"Go deeper on {competitor/topic}"** — additional research on specific area
+- **"Publish to Confluence"** — write to competitive intel page
+- **"Share via Slack"** — post summary to a channel
+- **"Edit"** — modify findings or framing
+- **"Add finding"** — include something the user knows that wasn't found in the scan
+
+### Step 6: Learn
+
+Update `references/competitive-config.md`:
+- Adjust competitor tracking based on which had activity
+- Add new competitors or focus areas discovered
+- Log scan date and key findings for trend tracking
+- Track which findings the user acted on (signal of value)
+
+---
+
+## Context Rules
+- Run Step 2 searches in parallel. Each source category is independent.
+- WebFetch articles: read first 2,000 words max. Extract key points, drop raw content.
+- Limit: 5 articles per competitor, 10 industry articles total.
+- After Step 2, drop raw search results and article content. Keep only extracted findings.
+- Quick scan: skip Steps 2C (technology) and 2D (internal). Headline-level only.
+- Confluence publish requires user approval.
+
+## Edge Cases
+- **No significant findings:** "Quiet period — no major competitor moves or industry shifts in the last {N} days. Notable absence: {what you'd expect to see but didn't}."
+- **Paywall content:** Note the finding from the headline/snippet. Flag: "Full article behind paywall — summary based on available excerpt."
+- **Unverified claims:** Flag: "Source reliability: unverified. This appeared in {source type} and hasn't been corroborated."
+- **Stale config (no scan in 90+ days):** "It's been {N} days since the last scan. Running a broader search to catch up."
+- **Overwhelming volume:** Prioritize by relevance to TST. Present top 10, offer to expand.
+- **User provides a specific article/link:** Read it, analyze it, add to the digest with context.
+
+## When NOT to Use
+- **Internal platform health** — use `problem-discoverer`
+- **Customer feedback analysis** — use `customer-signal-scanner`
+- **Market sizing or financial analysis** — beyond scope, suggest external research
+- **Sales competitive positioning** — this produces awareness, not sales materials
