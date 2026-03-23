@@ -1,6 +1,6 @@
 ---
 name: system-behavior-documenter
-description: "Use when documenting how a system flow works, capturing the 'why' alongside the 'what,' or building institutional knowledge about system behavior. Trigger on phrases like 'document how this works,' 'explain the booking pipeline,' 'capture system behavior,' 'how does this flow work,' 'trace this flow,' 'system documentation,' 'knowledge capture for,' 'on-call guide,' 'how to debug,' 'troubleshooting guide,' 'runbook,' or any request to document system behavior that lives in no one's head."
+description: "Document system flows, capture institutional knowledge, build runbooks and troubleshooting guides."
 ---
 
 # System Behavior Documenter

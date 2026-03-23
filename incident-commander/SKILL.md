@@ -1,6 +1,6 @@
 ---
 name: incident-commander
-description: "Use for full incident lifecycle — from first report through postmortem and action item tracking. Trigger on phrases like 'production issue,' 'incident,' 'outage,' 'postmortem,' 'P0,' 'P1 issue,' 'site down,' 'service degraded,' 'write a postmortem,' 'incident timeline,' 'what happened with the outage,' or when problem-discoverer surfaces a critical signal."
+description: "Full incident lifecycle — first report through postmortem and action item tracking."
 ---
 
 # Incident Commander

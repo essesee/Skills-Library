@@ -1,6 +1,6 @@
 ---
 name: stakeholder-update
-description: "Use when you need to send tailored project status updates to one or more stakeholders via Slack or email. Requires at least one stakeholder profile. Trigger on phrases like 'send stakeholder update,' 'weekly update,' 'project status to stakeholders,' 'update my stakeholders,' 'send the weekly report,' 'stakeholder email,' 'status update for {person},' or any request to communicate project progress."
+description: "Send tailored project status updates to stakeholders via Slack or email."
 ---
 
 # Stakeholder Update

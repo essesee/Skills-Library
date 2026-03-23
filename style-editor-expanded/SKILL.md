@@ -1,6 +1,6 @@
 ---
 name: style-editor-expanded
-description: "Use when editing or generating formal documents, reports, proposals, or polished external-facing content. Trigger on: 'edit this document,' 'tighten this up,' 'make this clearer,' 'formal report,' 'write a proposal,' 'clean up this draft,' 'Strunk & White,' 'style edit.'"
+description: "Edit or generate formal documents, reports, proposals with Strunk & White discipline."
 ---
 
 # Style Editor (Expanded)

@@ -1,6 +1,6 @@
 ---
 name: sql-data-analysis
-description: "Use when the user needs to answer a data question, write or audit SQL, query PostHog events, or create dashboards. Trigger on: 'how many users,' 'what's our retention,' 'write a query for,' 'pull the data on,' 'check the numbers,' 'create a dashboard,' 'audit this SQL,' 'PostHog events,' or any business question that needs data to answer."
+description: "Answer data questions, write/audit SQL, query PostHog events, create dashboards."
 ---
 
 # SQL & Data Analysis

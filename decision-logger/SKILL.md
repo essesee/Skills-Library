@@ -1,6 +1,6 @@
 ---
 name: decision-logger
-description: "Use when capturing decisions with context, searching for past decisions, or when other skills surface decision points. Trigger on phrases like 'log this decision,' 'why did we decide,' 'capture this decision,' 'decision record,' 'what was decided about,' 'document this choice,' 'decision log,' 'update decision on,' 'reverse the decision about,' 'supersede decision,' or when brainstorming/discover-design-deliver reaches a decision point."
+description: "Capture decisions with context, search past decisions, log decision points from other skills."
 ---
 
 # Decision Logger

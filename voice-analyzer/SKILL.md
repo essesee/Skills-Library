@@ -1,6 +1,6 @@
 ---
 name: voice-analyzer
-description: "Use when drafting communications on the user's behalf, or when building/updating a voice profile. Trigger on: 'learn my voice,' 'analyze my writing style,' 'build a voice profile,' 'make it sound like me,' or when any other skill needs to draft a message in the user's voice."
+description: "Build/update voice profiles for drafting communications in the user voice."
 ---
 
 # Voice Analyzer

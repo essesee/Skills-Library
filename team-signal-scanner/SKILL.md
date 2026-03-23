@@ -1,6 +1,6 @@
 ---
 name: team-signal-scanner
-description: "Scan Slack and Gmail for internal team signals — engineering pain points, recurring complaints, cross-team friction, and workaround culture. Trigger on phrases like 'what's the team frustrated about,' 'internal pain points,' 'what are engineers complaining about,' 'support team patterns,' 'team signal scan,' 'engineering friction,' 'workaround culture,' 'team health check,' or any request to surface internal frustration and friction."
+description: "Scan Slack and Gmail for internal team signals — pain points, friction, workaround culture."
 ---
 
 # Team Signal Scanner

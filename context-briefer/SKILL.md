@@ -1,6 +1,6 @@
 ---
 name: context-briefer
-description: "Use when switching between workstreams and need to reload context on a specific epic, project, or topic. Trigger on phrases like 'brief me on,' 'what happened with,' 'catch me up on,' 'where did we leave off with,' 'context on,' 'status of,' 'what's the latest on,' or any request to get up to speed on a specific area of work."
+description: "Reload context on a specific epic, project, or topic when switching workstreams."
 ---
 
 # Context Briefer

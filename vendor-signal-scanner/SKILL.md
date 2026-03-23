@@ -1,6 +1,6 @@
 ---
 name: vendor-signal-scanner
-description: "Scan Gmail and Slack for vendor/provider signals — integration problems, service degradation, contract issues, or upcoming changes. Trigger on phrases like 'vendor issues,' 'provider problems,' 'any integration issues,' 'vendor communication scan,' 'supplier signals,' 'vendor health check,' 'API changes,' 'deprecation notices,' 'vendor risk,' or any request to surface vendor-related risks and issues."
+description: "Scan Gmail and Slack for vendor/provider signals — integration issues, service degradation, contract changes."
 ---
 
 # Vendor Signal Scanner

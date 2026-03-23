@@ -1,6 +1,6 @@
 ---
 name: customer-signal-scanner
-description: "Scan Gmail and Slack for customer and partner escalations, complaints, and pain signals. Trigger on phrases like 'scan for customer issues,' 'any customer escalations,' 'what are customers complaining about,' 'customer complaints,' 'customer signal scan,' 'external escalations,' 'customer feedback,' or any request to surface what external stakeholders are reporting."
+description: "Scan Gmail and Slack for customer/partner escalations, complaints, and pain signals."
 ---
 
 # Customer Signal Scanner

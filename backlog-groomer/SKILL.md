@@ -1,6 +1,6 @@
 ---
 name: backlog-groomer
-description: "Use when the backlog needs a systematic health check, sprint planning prep, or cleanup. Trigger on phrases like 'groom the backlog,' 'prep for sprint planning,' 'clean up the board,' 'what's sprint ready,' 'are our priorities right,' 'stale tickets,' 'backlog health check,' 'audit the backlog,' 'board health,' 'what needs grooming,' or any request for comprehensive review of team tickets."
+description: "Systematic backlog health check — groom tickets, prep for sprint planning, identify stale or misprioritized items."
 ---
 
 # Backlog Groomer

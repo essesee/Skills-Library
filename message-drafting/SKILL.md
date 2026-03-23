@@ -1,6 +1,6 @@
 ---
 name: message-drafting
-description: "Use when the user needs to triage their inbox, draft email or Slack replies, or process unread messages. Trigger on: 'check my email,' 'draft a reply,' 'respond to this,' 'triage my inbox,' 'process my unreads,' 'what should I reply to first,' or any request involving reading and responding to messages."
+description: "Triage inbox, draft email or Slack replies, process unread messages."
 ---
 
 # Message Drafting & Triage

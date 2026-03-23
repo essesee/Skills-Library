@@ -1,6 +1,6 @@
 ---
 name: technical-to-business-translator
-description: "Use when translating technical concepts for business audiences or business requests for technical teams. Trigger on phrases like 'explain this to leadership,' 'business case for,' 'how do I tell the clubs,' 'frame this for,' 'translate this for,' 'what does this mean for the business,' 'non-technical explanation,' 'executive summary of this technical change,' or when stakeholder-update needs to explain a technical topic."
+description: "Translate technical concepts for business audiences or business requests for technical teams."
 ---
 
 # Technical-to-Business Translator

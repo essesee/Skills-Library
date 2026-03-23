@@ -1,6 +1,6 @@
 ---
 name: domain-sme-evaluator
-description: "Use when evaluating product artifacts (PRDs, API specs, data models, UIs) through an industry domain lens. Trigger on: 'review this as a travel expert,' 'domain review,' 'does this make sense for our industry,' 'SME evaluation,' 'expert review of this spec,' or when any artifact needs domain-specific scrutiny."
+description: "Evaluate product artifacts (PRDs, APIs, data models, UIs) through an industry domain expert lens."
 ---
 
 # Domain SME Evaluator

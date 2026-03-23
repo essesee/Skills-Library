@@ -1,6 +1,6 @@
 ---
 name: impact-analyzer
-description: "Use when quantifying the business impact of a feature, bug, or change by synthesizing data from PostHog, Jira, and Slack. Trigger on phrases like 'what's the impact of,' 'how many users affected,' 'business impact,' 'who's affected by this,' 'quantify this,' 'impact assessment,' 'how big is this problem,' 'user impact,' or when incident-commander or bug-consolidator needs impact context."
+description: "Quantify business impact of features, bugs, or changes using PostHog, Jira, and Slack data."
 ---
 
 # Impact Analyzer

@@ -1,6 +1,6 @@
 ---
 name: discover-design-deliver
-description: "Use when guiding product development through discovery, design, and delivery. Trigger on phrases like 'new feature,' 'scope this,' 'should we build,' 'product discovery,' 'problem statement,' 'write a PRD,' 'design this feature,' 'plan the build,' 'where are we on,' 'phase check,' '4D process,' or any product development lifecycle question."
+description: "Guide product development through discovery, design, and delivery phases. PRDs, scoping, phase checks."
 ---
 
 # Discover, Design, Develop, Deliver (4D Process)

@@ -1,6 +1,6 @@
 ---
 name: domain-modeler
-description: "Use when the user needs to model a domain, identify service boundaries, design aggregates, or run an event storming session. Trigger on: 'model this domain,' 'identify bounded contexts,' 'event storm this,' 'what are the aggregates,' 'context map,' 'domain events,' 'service boundaries,' or any architectural discussion about how domain concepts relate."
+description: "Model domains, identify bounded contexts, design aggregates, run event storming sessions."
 ---
 
 # Domain Modeler

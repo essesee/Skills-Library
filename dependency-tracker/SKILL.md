@@ -1,6 +1,6 @@
 ---
 name: dependency-tracker
-description: "Use when tracking cross-team dependencies, surfacing stale blockers, or generating nudge communications. Trigger on phrases like 'what's blocked,' 'dependency status,' 'check on [team],' 'stale blockers,' 'cross-team blockers,' 'what are we waiting on,' 'dependency check,' 'nudge the backend team,' 'blocked by another team,' or before standup to surface stale dependencies."
+description: "Track cross-team dependencies, surface stale blockers, generate nudge communications."
 ---
 
 # Dependency Tracker

@@ -1,6 +1,6 @@
 ---
 name: data-model-reviewer
-description: "Use when reviewing schemas, designing data exchange formats, evaluating API contracts, or checking standards compliance. Trigger on: 'review this schema,' 'does this follow UBL,' 'data model review,' 'standardize this format,' 'travel data structure,' 'exchange format,' 'document schema,' or any data modeling question involving business documents or travel data."
+description: "Review schemas, data exchange formats, API contracts, and standards compliance (UBL, travel data)."
 ---
 
 # Data Model Reviewer

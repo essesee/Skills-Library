@@ -1,6 +1,6 @@
 ---
 name: competitive-intel-scanner
-description: "Use when monitoring the travel tech landscape, checking competitor activity, or producing competitive intelligence digests. Trigger on phrases like 'what's happening in travel tech,' 'competitive landscape,' 'industry scan,' 'competitor analysis,' 'market awareness,' 'what are competitors doing,' 'travel tech news,' 'industry trends,' 'what's [competitor] up to,' 'any news about [company],' 'check on [competitor],' or any request for competitive/market intelligence."
+description: "Monitor travel tech landscape, check competitor activity, produce competitive intelligence digests."
 ---
 
 # Competitive Intel Scanner

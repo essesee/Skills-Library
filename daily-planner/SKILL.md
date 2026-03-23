@@ -1,6 +1,6 @@
 ---
 name: daily-planner
-description: "Use when the user needs to prioritize work across Jira, Gmail, Slack, Calendar, and Circleback for the day. Trigger on phrases like 'plan my day,' 'what should I work on today,' 'daily briefing,' 'morning standup prep,' 'what's on my plate,' 'build my to-do list,' 'what needs my attention,' or any request to aggregate today's work across tools."
+description: "Aggregate today's priorities across Jira, Gmail, Slack, Calendar, and Circleback into a daily plan."
 ---
 
 # Daily Planner

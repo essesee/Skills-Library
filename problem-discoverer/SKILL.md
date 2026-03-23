@@ -1,6 +1,6 @@
 ---
 name: problem-discoverer
-description: "Use when you need to proactively discover platform problems — monthly health checks (Full Scan), targeted area scans (Focused Scan), or validation of a specific signal (Signal Triage). Orchestrates quantitative data, bug patterns, organizational signals, structural analysis, and communication channels. Trigger on phrases like 'full scan,' 'quarterly health check,' 'what's broken,' 'platform health,' 'scan the checkout flow,' 'focused scan on search,' 'validate this signal,' 'is this a problem.'"
+description: "Proactively discover platform problems — full health checks, focused area scans, or signal validation."
 ---
 
 # Problem Discoverer

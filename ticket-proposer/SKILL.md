@@ -1,6 +1,6 @@
 ---
 name: ticket-proposer
-description: "Use when the user has meeting notes or Slack discussions with action items that should become Jira tickets. Trigger on: 'create tickets from this meeting,' 'turn these notes into Jira tickets,' 'extract action items,' 'this Slack thread needs tickets,' 'process my meeting notes,' or any request to convert conversations into tracked work items."
+description: "Convert meeting notes or Slack discussions into structured Jira tickets with action items."
 ---
 
 # Ticket Proposer

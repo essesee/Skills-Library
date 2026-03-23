@@ -1,6 +1,6 @@
 ---
 name: user-story-writer
-description: "Use when writing or improving story descriptions for any tracker — Jira, Linear, GitHub Issues. Trigger on: 'write a story,' 'draft the description,' 'gold standard template,' 'story for this ticket,' 'write acceptance criteria,' 'improve this ticket description,' or any request to produce a well-structured story. Also triggered automatically by bug-consolidator and ticket-proposer when they need to write descriptions."
+description: "Write or improve story descriptions for Jira, Linear, or GitHub Issues. Auto-validates when writing to trackers."
 ---
 
 # User Story Writer
@@ -45,6 +45,15 @@ Structured markdown with these sections (type determines which are included):
 ### Design  (if applicable)
 ### Other information  (if applicable)
 ```
+
+## Step 0: Detect Mode
+
+| Signal | Mode |
+|--------|------|
+| Content already exists (plan, draft, existing ticket) | **Review Mode** — skip to Step 3 (assignee prefs) then Step 4 (validate) |
+| No content yet, writing from scratch | **Author Mode** — proceed Step 1 through Step 5 as normal |
+
+**Review Mode workflow**: Load the pre-written content, apply assignee preferences (Step 3), validate against quality checklist (Step 4), propose improvements if any fail. Present the validated (or improved) content at Step 5.
 
 ## Step 1: Detect Story Type
 

@@ -1,6 +1,6 @@
 ---
 name: requirements-synthesizer
-description: "Use when multiple stakeholders want different things and you need to find common patterns, resolve conflicts, and propose a unified solution. Trigger on phrases like 'multiple clubs want,' 'competing requirements,' 'synthesize these requests,' 'find the common thread,' 'reconcile these requirements,' 'different stakeholders want different things,' 'consolidate feature requests,' or any request to unify divergent stakeholder needs."
+description: "Find common patterns across competing stakeholder requirements, resolve conflicts, propose unified solutions."
 ---
 
 # Requirements Synthesizer

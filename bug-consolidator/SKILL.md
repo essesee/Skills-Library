@@ -1,6 +1,6 @@
 ---
 name: bug-consolidator
-description: "Use when a bug backlog needs triage — clustering related bugs, merging duplicates, removing stale items, or prioritizing the board. Trigger on phrases like 'clean up the bugs,' 'consolidate the backlog,' 'group related bugs,' 'too many bug tickets,' 'deduplicate bugs,' 'triage the bug backlog,' 'find duplicate bugs,' 'stale bugs,' 'score bug priorities,' or any request to organize and reduce a cluttered bug board."
+description: "Triage bug backlogs — cluster related bugs, merge duplicates, remove stale items, score priorities."
 ---
 
 # Bug Consolidator

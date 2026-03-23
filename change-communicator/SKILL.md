@@ -1,6 +1,6 @@
 ---
 name: change-communicator
-description: "Use when something ships, changes, or gets deprecated and needs audience-specific communications. Trigger on phrases like 'announce this change,' 'rollout comms,' 'deprecation notice,' 'notify clubs about,' 'communicate this update,' 'migration announcement,' 'breaking change notice,' 'feature launch comms,' or when release-notes identifies a user-facing change needing announcement."
+description: "Draft audience-specific comms for shipped features, deprecations, rollouts, or breaking changes."
 ---
 
 # Change Communicator

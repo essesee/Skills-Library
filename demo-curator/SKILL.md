@@ -1,6 +1,6 @@
 ---
 name: demo-curator
-description: "Use when preparing demos or showcases — pulling recently shipped work and generating a narrative with talking points. Trigger on phrases like 'prep demo for,' 'what shipped for showcase,' 'demo talking points,' 'prepare showcase,' 'sprint demo,' 'stakeholder demo,' 'show and tell prep,' 'what can we demo,' or any request to prepare a presentation of delivered work."
+description: "Prepare demos and showcases — pull recently shipped work, generate narrative with talking points."
 ---
 
 # Demo Curator

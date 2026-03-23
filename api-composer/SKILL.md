@@ -1,6 +1,6 @@
 ---
 name: api-composer
-description: "Use when designing APIs, evaluating service integrations, analyzing data pipelines, or checking composability. Trigger on: 'design this API,' 'do these services compose,' 'how should these integrate,' 'data transformation,' 'pipeline design,' 'service composition,' 'mapping between systems,' or any question about how services, APIs, or data flows connect."
+description: "Design APIs, evaluate service integrations, analyze data pipelines, and check composability between systems."
 ---
 
 # API Composer
