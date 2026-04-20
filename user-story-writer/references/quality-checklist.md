@@ -32,6 +32,14 @@ Run every item before presenting the story. Fix failures before output.
 | 14 | Existing behavior preservation noted when changing code | |
 | 15 | For bug consolidation: every child bug's symptom is covered by at least one AC | |
 
+## Feature Flag (when flag confirmed at Step 1.5)
+
+| # | Check | Pass/Fail |
+|---|-------|-----------|
+| 15a | Flag name follows convention: kebab-case, product prefix, 2-4 word description | |
+| 15b | ACs cover both states: flag enabled (new behavior) AND flag disabled (existing behavior unchanged) | |
+| 15c | Cleanup/removal AC is present | |
+
 ## Structural Checks
 
 | # | Check | Pass/Fail |
@@ -40,6 +48,21 @@ Run every item before presenting the story. Fix failures before output.
 | 17 | Spike has Questions + Output + Timebox (no ACs) | |
 | 18 | Bug consolidation has consolidated bugs table | |
 | 19 | Out of Scope only present if scope is genuinely ambiguous | |
+
+## Definition of Ready (Team Agreement -- March 2026)
+
+These checks come from the Platform Scrum team agreement. Flag gently. This agreement is new and the team is growing into it.
+
+When flagging a DoR gap, use the format: "Note: Per the team's Definition of Ready, [specific criterion]. Recently adopted (March 2026)."
+
+| # | Check | Pass/Fail |
+|---|-------|-----------|
+| 23 | Story states clear business value: who benefits, why it matters, expected outcome | |
+| 24 | ACs contain no solutioning language ("as needed", "properly", "should work correctly", implementation details) | |
+| 25 | UI work has design assets attached (Figma link or mockup). N/A for non-UI work. | |
+| 26 | Story is appropriately sized: delivers standalone value, completable in a sprint | |
+| 27 | Work is framed for FE/BE collaboration, not sequential handoffs | |
+| 28 | Context section captures why, background, and expected outcome (not title-only) | |
 
 ## Assignee Preference Compliance
 

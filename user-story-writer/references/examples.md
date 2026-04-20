@@ -26,12 +26,16 @@ Maria, an experienced agent, enters return details and needs order-level fields 
 - [ ] Item selection enforces at least one item selected constraint
 - [ ] Refund Summary section calculates refund amounts per line item automatically
 - [ ] Form saves complete return in a single submit action
+- [ ] Feature is gated behind PostHog feature flag `agent-return-details-form`
+- [ ] When `agent-return-details-form` is disabled, agent sees the previous return flow
+- [ ] When `agent-return-details-form` is enabled, agent sees the unified form as designed
+- [ ] Feature flag `agent-return-details-form` is removed after stable production rollout
 
 ### Other information
 
 * **Environment**: Staging only. Do NOT release to Prod.
 
-**What makes this good:** Specific persona with name, clear situation trigger, concrete ACs with validation rules, design references included, scope constraint clearly stated.
+**What makes this good:** Specific persona with name, clear situation trigger, concrete ACs with validation rules, design references included, scope constraint clearly stated. Feature flag ACs cover gating, both states (enabled/disabled), and cleanup.
 
 ---
 

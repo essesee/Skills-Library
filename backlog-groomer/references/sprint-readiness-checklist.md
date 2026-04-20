@@ -22,6 +22,21 @@ Reference file for the backlog-groomer skill. Defines readiness criteria by tick
 | Has labels | Recommended | At least one label assigned |
 | Sub-tasks defined | Recommended | Has child issues or sub-tasks (for stories > 5 points) |
 
+### Definition of Ready -- Product-Level Checks (Team Agreement -- March 2026)
+
+These checks come from the Platform Scrum team agreement and assess product-level readiness beyond mechanical Jira-field presence. Flag gently. This agreement is new.
+
+When surfacing a DoR gap in the grooming report, use: "Note: Per the team's Definition of Ready, [specific criterion]. Recently adopted (March 2026)."
+
+| Criterion | Level | How to Check |
+|-----------|-------|-------------|
+| Clear business value | Required | Description articulates who benefits, why it matters, and expected outcome -- not just a feature description |
+| Solutioning-free ACs | Required | ACs describe WHAT, not HOW. No implementation prescriptions ("use X library", "add column to Y table"). No vague qualifiers ("as needed", "properly") |
+| Design assets (UI work) | Required | If summary/description references UI changes, a Figma link or mockup is present. Non-UI work: skip this check |
+| Collaboration framing | Recommended | Work is structured for FE/BE to collaborate in parallel, not sequential handoffs ("BE builds API then FE consumes") |
+| Appropriate sizing | Recommended | Story delivers standalone value and is completable within a single sprint (not epic-sized, not trivially small) |
+| Context captured | Required | Description has background and expected outcome -- not just a title or single sentence |
+
 ## Bug Readiness
 
 | Criterion | Level | How to Check |

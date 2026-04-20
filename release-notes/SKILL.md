@@ -1,6 +1,6 @@
 ---
 name: release-notes
-description: "Use when the user wants to summarize delivered work as a polished release notes document. Trigger on phrases like 'generate release notes,' 'write release notes,' 'what shipped this sprint,' 'create a changelog,' or any request to summarize delivered work for publishing."
+description: "Summarize delivered work as polished release notes or changelog for publishing."
 ---
 
 # Release Notes

@@ -1,6 +1,6 @@
 ---
 name: ui-evaluator
-description: "Use when reviewing a UI for usability, accessibility, or design consistency before shipping. Trigger on: 'review this design,' 'is this accessible,' 'audit the UI,' 'check usability,' 'heuristic evaluation,' 'WCAG compliance,' 'is this ready to ship,' or any request to validate a UI against best practices."
+description: "Review UI for usability, accessibility, and design consistency. Heuristic evaluation, WCAG checks."
 ---
 
 # UI Evaluator

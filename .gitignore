@@ -1,9 +1,23 @@
+# OS files
 .DS_Store
-peon-ping-*/
+
+# Company-specific data (keep local only)
 company-context/
 stakeholder-update/references/stakeholders/
 release-notes/references/company-*
 daily-planner/references/preferences.md
 daily-planner/references/roadmap-cache.md
+morning/references/preferences.md
+morning/references/roadmap-cache.md
 performance-review/references/company-context.md
+competitive-intel-scanner/references/scan-history.md
 user-story-writer/memory/
+comms/references/vip-config.md
+skill-evolver/references/evolution-log.md
+
+# Generated/usage-specific data
+*/references/optimizer-observations.md
+
+# Machine-specific
+*.local.md
+*.local.json

@@ -1,6 +1,6 @@
 ---
 name: performance-review
-description: "Use when preparing a quarterly self-review or performance conversation. Trigger on: 'quarterly review,' 'self-review,' 'performance review,' 'quarterly conversation,' 'SKS review,' 'start stop keep,' 'what did I accomplish this quarter,' 'help me with my review,' 'fill out my review form.'"
+description: "Prepare quarterly self-reviews and performance conversations. SKS format."
 ---
 
 # Performance Review

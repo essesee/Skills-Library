@@ -1,12 +1,12 @@
 ---
 name: discover-design-deliver
-description: "Use when guiding product development through discovery, design, and delivery. Trigger on phrases like 'new feature,' 'scope this,' 'should we build,' 'product discovery,' 'problem statement,' 'write a PRD,' 'design this feature,' 'plan the build,' 'where are we on,' 'phase check,' '4D process,' or any product development lifecycle question."
+description: "Guide product development through discovery, design, and delivery phases. PRDs, scoping, phase checks."
 ---
 
 # Discover, Design, Develop, Deliver (4D Process)
 
 ## Purpose
-A product development lifecycle. The 4D process emphasizes customer problem identification and collaborative design and delivery. Each diamond phase follows a divergent-convergent approach — expanding to explore possibilities, then narrowing to a specific outcome that initiates the next phase.
+A product development lifecycle emphasizing customer problem identification and collaborative design and delivery.
 
 The four phases:
 1. **Discover**: Research customer behavior, define the problem or opportunity
@@ -37,7 +37,11 @@ The four phases:
 
 **Reference Files:**
 - `references/problem-statement-template.md` — Problem Statement structure and checkpoints
-- `references/prd-template.md` — PRD structure and sections
+- `references/prd-template.md` — PRD structure (unified template, PRD tail)
+- `references/idea-template.md` — Idea structure (unified template, Idea tail)
+- `references/epic-template.md` — Epic structure (unified template, Epic tail)
+
+All three artifact templates share a core (Problem, Desired End State, Principles, Out of Scope, Why This Matters) and add type-specific tails. When an initiative produces more than one artifact, the shared core should be mirrored across them. Source of truth: `~/.claude/projects/-Users-you-work-project/memory/feedback_unified_artifact_template.md`.
 
 ## Context Gathering (Parallel — Always Do First)
 
@@ -54,7 +58,7 @@ Present a summary of prior art before starting. Don't repeat work already done.
 
 **Goal**: Validate the problem is real, worth solving, and clearly articulated.
 
-**Methodologies**: User interviews, data analytics (PostHog), vendor meetings for integration understanding.
+**Hypothesis framing** (before gathering evidence): State the bet. What outcome would confirm this problem is worth solving? What would falsify it? What's the minimum data point that would change the decision to pursue? Is this a watch signal (ongoing) or a verdict question (one-time answer)? If the user already has a clear problem statement, confirm the hypothesis in 1-2 sentences. If vague, this framing IS the discovery starting point.
 
 **Artifact: Problem Statement** (required to exit Discover). Use `references/problem-statement-template.md`. Must include: problem articulation, personas, examples, 5 Whys (down to root cause AND up to business case), and conclusion.
 
@@ -64,9 +68,9 @@ Present a summary of prior art before starting. Don't repeat work already done.
 
 **Goal**: Develop a validated solution to the approved problem.
 
-**Methodologies**: Design workshops, user testing with prototypes, prompt framing for AI-assisted content.
+**Artifact: PRD** (required to exit Design). Use `references/prd-template.md`. The PRD follows the unified template: shared core (Problem, Desired End State, Persona Impact, Goals, Principles, Out of Scope, Why This Matters) plus PRD-specific tails (Standard Template, Rollout Mechanics, Success Metrics, Stakeholders, Open Questions, Related Work).
 
-**Artifact: PRD** (required to exit Design). Use `references/prd-template.md`. Must include: executive summary, problem statement, goals, persona impact (before/after), background research, recommendations (MVP + success metrics + rollout), appendix.
+**Paired artifacts**: Initiatives that rise to the PRD level usually also have a parent Idea in MDP (use `references/idea-template.md`) and an implementing Epic in your Jira project (use `references/epic-template.md`). The shared core (Problem, Desired End State, Principles, Out of Scope, Why This Matters) should be mirrored verbatim across all three. Write the core once and copy it across.
 
 **Approval gate**: PRD approved by Advisory Group and Product Team.
 
@@ -76,7 +80,11 @@ Build the PRD solution via 2-week sprints. Work intake: roadmap initiatives, pro
 
 ## Phase 4: Deliver
 
-Release and validate business value. Review with stakeholders by work type (roadmap → stakeholders, bugs → reporters, tech → leads, security → DevOps).
+**Goal**: Release the solution and validate business value.
+
+Release and review with stakeholders by work type (roadmap → stakeholders, bugs → reporters, tech → leads, security → DevOps).
+
+**Post-ship evaluation**: After the feature has been live long enough to generate data (typically 1-2 weeks), invoke `/post-ship-retro` to close the learning loop. Compare PostHog adoption data against the PRD's success metrics and the Phase 1 hypothesis. Capture surprises and learnings in memory so they inform future initiatives.
 
 ## Modes
 
@@ -93,7 +101,13 @@ Generate a Problem Statement using the template. Load `references/problem-statem
 - Attribute evidence sources in the Problem Statement (e.g., "per customer signal scan," "per bug pattern analysis")
 
 ### Write PRD
-Generate a PRD using the template. Load `references/prd-template.md`. Build on the approved Problem Statement. Search GitHub for existing systems. Output a versioned document ready for review.
+Generate a PRD using the unified template. Load `references/prd-template.md`. Build on the approved Problem Statement. Search GitHub for existing systems. Output a versioned document ready for review. If the initiative also has a parent Idea or implementing Epic, offer to mirror the shared core sections into those artifacts at the end.
+
+### Write Idea
+Generate an MDP Idea using the unified template. Load `references/idea-template.md`. Appropriate when an initiative needs a strategic narrative for the roadmap or advisory group before (or alongside) a full PRD. If a PRD exists, the Idea's shared core should match the PRD's.
+
+### Write Epic
+Generate an Epic description using the unified template. Load `references/epic-template.md`. Appropriate when an initiative is moving into engineering execution. The Epic should link to its parent Idea and PRD in the header, and its shared core sections should match them verbatim.
 
 ### Phase Check
 Assess where a feature currently is:
@@ -116,13 +130,14 @@ For small features: compressed discovery, lightweight design, ticket creation wi
 - Version documents (v1, v2 [WIP], etc.) — preserve history
 
 ## Context Rules
-- Load reference templates only when entering the phase that uses them (problem-statement at Phase 1, prd at Phase 2). Do not preload both.
+- Load reference templates only when entering the phase or mode that uses them (problem-statement for Phase 1 / Write Problem Statement, prd for Phase 2 / Write PRD, idea for Write Idea, epic for Write Epic). Do not preload all four.
+- When producing more than one artifact for the same initiative, draft the shared core sections once and copy them across the artifacts to keep them aligned.
 - Run context gathering searches in parallel. Drop raw search results after summarizing.
 - At each gate, present a clear go/no-go recommendation with evidence.
 - When calling other skills, let them run their full workflow — do not abbreviate.
 
 ## When NOT to Use
-- **Ill-defined problem** — use `ambiguity-handler` first to clarify
+- **Ill-defined problem** — ask clarifying questions to narrow scope before starting
 - **Bug triage or backlog cleanup** — use `backlog-groomer` or `bug-consolidator`
 - **Status reporting on existing work** — use `atlassian:generate-status-report`
 - **Domain modeling without a product development context** — use `domain-modeler` directly

@@ -1,6 +1,6 @@
 ---
 name: sql-data-analysis
-description: "Use when the user needs to answer a data question, write or audit SQL, query PostHog events, or create dashboards. Trigger on: 'how many users,' 'what's our retention,' 'write a query for,' 'pull the data on,' 'check the numbers,' 'create a dashboard,' 'audit this SQL,' 'PostHog events,' or any business question that needs data to answer."
+description: "Answer data questions, write/audit SQL, query PostHog events, create dashboards."
 ---
 
 # SQL & Data Analysis
@@ -21,6 +21,9 @@ Handle the full loop: business question -> query -> execution -> interpretation 
 - Plain-language summaries in user's voice
 - Follow-up query recommendations (2-3 next questions)
 - Visualization specs or quick charts
+
+## Hypothesis Check (Before Any Query)
+When a business question arrives, ask: "What decision will this data inform?" If clear, proceed. If vague ("I just want to see the numbers"), pause: frame the hypothesis first. What bet are we evaluating, what would confirm or falsify it, is this a watch metric (ongoing) or a verdict metric (one-time answer)? Takes 30 seconds. Prevents building dashboards that answer the wrong question.
 
 ## Modes
 

@@ -4,7 +4,7 @@ Writing templates for each review section. Used during Phase 4 (Draft All Sectio
 
 ## General Principles
 
-- **First person** throughout — "I led..." not "Jesse led..."
+- **First person** throughout — "I led..." not "the user led..."
 - **Impact-led** — lead with what changed, not what you did
 - **Specific** — name projects, metrics, stakeholders where possible
 - **Honest** — don't inflate; understatement reads as confidence

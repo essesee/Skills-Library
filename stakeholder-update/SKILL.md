@@ -1,6 +1,6 @@
 ---
 name: stakeholder-update
-description: "Use when you need to send tailored project status updates to one or more stakeholders via Slack or email. Requires at least one stakeholder profile. Trigger on phrases like 'send stakeholder update,' 'weekly update,' 'project status to stakeholders,' 'update my stakeholders,' 'send the weekly report,' 'stakeholder email,' 'status update for {person},' or any request to communicate project progress."
+description: "Send tailored project status updates to stakeholders via Slack or email."
 ---
 
 # Stakeholder Update
@@ -128,7 +128,7 @@ For each stakeholder (one at a time):
 
 Additional filters: Metrics Yes/No. Risks: Always / Critical only / Skip.
 
-3. **Draft the update** — see `references/voice-guidelines.md` for blending rules. User's voice is core; stakeholder's communication profile tunes tone, formality, and structure. Address open questions from recent context. Cover topics they tend to follow up about. Use their vocabulary.
+3. **Draft the update** — **invoke the `cyrano-write` skill** as the drafting step. Pass the stakeholder name, the filtered content from step 2, recent context with that person, and the update intent ("weekly status", "milestone hit", etc.). `cyrano-write` handles self-profile + stakeholder profile loading, staleness checks, and produces the draft in the user's voice tuned to that stakeholder. Do not hand-draft by reading profiles inline. Template and format guidance from `references/voice-guidelines.md` and `references/update-templates.md` still apply — pass relevant constraints to `cyrano-write` as part of the intent.
 4. **Delivery channel decision:**
    1. Check stakeholder's "Preferred Channel" in profile
    2. If "Both" — check which was used last time

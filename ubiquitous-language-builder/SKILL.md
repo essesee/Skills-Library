@@ -1,6 +1,6 @@
 ---
 name: ubiquitous-language-builder
-description: "Use when terminology is inconsistent between code, docs, and business language, or when building a domain glossary. Trigger on: 'define the language for,' 'align terminology,' 'what do we call,' 'glossary,' 'naming is inconsistent,' 'terminology audit,' 'domain language,' or when other skills surface terminology confusion."
+description: "Align terminology across code, docs, and business language. Build domain glossaries."
 ---
 
 # Ubiquitous Language Builder

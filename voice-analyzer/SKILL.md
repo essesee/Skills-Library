@@ -1,6 +1,6 @@
 ---
 name: voice-analyzer
-description: "Use when drafting communications on the user's behalf, or when building/updating a voice profile. Trigger on: 'learn my voice,' 'analyze my writing style,' 'build a voice profile,' 'make it sound like me,' or when any other skill needs to draft a message in the user's voice."
+description: "Build/update voice profiles for drafting communications in the user voice."
 ---
 
 # Voice Analyzer
@@ -46,6 +46,18 @@ Run 3-4 test drafts:
 4. Casual Slack message
 
 Present each to the user for calibration. Log corrections as refinements.
+
+### Step 6: Iterative Refinement
+After the initial profile is built and validated:
+
+1. Ask: "Want to refine any aspect of the profile? You can provide additional samples, flag specific issues, or request adjustments."
+2. If user provides feedback:
+   a. Apply corrections directly to the voice profile
+   b. Re-run the affected test scenario(s) from Step 5 to confirm the fix
+   c. Repeat until user is satisfied
+3. If user says done, save the final profile and style rules
+
+This loop ensures the profile converges on accuracy rather than shipping a first-pass approximation.
 
 ## Context Rules
 - Load voice profile only when drafting or updating.

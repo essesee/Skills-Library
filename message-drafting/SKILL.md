@@ -1,6 +1,6 @@
 ---
 name: message-drafting
-description: "Use when the user needs to triage their inbox, draft email or Slack replies, or process unread messages. Trigger on: 'check my email,' 'draft a reply,' 'respond to this,' 'triage my inbox,' 'process my unreads,' 'what should I reply to first,' or any request involving reading and responding to messages."
+description: "Triage inbox, draft email or Slack replies, process unread messages."
 ---
 
 # Message Drafting & Triage
@@ -11,7 +11,7 @@ Prioritize what to answer first, draft replies in the user's voice, and learn fr
 ## Dependencies
 
 **Tools/APIs:** Gmail, Slack
-**Other Skills:** voice-analyzer (voice profile + style rules loaded at draft time)
+**Other Skills:** cyrano (profiles loaded at draft time — self-profile for user's voice, contact profiles for recipient context). Falls back to lightweight profiling if no Cyrano profile exists for a contact.
 
 ## Inputs
 - Gmail inbox and/or Slack unreads
@@ -33,16 +33,17 @@ Prioritize what to answer first, draft replies in the user's voice, and learn fr
 5. Present prioritized queue as a summary.
 
 ### Phase 2: Draft (One Message at a Time)
-1. Load only: the message thread, voice profile, and contact profile for the recipient.
-2. If user provided intent, follow it. If not, infer the appropriate response.
-3. Draft reply in user's voice with style rules applied.
-4. Default to shortest version that gets the point across — bias toward brevity, especially for Slack.
+1. Load the message thread.
+2. If user provided intent, capture it. If not, infer the appropriate response.
+3. **Invoke the `cyrano-write` skill** to produce the draft. Pass the thread, inferred/provided intent, and the recipient name. `cyrano-write` handles self-profile loading, recipient profile loading, staleness checks, and drafting — do not load profiles or draft inline.
+4. If no Cyrano contact profile exists for the recipient, `cyrano-write` will offer quick-mode or full-profile paths. Follow its flow.
+5. Default to shortest version that gets the point across — bias toward brevity, especially for Slack.
 
 ### Phase 3: Approve / Deny / Edit
 **Approve**: Send the message (with user confirmation). **Deny**: Skip, move to next. **Edit**: User modifies draft; log the delta and refine voice profile.
 
 ### Phase 4: Contact Profiles
-Build per-person profiles passively: tone, ask patterns, formality, preferred format. Seed from last 50-100 messages per frequent contact. New contacts get **low confidence** tag until 10+ interactions.
+Check `~/.claude/cyrano/profiles/contacts/` for existing Cyrano profiles first — these are richer and more reliable. For contacts without a Cyrano profile, build lightweight profiles passively: tone, ask patterns, formality, preferred format. Seed from last 50-100 messages per frequent contact. New contacts get **low confidence** tag until 10+ interactions. If a lightweight profile proves useful, suggest building a full Cyrano profile for that contact.
 
 ## Context Rules
 - During triage: load full queue overview. Do not load drafting context.

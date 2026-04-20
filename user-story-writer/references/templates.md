@@ -35,6 +35,12 @@
 - [ ] [Include edge cases relevant to this change]
 - [ ] [Include negative cases: "X does NOT happen when Y"]
 
+<!-- Include ONLY when feature flag confirmed at Step 1.5 -->
+- [ ] Feature is gated behind PostHog feature flag `{flag-name}`
+- [ ] When `{flag-name}` is disabled, existing behavior is unchanged
+- [ ] When `{flag-name}` is enabled, [new behavior description]
+- [ ] Feature flag `{flag-name}` is removed and gating code cleaned up after stable production rollout
+
 ### Other information
 
 * **In scope**: [Bullet list of what's included]
@@ -47,6 +53,41 @@
 - Multiple user stories OK if genuinely distinct perspectives (e.g., agent + admin)
 - Design section only when Figma/mockup exists
 - Other information is optional — omit if nothing useful to add
+- Feature flag ACs are conditional — only include when confirmed at Step 1.5. Developer profiles override the exact format (e.g., Kevin gets Requirements table rows, Claude Code gets `posthog.isFeatureEnabled()` code references).
+
+---
+
+## Bug Template
+
+```markdown
+### Bug summary
+
+[2-3 sentences: What's broken? What's the user impact? Scope of the issue.]
+
+### Current vs Expected
+
+* **Current:** [What happens now]
+* **Expected:** [What should happen instead]
+
+### Reproduction
+
+* **Reference:** [URL, booking ID, or other reference to a specific instance]
+* [Step-by-step reproduction path]
+* [Note frequency: always, intermittent, specific conditions]
+
+### Acceptance criteria
+
+- [ ] [Fix addresses the root cause, not just the reported instance]
+- [ ] [Specific testable criterion with expected behavior]
+- [ ] [Existing correct behavior is preserved]
+```
+
+**Notes:**
+- Bug summary describes the problem, not the symptom
+- Current vs Expected makes the gap concrete and testable
+- Reproduction section replaces Context -- bugs need repro steps, not background
+- ACs should include at least one criterion ensuring the fix is general, not instance-specific
+- Developer profiles override AC format (e.g., Kevin gets Requirements table rows)
 
 ---
 
